@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dp.dao.mybatis.category.CategoryPartDOMapper" >
+  <resultMap id="BaseResultMap" type="dp.beans.category.CategoryPartDO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="part_name" property="partName" jdbcType="VARCHAR" />
+    <result column="part_code" property="partCode" jdbcType="VARCHAR" />
+    <result column="first_cat_id" property="firstCatId" jdbcType="INTEGER" />
+    <result column="first_cat_name" property="firstCatName" jdbcType="VARCHAR" />
+    <result column="second_cat_id" property="secondCatId" jdbcType="INTEGER" />
+    <result column="second_cat_name" property="secondCatName" jdbcType="VARCHAR" />
+    <result column="third_cat_id" property="thirdCatId" jdbcType="INTEGER" />
+    <result column="third_cat_name" property="thirdCatName" jdbcType="VARCHAR" />
+    <result column="sum_code" property="sumCode" jdbcType="VARCHAR" />
+    <result column="aliss_name_text" property="alissNameText" jdbcType="VARCHAR" />
+    <result column="label_name_text" property="labelNameText" jdbcType="VARCHAR" />
+    <result column="cat_kind" property="catKind" jdbcType="INTEGER" />
+    <result column="vehicle_code" property="vehicleCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gmt_create, gmt_modified, is_deleted, part_name, part_code, first_cat_id, first_cat_name, 
+    second_cat_id, second_cat_name, third_cat_id, third_cat_name, sum_code, aliss_name_text, 
+    label_name_text, cat_kind, vehicle_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from db_category_part
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from db_category_part
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="dp.beans.category.CategoryPartDO" >
+    insert into db_category_part (id, gmt_create, gmt_modified, 
+      is_deleted, part_name, part_code, 
+      first_cat_id, first_cat_name, second_cat_id, 
+      second_cat_name, third_cat_id, third_cat_name, 
+      sum_code, aliss_name_text, label_name_text, 
+      cat_kind, vehicle_code)
+    values (#{id,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=VARCHAR}, #{partName,jdbcType=VARCHAR}, #{partCode,jdbcType=VARCHAR}, 
+      #{firstCatId,jdbcType=INTEGER}, #{firstCatName,jdbcType=VARCHAR}, #{secondCatId,jdbcType=INTEGER}, 
+      #{secondCatName,jdbcType=VARCHAR}, #{thirdCatId,jdbcType=INTEGER}, #{thirdCatName,jdbcType=VARCHAR}, 
+      #{sumCode,jdbcType=VARCHAR}, #{alissNameText,jdbcType=VARCHAR}, #{labelNameText,jdbcType=VARCHAR}, 
+      #{catKind,jdbcType=INTEGER}, #{vehicleCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="dp.beans.category.CategoryPartDO" >
+    insert into db_category_part
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="partName != null" >
+        part_name,
+      </if>
+      <if test="partCode != null" >
+        part_code,
+      </if>
+      <if test="firstCatId != null" >
+        first_cat_id,
+      </if>
+      <if test="firstCatName != null" >
+        first_cat_name,
+      </if>
+      <if test="secondCatId != null" >
+        second_cat_id,
+      </if>
+      <if test="secondCatName != null" >
+        second_cat_name,
+      </if>
+      <if test="thirdCatId != null" >
+        third_cat_id,
+      </if>
+      <if test="thirdCatName != null" >
+        third_cat_name,
+      </if>
+      <if test="sumCode != null" >
+        sum_code,
+      </if>
+      <if test="alissNameText != null" >
+        aliss_name_text,
+      </if>
+      <if test="labelNameText != null" >
+        label_name_text,
+      </if>
+      <if test="catKind != null" >
+        cat_kind,
+      </if>
+      <if test="vehicleCode != null" >
+        vehicle_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="partName != null" >
+        #{partName,jdbcType=VARCHAR},
+      </if>
+      <if test="partCode != null" >
+        #{partCode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstCatId != null" >
+        #{firstCatId,jdbcType=INTEGER},
+      </if>
+      <if test="firstCatName != null" >
+        #{firstCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondCatId != null" >
+        #{secondCatId,jdbcType=INTEGER},
+      </if>
+      <if test="secondCatName != null" >
+        #{secondCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdCatId != null" >
+        #{thirdCatId,jdbcType=INTEGER},
+      </if>
+      <if test="thirdCatName != null" >
+        #{thirdCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="sumCode != null" >
+        #{sumCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alissNameText != null" >
+        #{alissNameText,jdbcType=VARCHAR},
+      </if>
+      <if test="labelNameText != null" >
+        #{labelNameText,jdbcType=VARCHAR},
+      </if>
+      <if test="catKind != null" >
+        #{catKind,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleCode != null" >
+        #{vehicleCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="dp.beans.category.CategoryPartDO" >
+    update db_category_part
+    <set >
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="partName != null" >
+        part_name = #{partName,jdbcType=VARCHAR},
+      </if>
+      <if test="partCode != null" >
+        part_code = #{partCode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstCatId != null" >
+        first_cat_id = #{firstCatId,jdbcType=INTEGER},
+      </if>
+      <if test="firstCatName != null" >
+        first_cat_name = #{firstCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondCatId != null" >
+        second_cat_id = #{secondCatId,jdbcType=INTEGER},
+      </if>
+      <if test="secondCatName != null" >
+        second_cat_name = #{secondCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdCatId != null" >
+        third_cat_id = #{thirdCatId,jdbcType=INTEGER},
+      </if>
+      <if test="thirdCatName != null" >
+        third_cat_name = #{thirdCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="sumCode != null" >
+        sum_code = #{sumCode,jdbcType=VARCHAR},
+      </if>
+      <if test="alissNameText != null" >
+        aliss_name_text = #{alissNameText,jdbcType=VARCHAR},
+      </if>
+      <if test="labelNameText != null" >
+        label_name_text = #{labelNameText,jdbcType=VARCHAR},
+      </if>
+      <if test="catKind != null" >
+        cat_kind = #{catKind,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleCode != null" >
+        vehicle_code = #{vehicleCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="dp.beans.category.CategoryPartDO" >
+    update db_category_part
+    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      part_name = #{partName,jdbcType=VARCHAR},
+      part_code = #{partCode,jdbcType=VARCHAR},
+      first_cat_id = #{firstCatId,jdbcType=INTEGER},
+      first_cat_name = #{firstCatName,jdbcType=VARCHAR},
+      second_cat_id = #{secondCatId,jdbcType=INTEGER},
+      second_cat_name = #{secondCatName,jdbcType=VARCHAR},
+      third_cat_id = #{thirdCatId,jdbcType=INTEGER},
+      third_cat_name = #{thirdCatName,jdbcType=VARCHAR},
+      sum_code = #{sumCode,jdbcType=VARCHAR},
+      aliss_name_text = #{alissNameText,jdbcType=VARCHAR},
+      label_name_text = #{labelNameText,jdbcType=VARCHAR},
+      cat_kind = #{catKind,jdbcType=INTEGER},
+      vehicle_code = #{vehicleCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,31 @@
+CREATE TABLE `ly_id_goods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `goods_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `ly_id` varchar(50) NOT NULL DEFAULT '' COMMENT '力洋id',
+  PRIMARY KEY (`id`),
+  KEY `idx_goods_id` (`goods_id`),
+  KEY `idx_ly_id` (`ly_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='临时表';
+
+
+CREATE TABLE `temp_goods_car` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+  `car_id` int(11) NOT NULL DEFAULT '0' COMMENT '最子级车型关系',
+  `car_name` varchar(255) NOT NULL DEFAULT '' COMMENT '最小子级名称',
+  `level` tinyint(1) NOT NULL DEFAULT '6' COMMENT '车型数据等级',
+  `car_brand_id` int(11) NOT NULL DEFAULT '0' COMMENT '品牌id',
+  `car_brand` varchar(100) NOT NULL COMMENT '品牌名称',
+  `car_series_id` int(11) NOT NULL DEFAULT '0' COMMENT '系列id',
+  `car_series` varchar(100) NOT NULL COMMENT '系列名称',
+  `car_model_id` int(11) NOT NULL DEFAULT '0' COMMENT '第三级车型id',
+  `car_model` varchar(100) NOT NULL DEFAULT '' COMMENT 'model的name',
+  `car_power_id` int(11) NOT NULL DEFAULT '0' COMMENT '排量id',
+  `car_power` varchar(50) NOT NULL COMMENT '排量名称',
+  `car_year_id` int(11) NOT NULL DEFAULT '0' COMMENT '年款id',
+  `car_year` char(10) NOT NULL COMMENT '年款名称',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:缺省（无效） 1：有效  2:删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_goods_car` (`goods_id`,`car_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+

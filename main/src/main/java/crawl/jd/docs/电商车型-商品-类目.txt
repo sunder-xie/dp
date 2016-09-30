@@ -1,0 +1,53 @@
+根据车型查商品搜索接口：http://search.epei360.com/elasticsearch/goods/convert?rows=10&carType=74048&catId=4375
+
+电商有车型-商品对应关系的类目：
+1、 轮胎  4191
+2、 电瓶  4440
+3、 机油滤清器  4343
+4、 空气滤清器  4487
+5、 空调滤清器  4748
+6、 燃油滤清器  4569
+7、 火花塞  4375
+
+
+汽机油： 5025
+柴机油： 5028
+
+
+
+# 导出 有/无 商品的车型数据
+
+select c.id,c.brand as '品牌',c.company as '厂家',c.series as '车系',
+c.model as '车型',c.power as '排量',c.`year` as '年款',c.`name` as '车款'
+from
+(select * from db_car_category where level=6 and is_del=0) c
+left join 
+(select distinct car_id from
+(select * from db_goods where cat_id=5025 and is_delete=0) g,
+db_goods_car gc
+where gc.goods_id=g.goods_id) t1
+on c.id=t1.car_id
+where t1.car_id is null
+order by c.brand,c.company,c.series,c.model,c.power,c.`year`,c.`name`;
+
+
+# 导出没有商品有保养的车型数据
+
+select c1.id,c1.brand as '品牌',c1.company as '厂家',c1.series as '车系',
+c1.model as '车型',c1.power as '排量',c1.`year` as '年款',c1.`name` as '车款'
+from
+(select c.* from
+(select * from db_car_category where level=6 and is_del=0) c
+left join 
+(select distinct car_id from
+(select * from db_goods where cat_id=4440 and is_delete=0) g,
+db_goods_car gc
+where gc.goods_id=g.goods_id) t1
+on c.id=t1.car_id
+where t1.car_id is null) c1
+left join
+(select distinct model_id from db_model_maintain_relation) c2
+on c1.id=c2.model_id
+where c2.model_id is not null
+order by c1.brand,c1.company,c1.series,c1.model,c1.power,c1.`year`,c1.`name`;
+

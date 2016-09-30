@@ -1,0 +1,13 @@
+
+select t1.epc_pic,t2.pic_id
+from
+(select go.oe_number,go.oe_number_trim,gco.car_id,gco.epc_pic
+from
+(select goods_id,car_id,epc_pic from center_goods_car_relation_old
+where epc_pic like '%epc%' group by goods_id,car_id) gco,
+center_goods_old go
+where gco.goods_id=go.id) t1,
+(select g.oe_number,gc.car_id,gc.pic_id
+from center_goods g, center_goods_car_relation gc
+where g.id=gc.goods_id) t2
+where t1.oe_number_trim=t2.oe_number and t1.car_id=t2.car_id

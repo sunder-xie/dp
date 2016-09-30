@@ -1,0 +1,69 @@
+# ====================== 导出电商商品 =========================
+select g.goods_id,b.brand_name as '品牌',g.goods_name as '名称',
+  g.goods_format as '规格型号',g.keywords as '关键词'
+from
+  (select * from db_goods where cat_id=4440 and is_delete=0) g,
+  db_brand b
+where g.brand_id=b.brand_id
+order by b.brand_name;
+
+
+# 导出商品（属性）
+select t1.*,t2.attr_name,t2.attr_value
+from
+(select g.goods_id,b.brand_name,g.goods_name,g.goods_format,g.keywords
+from
+  (select * from db_goods where cat_id=4191 and is_delete=0) g,
+  db_brand b
+where g.brand_id=b.brand_id) t1
+left join
+(select ga.goods_id,ac.attr_name,ga.attr_value
+from db_goods_attribute ga,db_attribute_config ac
+where ga.attr_id=ac.id and ac.is_deleted='N' and ga.is_deleted='N') t2
+on t1.goods_id=t2.goods_id;
+
+
+# ========== 有车型对应关系的商品 ==========
+select t1.goods_id,t1.brand_name as '品牌',t1.goods_name as '名称',
+  t1.goods_format as '规格型号',t1.keywords as '关键词',t1.car_model as '是否通用'
+from
+  (select g.goods_id,b.brand_name,g.goods_name,g.goods_format,g.keywords,g.car_model
+   from
+     (select * from db_goods where cat_id=4440 and is_delete=0) g,
+     db_brand b
+   where g.brand_id=b.brand_id) t1,
+  db_goods_car gc
+where gc.goods_id=t1.goods_id group by t1.goods_id
+order by t1.brand_name;
+
+# 没有对应关系的商品
+select t1.goods_id,t1.brand_name as '品牌',t1.goods_name as '名称',
+  t1.goods_format as '规格型号',t1.keywords as '关键词',t1.car_model as '是否通用'
+from
+  (select g.goods_id,b.brand_name,g.goods_name,g.goods_format,g.keywords,g.car_model
+   from
+     (select * from db_goods where cat_id=4440 and is_delete=0) g,
+     db_brand b
+   where g.brand_id=b.brand_id) t1
+  left join
+  db_goods_car gc
+    on gc.goods_id=t1.goods_id
+where gc.goods_id is null
+order by t1.brand_name;
+
+
+# ============== 导出 有/无 壳牌机油的（淘汽）车款 =================
+select c.brand as '品牌',c.company as '厂家',c.series as '车系',
+       c.model as '车型',c.power as '排量',c.year as '年款',c.name as '车款'
+from
+  (select * from db_car_category where level=6 and is_del=0) c
+  left join
+  (select distinct car_id
+   from
+     (select goods_id from db_goods where brand_id=92 and is_delete=0) g,
+     db_goods_car gc
+   where g.goods_id=gc.goods_id and gc.status=1) t1
+    on c.id=t1.car_id
+where t1.car_id is null
+order by c.brand,c.company,c.series,c.model,c.power,c.year,c.name;
+

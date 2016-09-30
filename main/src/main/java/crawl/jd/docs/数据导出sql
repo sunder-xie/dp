@@ -1,0 +1,64 @@
+
+# ====================== 导出京东商品-属性 ===========================
+select g.id,g.goods_name,g.short_name,g.goods_num,g.goods_brand,g.price,
+  gav.attr_name,gav.attr_value
+from
+  (select * from jd_goods where cat_id=9) g,
+  jd_goods_attr_value gav
+where g.id=gav.goods_id;
+
+
+# =============== 导出力洋id-京东商品数据 ====================
+select c.liyang_id_list,gc.goods_id
+from
+  (select id,liyang_id_list from jd_car where liyang_id_list!='') c,
+  (select car_id,goods_id from jd_goods_car where jd_cat_id=221) gc
+where c.id=gc.car_id;
+
+
+# ====================== 导出淘汽车型-京东商品数据 =======================
+select gc.goods_id,ca.car_models_id,ca.car_models,
+	ca.brand,ca.brand_id,ca.series,ca.series_id,ca.model,ca.model_id,
+	ca.power,ca.power_id,ca.year,ca.year_id
+from ly_id_goods gc,db_car_all ca
+where gc.ly_id=ca.new_l_id
+group by ca.car_models_id,gc.goods_id;
+
+
+# 验证 db_goods_car 是否有重复的
+select t1.id,t2.id
+from temp_goods_car t1
+left join db_goods_car t2
+on t1.car_id=t2.car_id and t1.goods_id=t2.goods_id
+where t2.id is not null;
+
+# 导出 db_goods_car 不重复的数据
+select t1.goods_id,t1.car_id,t1.car_name,
+	t1.car_brand_id,t1.car_brand,t1.car_series_id,t1.car_series,
+	t1.car_model_id,t1.car_model,t1.car_power_id,t1.car_power,
+	t1.car_year_id,t1.car_year
+from temp_goods_car t1
+left join db_goods_car t2
+on t1.car_id=t2.car_id and t1.goods_id=t2.goods_id
+where t2.id is null;
+
+
+# ========== 导出京东机油(属性) ==========
+select g.id,g.goods_name,g.short_name,g.goods_num,g.goods_brand,g.price,
+  gav.attr_name,gav.attr_value
+from
+  (select * from jd_goods where cat_id=1
+                                and (goods_brand like '壳牌%' or goods_brand like '美孚%'
+                                     or goods_brand like '道达尔%' or goods_brand like '嘉实多%')) g,
+  jd_goods_attr_value gav
+where g.id=gav.goods_id
+      and (gav.attr_name='机油等级' or gav.attr_name='匹配参数' or gav.attr_name='粘稠度')
+order by goods_brand;
+
+# 导出京东机油
+select
+  id,goods_name,short_name,goods_num,goods_brand,price
+from jd_goods where cat_id=1
+                    and (goods_brand like '壳牌%' or goods_brand like '美孚%'
+                         or goods_brand like '道达尔%' or goods_brand like '嘉实多%')
+order by goods_brand;

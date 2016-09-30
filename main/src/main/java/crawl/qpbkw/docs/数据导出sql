@@ -1,0 +1,28 @@
+# ==================== 导出汽配百科数据 ====================
+
+# 导出车型配件
+
+select c.car_brand,c.car_model,c.car_year,c.car_power,
+p.part_no,p.cate_name as part_name,p.pid
+from
+(select * from qpbkw_car where car_brand='别克' and car_model='GL8') c,
+qpbkw_car_part_cate p
+where c.id=p.car_id and p.part_no!='';
+
+
+# 导出配件分类
+
+select p1.id,p1.cate_name,p1.img_url
+from
+(select id from qpbkw_car where car_brand='别克' and car_model='GL8') c1,
+qpbkw_car_part_cate p1
+where c1.id=p1.car_id and p1.bk_cate_table='6';
+
+
+# ==================== 导出淘汽配件数据 ====================
+select gc.pic_id,g.oe_number,gcp.epc_pic_num,gcp.epc_index
+from
+(select goods_id,pic_id from center_goods_car_relation where model_id=76987) gc,
+center_goods g,center_goods_car_picture gcp
+where g.id=gc.goods_id and gcp.id=gc.pic_id
+group by gc.pic_id,g.oe_number

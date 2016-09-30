@@ -1,0 +1,7 @@
+
+select t1.goods_format,t2.car_models_id,t2.car_models,
+	t2.`year`,t2.year_id,t2.power,t2.power_id,
+	t2.model,t2.model_id,t2.series,t2.series_id,t2.brand,t2.brand_id
+from temp_goods_lyid_rel t1,db_car_all t2
+where t1.ly_id=t2.new_l_id and t2.car_models not like '%电动%'
+group by t1.goods_format,t2.car_models_id

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <!--
+        <property name="initialSize" value="1"/>
+        -->
+        <!-- 最小空闲连接
+        <property name="minIdle" value="1"/>
+        -->
+
+        <!-- 最大连接数量 -->
+        <property name="maxActive" value="20"/>
+
+        <!-- 超时等待时间，以毫秒为单位 -->
+        <property name="maxWait" value="60000"/>
+
+        <!-- 是否在自动回收超时连接的时候打印连接的超时错误 -->
+        <property name="logAbandoned" value="true"/>
+        <!-- 是否自动回收超时连接 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 超时时间，以秒数为单位 -->
+        <property name="removeAbandonedTimeout" value="60"/>
+
+        <property name="validationQuery" value="SELECT 1" />
+        <!-- 是否在从池中取出连接前进行检验 -->
+        <property name="testOnBorrow" value="true" />
+
+    </bean>
+
+    <!--
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    -->
+
+    <!-- MyBatis配置 -->
+    <bean id="sqlSessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+        <property name="typeAliasesPackage" value="dp.beans"/>
+        <!-- 显式指定Mapper文件位置 -->
+        <property name="mapperLocations" value="classpath:mybatis/**/*.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="dp.dao.mapper"/>
+    </bean>
+
+</beans>
