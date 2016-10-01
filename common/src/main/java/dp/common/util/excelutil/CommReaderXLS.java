@@ -24,6 +24,10 @@ public class CommReaderXLS extends ReadExcelXLS {
     protected String type;
     protected int mapKeyCol;
 
+    public CommReaderXLS(Map<String, String> attrMap){
+        this(attrMap, Constant.TYPE_LIST, 0);
+    }
+
     public CommReaderXLS(Map<String, String> attrMap, String type, int mapKeyCol) {
         this.attrMap = attrMap;
         this.type = type;
@@ -63,6 +67,17 @@ public class CommReaderXLS extends ReadExcelXLS {
     }
 
     protected void handleRowsForList(int sheetIndex, int curRow, List<String> rowList){
+        if(needHandleSheet>-1){
+            if(sheetIndex==needHandleSheet) {
+                if (curRow == titleRow) {
+                    initAttrIdxMap(rowList);
+                } else if (curRow > titleRow) {
+                    dataList.add(getData(rowList));
+                }
+            }
+            return;
+        }
+
         if(sheetIndex==0){
             if(curRow==titleRow){
                 initAttrIdxMap(rowList);
@@ -75,6 +90,17 @@ public class CommReaderXLS extends ReadExcelXLS {
     }
 
     protected void handleRowsForMap(int sheetIndex, int curRow, List<String> rowList){
+        if(needHandleSheet>-1){
+            if(sheetIndex==needHandleSheet) {
+                if (curRow == titleRow) {
+                    initAttrIdxMap(rowList);
+                } else if (curRow > titleRow) {
+                    addDataForMap(rowList);
+                }
+            }
+            return;
+        }
+
         if(sheetIndex==0){
             if(curRow==titleRow){
                 initAttrIdxMap(rowList);

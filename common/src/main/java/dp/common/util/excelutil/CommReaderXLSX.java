@@ -24,6 +24,10 @@ public class CommReaderXLSX extends ReadExcelXLSX {
     protected String type;
     protected int mapKeyCol;
 
+    public CommReaderXLSX(Map<String, String> attrMap){
+        this(attrMap, Constant.TYPE_LIST, 0);
+    }
+
     public CommReaderXLSX(Map<String, String> attrMap, String type, int mapKeyCol) {
         this.attrMap = attrMap;
         this.type = type;

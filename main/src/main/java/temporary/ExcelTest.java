@@ -1,6 +1,5 @@
 package temporary;
 
-import dp.common.util.Constant;
 import dp.common.util.DateUtils;
 import dp.common.util.IoUtil;
 import dp.common.util.Print;
@@ -26,18 +25,21 @@ public class ExcelTest {
     @Test
     public void test() throws Exception{
         path = "/Users/huangzhangting/Desktop/";
-        String excel = path+"vin码数据.xls";
+        String excel = path+"有配件图片的车型数据 (仅车型).xls";
 
         Map<String, String> attrMap = new HashMap<>();
-        attrMap.put("vin", "vin");
-        attrMap.put("new_l_id", "new_l_id");
+        attrMap.put("品牌", "brand");
+        attrMap.put("车款", "carName");
 
-        CommReaderXLS readerXLS = new CommReaderXLS(attrMap, Constant.TYPE_LIST, 0);
-        readerXLS.process(excel, 2);
+        CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
+        readerXLS.processFirstSheet(excel, attrMap.size());
 
-        init();
+        List<Map<String, String>> dataList = readerXLS.getDataList();
 
-        handleCarVin(readerXLS.getDataList());
+        Print.info(dataList.size());
+        Print.info(dataList.get(0));
+
+
     }
 
     public void init(){

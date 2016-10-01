@@ -50,7 +50,11 @@ public abstract class ReadExcelXLSX {
      * @param sheetId  sheetId为要遍历的sheet索引，从1开始
      * @throws Exception
      */
-    public void processOneSheet(String fileName,int sheetId) throws Exception {
+    public void processOneSheet(String fileName, int sheetId) throws Exception {
+        if(sheetId<1){
+            sheetId = 1;
+        }
+
         OPCPackage pkg = OPCPackage.open(fileName);
         XSSFReader r = new XSSFReader(pkg);
         SharedStringsTable sst = r.getSharedStringsTable();
@@ -113,7 +117,7 @@ public abstract class ReadExcelXLSX {
         // Gathers characters as they are seen.
         private StringBuffer value;
 
-        private List<String> rowlist;
+        private List<String> rowList;
         private int curCol = -1;	//当前列索引
         private int preCol = -1;	//上一列列索引
         private int rowLength = 0;	//列数
@@ -124,7 +128,7 @@ public abstract class ReadExcelXLSX {
             this.value = new StringBuffer();
             this.nextDataType = xssfDataType.NUMBER;
             this.formatter = new DataFormatter();
-            this.rowlist = new ArrayList<String>();
+            this.rowList = new ArrayList<>();
         }
 
         public void startElement(String uri, String localName, String name,
@@ -176,7 +180,7 @@ public abstract class ReadExcelXLSX {
             String thisStr = null;
 
             // v => 单元格的值，如果单元格是字符串则v标签的值为该字符串在SST中的索引
-            // 将单元格内容加入rowlist中，在这之前先去掉字符串前后的空白符
+            // 将单元格内容加入rowList中，在这之前先去掉字符串前后的空白符
             if ("v".equals(name)) {
 
                 switch (nextDataType) {
@@ -233,35 +237,40 @@ public abstract class ReadExcelXLSX {
                 if (cols>1){
                     //System.out.println(curRow+"  "+curCol+"  "+cols);
                     for (int i = 0;i < cols-1;i++){
-                        rowlist.add(preCol+1,"");
+                        rowList.add(preCol+1, "");
                     }
                 }
                 preCol = curCol;
-                rowlist.add(thisStr.trim());
+
+                if(thisStr==null){
+                    thisStr = "";
+                }
+
+                rowList.add(thisStr.trim());
 
             }else {
                 //如果标签名称为 row ，这说明已到行尾，调用 optRows() 方法
                 if ("row".equals(name)) {
                     if(curRow == titleRow){
-                        this.rowLength = rowlist.size();
+                        this.rowLength = rowList.size();
                     }
 
                     if(curRow > titleRow){
-                        int tmpCols = rowlist.size();
+                        int tmpCols = rowList.size();
                         if(tmpCols < this.rowLength) {
                             for (int i = 0; i < this.rowLength - tmpCols; i++) {
-                                rowlist.add("");
+                                rowList.add("");
                             }
                         }
                     }
 
                     try {
-                        operateRows(sheetIndex, curRow, rowlist);
+                        operateRows(sheetIndex, curRow, rowList);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    rowlist.clear();
+                    rowList.clear();
                     curRow++;
                     preCol = -1;
                 }

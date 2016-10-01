@@ -1,6 +1,7 @@
 package dp.common.util.excelutil;
 
 import dp.common.util.DateUtils;
+import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
 import dp.common.util.StrUtil;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -386,22 +387,6 @@ public class PoiUtil {
         }
     }
 
-    public static List<Map<String, String>> convert(List<Map<String, Object>> dataList){
-        if(dataList.isEmpty()){
-            return new ArrayList<>();
-        }
-        List<Map<String, String>> list = new ArrayList<>();
-        for(Map<String, Object> map : dataList){
-            Map<String, String> m = new HashMap<>();
-            for(Map.Entry<String, Object> entry : map.entrySet()){
-                m.put(entry.getKey(), entry.getValue()==null?"":entry.getValue().toString());
-            }
-            list.add(m);
-        }
-
-        return list;
-    }
-
     //导出xlsx
     public void exportXlsxWithMap(String excelName, String filePath, String[] headList, String[] fieldList,
                                   Collection<Map<String, String>> dataList) throws Exception{
@@ -448,6 +433,12 @@ public class PoiUtil {
                 cell.setCellValue(value==null?"":value);
             }
         }
+    }
+
+
+    //特殊方法
+    public static List<Map<String, String>> convert(List<Map<String, Object>> dataList){
+        return ObjectUtil.objToStrMapList(dataList);
     }
 
 }

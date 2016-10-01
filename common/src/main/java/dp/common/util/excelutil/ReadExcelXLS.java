@@ -47,6 +47,10 @@ public abstract class ReadExcelXLS implements HSSFListener {
 
     private List<String> rowList;
 
+    //只处理一个sheet时使用，指定的待处理sheet，默认处理第一个
+    protected int needHandleSheet = -1;
+
+
     /**
      *  minColumns: 列数
      */
@@ -72,10 +76,28 @@ public abstract class ReadExcelXLS implements HSSFListener {
     }
 
     /**
+     * 指定需要读取的sheet，从 1 开始
+     * */
+    public void processOneSheet(String filename, int minColumns, int sheetIndex) throws IOException {
+        if(sheetIndex<1){
+            needHandleSheet = 0;
+        }else{
+            needHandleSheet = sheetIndex - 1;
+        }
+
+        this.process(filename, minColumns);
+    }
+    public void processFirstSheet(String filename, int minColumns) throws IOException {
+        this.processOneSheet(filename, minColumns, 1);
+    }
+
+
+    /**
      * Main HSSFListener method, processes events, and outputs the
      *  CSV as the file is processed.
      */
     public void processRecord(Record record) {
+
         int thisRow = -1;
         int thisColumn = -1;
         String thisStr = null;
@@ -101,10 +123,10 @@ public abstract class ReadExcelXLS implements HSSFListener {
                     if(orderedBSRs == null) {
                         orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
                     }
-                    System.out.println(
-                            orderedBSRs[sheetIndex].getSheetname() +
-                                    " [" + (sheetIndex + 1) + "]:"
-                    );
+//                    System.out.println(
+//                            orderedBSRs[sheetIndex].getSheetname() +
+//                                    " [" + (sheetIndex + 1) + "]:"
+//                    );
                 }
                 break;
 
@@ -218,7 +240,7 @@ public abstract class ReadExcelXLS implements HSSFListener {
 
         // If we got something to print out, do so
         if(thisStr != null) {
-            rowList.add(thisStr);
+            rowList.add(thisStr.trim());
         }
 
         // Update column and row count
