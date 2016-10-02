@@ -515,7 +515,7 @@ public class 机滤数据处理 extends BaseTest {
 
 
     private void handleGoodsDataList(Set<String> formatSet, List<Map<String, String>> goodsList,
-                                                          String brand, List<Map<String, String>> goodsDataList){
+                                     String brand, List<Map<String, String>> goodsDataList){
 
         for(String format : formatSet){
             boolean flag = true;

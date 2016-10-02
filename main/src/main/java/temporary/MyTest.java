@@ -3,6 +3,7 @@ package temporary;
 import dp.common.util.Print;
 import dp.common.util.StrUtil;
 import org.junit.Test;
+import 机油滤清器处理.处理后数据统计.StatisticConfig;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -63,5 +64,22 @@ public class MyTest<E> {
         System.out.println(Math.abs(d1-d2));
         System.out.println(Math.abs(d1-d2)<=1.5);
 
+
+        str = "'阿尔法-罗密欧','阿斯顿马丁','安驰','Alpina','巴博斯'," +
+                "'宝龙','保斐利','宾利','布加迪','宝沃','大发','大宇'," +
+                "'法拉利','富奇','GMC','光冈','海格','悍马','黑豹','华北'," +
+                "'黄海','华阳','恒天','华颂','九龙','金程','卡尔森'," +
+                "'科尼赛克','卡威','凯翼','兰博基尼','劳伦士','劳斯莱斯'," +
+                "'路特斯','罗孚','玛莎拉蒂','迈巴赫','美亚','迈凯伦'," +
+                "'帕加尼','庞蒂克','启腾','RUF','SPRINGO','Scion','萨博','世爵'," +
+                "'赛宝','通田','特斯拉','威兹曼','西雅特','新凯','云雀','知豆'";
+
+        String[] brands = str.split(",");
+//        for(String b : brands){
+//            System.out.println("set.add(\""+b.replace("'", "")+"\");");
+//        }
+
+        String sql = StatisticConfig.notInBrandSql();
+        System.out.println(sql);
     }
 }
