@@ -84,8 +84,10 @@ public class GoodsCarExcelTest extends BaseTest {
     }
 
     private void init(){
+        String sqlPath = path + "sql/";
+        IoUtil.mkdirsIfNotExist(sqlPath);
         String dateStr = DateUtils.dateToString(new Date(), DateUtils.yyyyMMdd);
-        String sqlFile = path+"sql/insert_goods_lyid_rel_"+dateStr+"_"+ BRAND_CODE +".sql";
+        String sqlFile = sqlPath+"insert_goods_lyid_rel_"+dateStr+"_"+ BRAND_CODE +".sql";
         writer = IoUtil.getWriter(sqlFile);
     }
 

@@ -169,8 +169,9 @@ public class StatisticTest extends BaseTest {
 
 
         path = "/Users/huangzhangting/Desktop/机滤数据处理/";
-        //导出excel
-        ExcelExporter.exportGoodsInfo(path, goodsDataList);
+
+        //TODO 导出商品信息excel
+//        ExcelExporter.exportGoodsInfo(path, goodsDataList);
 
 
         //统计未覆盖车款信息
@@ -200,8 +201,8 @@ public class StatisticTest extends BaseTest {
 
         Print.info("覆盖率："+(size1*1.0)/(size1+size2));
 
-        path += "未覆盖车款数据/";
-        ExcelExporter.exportUnCoverCars(path, needCheckCarsTrue);
+        //TODO 导出未覆盖车款信息excel
+//        ExcelExporter.exportUnCoverCars(path, needCheckCarsTrue);
 
     }
 

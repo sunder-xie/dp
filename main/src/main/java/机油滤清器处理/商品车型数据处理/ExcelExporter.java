@@ -1,5 +1,6 @@
 package 机油滤清器处理.商品车型数据处理;
 
+import dp.common.util.IoUtil;
 import dp.common.util.excelutil.PoiUtil;
 import 机油滤清器处理.BrandEnum;
 
@@ -69,8 +70,11 @@ public class ExcelExporter {
             dataList = new ArrayList<>();
         }
 
+        path += "数据处理后/";
+        IoUtil.mkdirsIfNotExist(path);
+
         try {
-            poiUtil.exportXlsxWithMap(fileName, path+"数据处理后/", heads, fields, dataList);
+            poiUtil.exportXlsxWithMap(fileName, path, heads, fields, dataList);
         } catch (Exception e) {
             e.printStackTrace();
         }

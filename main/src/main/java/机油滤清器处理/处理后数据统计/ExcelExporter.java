@@ -1,5 +1,6 @@
 package 机油滤清器处理.处理后数据统计;
 
+import dp.common.util.IoUtil;
 import dp.common.util.ObjectUtil;
 import dp.common.util.excelutil.PoiUtil;
 
@@ -28,6 +29,9 @@ public class ExcelExporter {
         String[] fields = new String[]{"id", "brand", "company", "series", "model", "power", "year", "name"};
 
         List<Map<String, String>> mapList = ObjectUtil.objToStrMapList(dataList);
+
+        path += "未覆盖车款数据/";
+        IoUtil.mkdirsIfNotExist(path);
 
         try {
             poiUtil.exportXlsxWithMap("机滤未覆盖的车款", path, heads, fields, mapList);
