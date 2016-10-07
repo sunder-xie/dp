@@ -30,11 +30,11 @@ public class ExcelExporter {
 
         List<Map<String, String>> mapList = ObjectUtil.objToStrMapList(dataList);
 
-        path += "未覆盖车款数据/";
-        IoUtil.mkdirsIfNotExist(path);
+        String filePath = path + "未覆盖车款数据/";
+        IoUtil.mkdirsIfNotExist(filePath);
 
         try {
-            poiUtil.exportXlsxWithMap("机滤未覆盖的车款", path, heads, fields, mapList);
+            poiUtil.exportXlsxWithMap("机滤未覆盖的车款", filePath, heads, fields, mapList);
         } catch (Exception e) {
             e.printStackTrace();
         }
