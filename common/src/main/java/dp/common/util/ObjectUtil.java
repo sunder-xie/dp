@@ -1,5 +1,7 @@
 package dp.common.util;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,4 +54,13 @@ public class ObjectUtil {
 
         return list;
     }
+
+    //保留两位小数，四舍五入
+    public static String dbToStrHalfUp(double db){
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+
+        return df.format(db);
+    }
+
 }

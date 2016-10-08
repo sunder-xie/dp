@@ -6,6 +6,8 @@ import org.junit.Test;
 import 机油滤清器处理.处理后数据统计.StatisticConfig;
 
 import java.lang.reflect.Method;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -80,6 +82,14 @@ public class MyTest<E> {
 //        }
 
         String sql = StatisticConfig.notInBrandSql();
-        System.out.println(sql);
+        //System.out.println(sql);
+
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+
+        double dd = 3.5;
+        System.out.println(df.format(dd));
+
     }
 }

@@ -3,6 +3,7 @@ package temporary.云修;
 /**
  * Created by huangzhangting on 16/9/27.
  */
+@Deprecated
 public class 机滤相关sql {
 
     public static String getNewDataSql(int type, int gcId){

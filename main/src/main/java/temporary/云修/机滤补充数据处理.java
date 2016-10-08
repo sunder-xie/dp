@@ -14,6 +14,7 @@ import java.util.Map;
 /**
  * Created by huangzhangting on 16/9/29.
  */
+@Deprecated
 public class 机滤补充数据处理 extends BaseTest {
     private static final int BW_CODE = 6; //豹王机滤
     private static final int ML_CODE = 7; //马勒机滤

@@ -227,7 +227,7 @@ public class StatisticTest extends BaseTest {
 
     //修订后的数据
     private List<Map<String, String>> getCheckedDataList() throws Exception{
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/数据校验/";
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/数据校验/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("id", "carId");
@@ -235,7 +235,7 @@ public class StatisticTest extends BaseTest {
         attrMap.put("备注", "remark");
 
         CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
-        readerXLSX.processOneSheet(path + "机滤覆盖车型信息处理汇总表.xlsx", 1);
+        readerXLSX.processOneSheet(filePath + "机滤覆盖车型信息处理汇总表.xlsx", 1);
 
         List<Map<String, String>> dataList = readerXLSX.getDataList();
         Print.info(dataList.size());
@@ -345,14 +345,14 @@ public class StatisticTest extends BaseTest {
     //处理验证后的箭冠数据
     private void checkJgCarIds(Set<String> carIdSet) throws Exception{
 
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/数据校验/";
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/数据校验/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("id", "carId");
         attrMap.put("错误说明", "errorDesc");
 
         CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
-        readerXLS.process(path+"箭冠可以补充的机滤(一个车款一个机滤)修改汇总.xls", attrMap.size());
+        readerXLS.process(filePath+"箭冠可以补充的机滤(一个车款一个机滤)修改汇总.xls", attrMap.size());
         List<Map<String, String>> oToDataList = readerXLS.getDataList();
         Print.info(oToDataList.size());
         Print.info(oToDataList.get(0));
@@ -367,20 +367,20 @@ public class StatisticTest extends BaseTest {
     }
 
     private List<Map<String, String>> handleJgGoods() throws Exception{
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/";
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("id", "carId");
         attrMap.put("商品编码", "goodsFormat");
 
         CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
-        readerXLS.process(path+"箭冠可以补充的机滤(一对一).xls", attrMap.size());
+        readerXLS.process(filePath+"箭冠可以补充的机滤(一对一).xls", attrMap.size());
         List<Map<String, String>> oToDataList = readerXLS.getDataList();
         Print.info(oToDataList.size());
         Print.info(oToDataList.get(0));
 
         CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
-        readerXLSX.processOneSheet(path+"箭冠可以补充的机滤(一对多)-处理后.xlsx", 1);
+        readerXLSX.processOneSheet(filePath+"箭冠可以补充的机滤(一对多)-处理后.xlsx", 1);
         List<Map<String, String>> oTmDataList = readerXLSX.getDataList();
         Print.info(oTmDataList.size());
         Print.info(oTmDataList.get(0));
@@ -453,14 +453,14 @@ public class StatisticTest extends BaseTest {
 
     //处理奥盛数据
     private List<Map<String, String>> handleAsGoods() throws Exception{
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/奥盛机滤/";
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/奥盛机滤/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("id", "carId");
         attrMap.put("商品编码", "goodsFormat");
 
         CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
-        readerXLS.process(path+"奥盛可以补充的型号.xls", attrMap.size());
+        readerXLS.process(filePath+"奥盛可以补充的型号.xls", attrMap.size());
         List<Map<String, String>> oToDataList = readerXLS.getDataList();
         Print.info(oToDataList.size());
         Print.info(oToDataList.get(0));
@@ -539,14 +539,14 @@ public class StatisticTest extends BaseTest {
     //电商商品数据
     private List<Map<String, String>> getGoodsDataList(String fileName) throws Exception{
 
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/电商机滤商品数据/";
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/电商机滤商品数据/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("new_goods_sn", "goodsSn");
         attrMap.put("goods_format", "goodsFormat");
 
         CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
-        readerXLS.process(path + fileName, attrMap.size());
+        readerXLS.process(filePath + fileName, attrMap.size());
 
         List<Map<String, String>> dataList = readerXLS.getDataList();
         Print.info(fileName+"  "+dataList.size());
@@ -569,14 +569,14 @@ public class StatisticTest extends BaseTest {
 
     private List<Map<String, String>> supplyGoodsCarDataList(String fileName) throws Exception{
 
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/补充数据/待处理数据/";
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/补充数据/待处理数据/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("gc2.car_models_id", "carId");
         attrMap.put("gc2.goods_format", "goodsFormat");
 
         CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
-        readerXLS.process(path + fileName, attrMap.size());
+        readerXLS.process(filePath + fileName, attrMap.size());
 
         List<Map<String, String>> dataList = readerXLS.getDataList();
         Print.info(fileName+"  "+dataList.size());

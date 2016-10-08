@@ -17,6 +17,7 @@ import java.util.*;
  * 云修机油滤清器处理
  * Created by huangzhangting on 16/6/7.
  */
+@Deprecated
 public class EngineOilFilterTest extends BaseTest{
     private static final int YX_CODE = 1; //云修机滤
     private static final int BS_CODE = 2; //博世机滤

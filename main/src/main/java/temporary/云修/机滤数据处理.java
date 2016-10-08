@@ -13,6 +13,7 @@ import java.util.*;
 /**
  * Created by huangzhangting on 16/9/22.
  */
+@Deprecated
 public class 机滤数据处理 extends BaseTest {
     private static final int YX_CODE = 1; //云修机滤
     private static final int BS_CODE = 2; //博世机滤

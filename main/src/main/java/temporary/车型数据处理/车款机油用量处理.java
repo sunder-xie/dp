@@ -3,21 +3,25 @@ package temporary.车型数据处理;
 import base.BaseTest;
 import dp.common.util.DateUtils;
 import dp.common.util.IoUtil;
+import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
 import org.junit.Test;
-import temporary.云修.机滤相关sql;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by huangzhangting on 16/9/22.
  */
 public class 车款机油用量处理 extends BaseTest {
+
+    @Test
+    public void justTest() throws Exception{
+        System.out.println(getOilCapacitySql());
+    }
+
 
     private String getOilCapacitySql(){
         String sql = "select c1.* " +
@@ -59,24 +63,67 @@ public class 车款机油用量处理 extends BaseTest {
         Print.info(dataList.size());
         Print.info(dataList.get(0));
 
+        Map<String, List<String>> oilCarIdsMap = new HashMap<>();
+
+        for(Map<String, Object> data : dataList){
+            double oilCapacity = Double.parseDouble(data.get("oil_capacity").toString());
+            String str = ObjectUtil.dbToStrHalfUp(oilCapacity);
+            List<String> carIds = oilCarIdsMap.get(str);
+            if(carIds==null){
+                carIds = new ArrayList<>();
+                oilCarIdsMap.put(str, carIds);
+            }
+            carIds.add(data.get("id").toString());
+        }
+
         path = "/Users/huangzhangting/Desktop/安心保险数据对接/车型机油用量/";
 
         String dateStr = DateUtils.dateToString(new Date(), DateUtils.yyyyMMdd);
         writer = IoUtil.getWriter(path + "update_oil_capacity_" + dateStr + ".sql");
-        for(Map<String, Object> data : dataList){
-            StringBuilder sql = new StringBuilder();
-            sql.append("update db_car_category set oil_capacity=");
-            sql.append(data.get("oil_capacity"));
-            sql.append(" where id=");
-            sql.append(data.get("id"));
-            sql.append(";\n");
 
-            IoUtil.writeFile(writer, sql.toString());
+        for(Map.Entry<String, List<String>> entry : oilCarIdsMap.entrySet()){
+            handleSql(entry.getKey(), entry.getValue());
         }
 
         IoUtil.closeWriter(writer);
     }
 
+    private void handleSql(String oilCapacity, List<String> carIdList){
+        int size = carIdList.size();
+        Print.info(oilCapacity+"  "+size);
+
+        if(size==1){
+            String sql = "update db_car_category set oil_capacity="+oilCapacity+" where id="+carIdList.get(0)+";\n";
+            IoUtil.writeFile(writer, sql);
+            return;
+        }
+
+        int count = 200;
+        int lastIndex = size - 1;
+        StringBuilder sql = new StringBuilder();
+        for(int i=0; i<size; i++){
+            sql.append(carIdList.get(i));
+            if((i+1)%count==0){
+                writeSql(oilCapacity, sql);
+                sql.setLength(0);
+                continue;
+            }
+            if(i==lastIndex){
+                writeSql(oilCapacity, sql);
+                break;
+            }
+            sql.append(",");
+        }
+    }
+    private void writeSql(String oilCapacity, StringBuilder sql){
+        String str = "update db_car_category set oil_capacity="+oilCapacity+" where id in(";
+        sql.insert(0, str);
+        sql.append(");\n");
+        IoUtil.writeFile(writer, sql.toString());
+    }
+
+
+/*
 
     private boolean unNeedAdd(String id){
         String sql = "select id from db_car_category where level=6 and oil_capacity=0 and id="+id;
@@ -84,7 +131,8 @@ public class 车款机油用量处理 extends BaseTest {
         return list.isEmpty();
     }
 
-    @Test
+
+    //@Test
     public void add_oil_capacity() throws Exception{
         path = "/Users/huangzhangting/Desktop/安心保险数据对接/车型机油用量/";
         String fileName = path + "yc51OilDosage20160922.txt";
@@ -116,6 +164,7 @@ public class 车款机油用量处理 extends BaseTest {
 
         IoUtil.closeWriter(writer);
     }
+*/
 
 
     //生成更新力洋车型机油用量的sql
