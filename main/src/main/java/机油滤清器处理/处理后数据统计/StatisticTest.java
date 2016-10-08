@@ -366,6 +366,7 @@ public class StatisticTest extends BaseTest {
         }
     }
 
+    //TODO 处理箭冠补充数据
     private List<Map<String, String>> handleJgGoods() throws Exception{
         String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/";
 
@@ -451,7 +452,7 @@ public class StatisticTest extends BaseTest {
         return goodsDataList;
     }
 
-    //处理奥盛数据
+    //TODO 处理奥盛补充数据
     private List<Map<String, String>> handleAsGoods() throws Exception{
         String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/奥盛机滤/";
 
