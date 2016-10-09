@@ -69,14 +69,14 @@ public class 补充数据Test extends BaseTest {
     //TODO 处理箭冠补充数据
     @Test
     public void test_jian_guan() throws Exception{
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/";
+        path = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/最终数据/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("id", "carId");
         attrMap.put("商品编码", "goodsFormat");
 
         CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
-        readerXLSX.processOneSheet(path+"箭冠可以补充的机滤-20161008.xlsx", 1);
+        readerXLSX.processOneSheet(path+"箭冠可以补充的型号(修订后)-20161009.xlsx", 1);
         List<Map<String, String>> dataList = readerXLSX.getDataList();
         Print.info(dataList.size());
         Print.info(dataList.get(0));

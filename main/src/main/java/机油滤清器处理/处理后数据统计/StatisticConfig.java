@@ -35,6 +35,15 @@ public class StatisticConfig {
         return "select distinct goods_format from temp_goods_lyid_rel where brand_code="+code;
     }
 
+    //机油车款
+    public static String oilCarSql(){
+        String sql = "select id,brand,company,series,model,power,`year`,`name` " +
+                "from db_car_category where level=6 " +
+                "and power!='电动' and `name` not like '%柴油%' ";
+
+        return sql;
+    }
+
     //需要验证的车款数据sql
     public static String needCheckCarsSql(){
         String sql = "select id,brand,company,series,model,power,`year`,`name` " +

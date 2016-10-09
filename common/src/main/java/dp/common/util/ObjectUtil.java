@@ -12,6 +12,14 @@ import java.util.Map;
  */
 public class ObjectUtil {
 
+    public static Map<String, String> objToStrMap(Map<String, Object> map){
+        Map<String, String> m = new HashMap<>();
+        for(Map.Entry<String, Object> entry : map.entrySet()){
+            m.put(entry.getKey(), entry.getValue()==null?"":entry.getValue().toString());
+        }
+        return m;
+    }
+
     public static Map<String, Object> copyMap(Map<String, Object> map){
         if(map==null){
             return null;

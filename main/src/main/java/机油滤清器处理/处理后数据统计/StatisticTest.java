@@ -21,10 +21,11 @@ public class StatisticTest extends BaseTest {
 
     @Test
     public void justTest() throws Exception{
-        List<Map<String, Object>> dataList = commonMapper.selectListBySql(StatisticConfig.needCheckCarsSql());
-        Print.info(dataList.size());
-        Print.info(dataList.get(0));
+        List<Map<String, String>> goodsDataList = handleJianGuanGoods();
+        Print.info(goodsDataList.size());
+        Print.info(goodsDataList.get(0));
 
+        Print.info(CAR_ID_SET);
     }
 
     @Test
@@ -160,7 +161,7 @@ public class StatisticTest extends BaseTest {
         Print.info("覆盖车款id："+CAR_ID_SET.size());
 
         //处理箭冠数据
-        goodsDataList.addAll(handleJgGoods());
+        goodsDataList.addAll(handleJianGuanGoods());
         Print.info(goodsDataList.size());
 
         //处理奥盛数据
@@ -171,7 +172,7 @@ public class StatisticTest extends BaseTest {
         path = "/Users/huangzhangting/Desktop/机滤数据处理/";
 
         //TODO 导出商品信息excel
-//        ExcelExporter.exportGoodsInfo(path, goodsDataList);
+        ExcelExporter.exportGoodsInfo(path, goodsDataList);
 
 
         //统计未覆盖车款信息
@@ -202,7 +203,7 @@ public class StatisticTest extends BaseTest {
         Print.info("覆盖率："+(size1*1.0)/(size1+size2));
 
         //TODO 导出未覆盖车款信息excel
-//        ExcelExporter.exportUnCoverCars(path, needCheckCarsTrue);
+        ExcelExporter.exportUnCoverCars(path, needCheckCarsTrue);
 
     }
 
@@ -343,6 +344,7 @@ public class StatisticTest extends BaseTest {
 
 
     //处理验证后的箭冠数据
+/*
     private void checkJgCarIds(Set<String> carIdSet) throws Exception{
 
         String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/数据校验/";
@@ -451,6 +453,44 @@ public class StatisticTest extends BaseTest {
 
         return goodsDataList;
     }
+*/
+
+    private List<Map<String, String>> handleJianGuanGoods() throws Exception{
+        String filePath = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/最终数据/";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("id", "carId");
+        attrMap.put("商品编码", "goodsFormat");
+
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(filePath + "箭冠可以补充的型号(修订后)-20161009.xlsx", 1);
+        List<Map<String, String>> dataList = readerXLSX.getDataList();
+        Print.info(dataList.size());
+        Print.info(dataList.get(0));
+
+        Set<String> carIdSet = new HashSet<>();
+        Set<String> goodsFormats = new HashSet<>();
+        for(Map<String, String> data : dataList){
+            carIdSet.add(data.get("carId"));
+            goodsFormats.add(data.get("goodsFormat"));
+        }
+
+        //统计全部覆盖车款
+        CAR_ID_SET.addAll(carIdSet);
+
+        List<Map<String, String>> goodsDataList = new ArrayList<>();
+        for(String gf : goodsFormats){
+            Map<String, String> map = new HashMap<>();
+            map.put("brand", "箭冠");
+            map.put("goodsFormat", gf);
+            map.put("goodsSn", "待补充");
+
+            goodsDataList.add(map);
+        }
+
+        return goodsDataList;
+    }
+
 
     //TODO 处理奥盛补充数据
     private List<Map<String, String>> handleAsGoods() throws Exception{
@@ -461,7 +501,7 @@ public class StatisticTest extends BaseTest {
         attrMap.put("商品编码", "goodsFormat");
 
         CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
-        readerXLS.process(filePath+"奥盛可以补充的型号.xls", attrMap.size());
+        readerXLS.process(filePath + "奥盛可以补充的型号.xls", attrMap.size());
         List<Map<String, String>> oToDataList = readerXLS.getDataList();
         Print.info(oToDataList.size());
         Print.info(oToDataList.get(0));

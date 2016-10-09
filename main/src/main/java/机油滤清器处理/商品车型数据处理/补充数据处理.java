@@ -2,13 +2,14 @@ package 机油滤清器处理.商品车型数据处理;
 
 import base.BaseTest;
 import dp.common.util.IoUtil;
+import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
 import dp.common.util.excelutil.CommReaderXLS;
 import dp.common.util.excelutil.CommReaderXLSX;
-import dp.common.util.excelutil.PoiUtil;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 import 机油滤清器处理.BrandEnum;
+import 机油滤清器处理.处理后数据统计.StatisticConfig;
 
 import java.util.*;
 
@@ -175,9 +176,6 @@ public class 补充数据处理 extends BaseTest {
         dataList.addAll(oToDataList);
         dataList.addAll(oTmDataList);
 
-        //TODO 读取箭冠商品
-        List<Map<String, String>> goodsList = new ArrayList<>();
-
         List<Map<String, String>> effectiveList = new ArrayList<>();
         for(Map<String, String> data : dataList){
             String carId = data.get("carId");
@@ -189,7 +187,7 @@ public class 补充数据处理 extends BaseTest {
         Print.info("有效数据："+effectiveList.size());
 
         //TODO 导出excel
-        //ExcelExporter.exportCarGoodsData(path, "箭冠可以补充的机滤", effectiveList);
+        ExcelExporter.exportCarGoodsData(path, "箭冠可以补充的机滤", effectiveList);
 
     }
 
@@ -217,6 +215,187 @@ public class 补充数据处理 extends BaseTest {
         }
 
         return carIdSet;
+    }
+
+
+    // TODO 修订后的箭冠数据处理
+    @Test
+    public void test_jian_guan_checked() throws Exception{
+        path = "/Users/huangzhangting/Desktop/机滤数据处理/待处理的数据/箭冠补充数据/";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("id", "carId");
+        attrMap.put("商品编码", "goodsFormat");
+        attrMap.put("品牌", "brand");
+        attrMap.put("厂家", "company");
+        attrMap.put("车系", "series");
+        attrMap.put("车型", "model");
+        attrMap.put("排量", "power");
+        attrMap.put("年款", "year");
+        attrMap.put("车款", "carName");
+        attrMap.put("备注", "remark");
+
+        attrMap.put("品牌-new", "brand_new");
+        attrMap.put("厂家-new", "company_new");
+        attrMap.put("车系-new", "series_new");
+        attrMap.put("车型-new", "model_new");
+        attrMap.put("排量-new", "power_new");
+        attrMap.put("年款-new", "year_new");
+        attrMap.put("进气形式-new", "inlet_type");
+
+
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(path + "箭冠可以补充的机滤-修订后-20161009.xlsx", 1);
+        List<Map<String, String>> dataList = readerXLSX.getDataList();
+        Print.info(dataList.size());
+        Print.info(dataList.get(0));
+
+        Set<String> deleteFormats = new HashSet<>();
+        Set<String> effectiveFormats = new HashSet<>();
+        List<Map<String, String>> modifyDataList = new ArrayList<>(); //修订数据
+        List<Map<String, String>> effectiveList = new ArrayList<>(); //有效的数据
+        for(Map<String, String> data : dataList){
+            String remark = data.get("remark");
+            String goodsFormat = data.get("goodsFormat");
+
+            if("删除".equals(remark)){
+                deleteFormats.add(goodsFormat);
+            }else{
+                effectiveFormats.add(goodsFormat);
+                if("更改".equals(remark)){
+                    modifyDataList.add(data);
+                }else{
+                    effectiveList.add(data);
+                }
+            }
+        }
+        Print.info(effectiveFormats.size());
+        Print.info(deleteFormats);
+
+        boolean flag = false;
+        for(String df : deleteFormats){
+            if(!effectiveFormats.contains(df)){
+                Print.info("需要删除的型号："+df);
+                flag = true;
+            }
+        }
+
+        if(flag){
+            return;
+        }
+
+        Print.info(modifyDataList.size());
+        Print.info(modifyDataList.get(0));
+
+        Print.info("有效的数据："+effectiveList.size());
+
+        effectiveList.addAll(handleModifyDataList(modifyDataList));
+
+        Print.info("有效的数据："+effectiveList.size());
+
+
+        //TODO 导出excel
+        ExcelExporter.exportCarGoodsData(path, "箭冠可以补充的型号(修订后)", effectiveList);
+
+    }
+
+    private List<Map<String, String>> handleModifyDataList(List<Map<String, String>> modifyDataList){
+        List<Map<String, Object>> oilCarList = commonMapper.selectListBySql(StatisticConfig.oilCarSql());
+        Print.info(oilCarList.size());
+        Print.info(oilCarList.get(0));
+
+        List<Map<String, String>> dataList = new ArrayList<>();
+
+        for(Map<String, String> md : modifyDataList){
+            String brand = md.get("brand_new");
+            String company = md.get("company_new");
+            String series = md.get("series_new");
+            String model = md.get("model_new");
+
+            String year = md.get("year_new");
+
+            Set<String> powerSet = getAttrSet(md.get("power_new"));
+
+            String inletType = md.get("inlet_type");
+
+            for(Map<String, Object> car : oilCarList){
+                if(brand.equals(car.get("brand").toString())
+                        && company.equals(car.get("company").toString())
+                        && series.equals(car.get("series").toString())
+                        && model.equals(car.get("model").toString())){
+
+                    if(comparePower(powerSet, car.get("power"), inletType)
+                            && compareYear(year, car.get("year"))){
+
+                        //Print.info("匹配上的数据："+md.get("goodsFormat")+"  "+car);
+
+                        Map<String, String> map = ObjectUtil.objToStrMap(car);
+                        map.put("carId", map.get("id"));
+                        map.put("goodsFormat", md.get("goodsFormat"));
+                        map.put("carName", map.get("name"));
+
+                        dataList.add(map);
+                    }
+
+                }
+            }
+
+        }
+
+        Print.info(dataList.size());
+        Print.info(dataList.get(0));
+
+        return dataList;
+    }
+
+    //比较年款
+    private boolean compareYear(String yearStr, Object obj){
+        if(StringUtils.isEmpty(yearStr)){
+            return true;
+        }
+        if(obj==null){
+            return false;
+        }
+        String year = obj.toString().trim();
+        if("".equals(year)){
+            return false;
+        }
+
+        return yearStr.equals(year);
+    }
+
+    //比较排量
+    private boolean comparePower(Set<String> attrs, Object val, String inletType){
+        if(attrs==null){
+            return true;
+        }
+        if(val==null){
+            return false;
+        }
+        String str = val.toString().trim();
+        if("".equals(str)){
+            return false;
+        }
+
+        return attrs.contains(str.replace(inletType, ""));
+    }
+
+    //有多个值的属性，封装成set
+    private Set<String> getAttrSet(String attrs){
+        if(attrs==null){
+            return null;
+        }
+        attrs = attrs.trim();
+        if("".equals(attrs)){
+            return null;
+        }
+        Set<String> set = new HashSet<>();
+
+        String[] ps = attrs.split("/");
+        for(int i=0; i<ps.length; i++){
+            set.add(ps[i]);
+        }
+        return set;
     }
 
 }
