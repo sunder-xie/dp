@@ -84,7 +84,7 @@ public class 补充数据Test extends BaseTest {
         //TODO 读取箭冠商品
         List<Map<String, String>> goodsList = new ArrayList<>();
 
-        GoodsCarSqlGen sqlGen = new GoodsCarSqlGen(path);
+        GoodsCarSqlGen sqlGen = new GoodsCarSqlGen(path, commonMapper);
 
         for(Map<String, String> data : dataList){
             String carId = data.get("carId");

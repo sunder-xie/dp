@@ -5,6 +5,7 @@ import dp.common.util.DateUtils;
 import dp.common.util.IoUtil;
 import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
+import dp.dao.mapper.CommonMapper;
 
 import java.util.*;
 
@@ -18,8 +19,9 @@ public class GoodsCarSqlGen extends BaseTest{
     private List<Map<String, Object>> carInfoList;
 
 
-    public GoodsCarSqlGen(String path) {
+    public GoodsCarSqlGen(String path, CommonMapper commonMapper) {
         this.path = path;
+        this.commonMapper = commonMapper;
 
         init();
     }
@@ -44,9 +46,23 @@ public class GoodsCarSqlGen extends BaseTest{
 
     //车型信息相关
     public List<Map<String, Object>> getCarInfoList(){
-        String sql = "select brand,brand_id,series,series_id,model,model_id," +
-                "power,power_id,year,year_id,car_models as car_name,car_models_id as car_id, company " +
-                "from db_car_all group by car_models_id";
+//        String sql = "select brand,brand_id,series,series_id,model,model_id," +
+//                "power,power_id,year,year_id,car_models as car_name,car_models_id as car_id, company " +
+//                "from db_car_all group by car_models_id";
+
+        String sql = "select t6.id as car_id,t6.`name` as car_name,t6.company, " +
+                "t5.`name` as year,t5.id as year_id,t4.`name` as power,t4.id as power_id, " +
+                "t3.`name` as model,t3.id as model_id,t2.`name` as series,t2.id as series_id, " +
+                "t1.`name` as brand,t1.id as brand_id " +
+                "from " +
+                "(select id,name,pid,company from db_car_category where level=6) t6, " +
+                "(select id,name,pid from db_car_category where level=5) t5, " +
+                "(select id,name,pid from db_car_category where level=4) t4, " +
+                "(select id,name,pid from db_car_category where level=3) t3, " +
+                "(select id,name,pid from db_car_category where level=2) t2, " +
+                "(select id,name from db_car_category where level=1) t1 " +
+                "where t1.id=t2.pid and t2.id=t3.pid and t3.id=t4.pid " +
+                "and t4.id=t5.pid and t5.id=t6.pid ";
 
         return commonMapper.selectListBySql(sql);
     }
