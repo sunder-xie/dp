@@ -1,5 +1,6 @@
 package dp.common.util.excelutil;
 
+import dp.common.util.Print;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -51,6 +52,8 @@ public abstract class ReadExcelXLSX {
      * @throws Exception
      */
     public void processOneSheet(String fileName, int sheetId) throws Exception {
+        Print.info(fileName);
+
         if(sheetId<1){
             sheetId = 1;
         }
@@ -73,6 +76,8 @@ public abstract class ReadExcelXLSX {
      * 遍历 excel 文件
      */
     public void processAllSheets(String fileName) throws Exception {
+        Print.info(fileName);
+
         OPCPackage pkg = OPCPackage.open(fileName);
         XSSFReader r = new XSSFReader(pkg);
         SharedStringsTable sst = r.getSharedStringsTable();

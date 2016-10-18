@@ -1,5 +1,6 @@
 package dp.common.util.excelutil;
 
+import dp.common.util.Print;
 import org.apache.poi.hssf.eventusermodel.*;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
@@ -55,6 +56,8 @@ public abstract class ReadExcelXLS implements HSSFListener {
      *  minColumns: 列数
      */
     public void process(String filename, int minColumns) throws IOException {
+        Print.info(filename);
+
         this.fs = new POIFSFileSystem(new FileInputStream(filename));
         this.minColumns = minColumns-1;
         this.rowList = new ArrayList<>();
