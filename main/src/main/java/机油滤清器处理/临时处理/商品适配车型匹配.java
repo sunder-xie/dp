@@ -1,6 +1,7 @@
 package 机油滤清器处理.临时处理;
 
 import base.BaseTest;
+import dp.common.util.IoUtil;
 import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
 import dp.common.util.StrUtil;
@@ -8,8 +9,6 @@ import dp.common.util.excelutil.CommReaderXLS;
 import dp.common.util.excelutil.CommReaderXLSX;
 import dp.common.util.excelutil.PoiUtil;
 import org.junit.Test;
-import 机油滤清器处理.处理后数据统计.ExcelExporter;
-import 机油滤清器处理.处理后数据统计.StatisticConfig;
 
 import java.util.*;
 
@@ -165,7 +164,7 @@ public class 商品适配车型匹配 extends BaseTest{
         Print.info(lyCarGoodsList.get(0));
 
         //力洋-电商车型关系数据
-        List<Map<String, Object>> lyCarRelList = commonMapper.selectListBySql("select new_l_id,brand,company,series,model,power,`year`,car_models,car_models_id from db_car_all");
+        List<Map<String, Object>> lyCarRelList = getLyCarRelList();
         Print.info(lyCarRelList.size());
         Print.info(lyCarRelList.get(0));
 
@@ -369,6 +368,11 @@ public class 商品适配车型匹配 extends BaseTest{
     }
 
     //力洋数据相关处理
+    private List<Map<String, Object>> getLyCarRelList(){
+        String sql = "select new_l_id,brand,company,series,model,power,`year`,car_models,car_models_id from db_car_all";
+        return commonMapper.selectListBySql(sql);
+    }
+
     private Set<String> getLyIdSet(String goodsFormat, List<Map<String, String>> lyCarGoodsList){
         Set<String> set = new HashSet<>();
         for(Map<String, String> cg : lyCarGoodsList){
@@ -400,5 +404,146 @@ public class 商品适配车型匹配 extends BaseTest{
     }
 
 
+    //TODO 步骤二，重复数据分离
+    @Test
+    public void test_2() throws Exception{
+        path = "/Users/huangzhangting/Desktop/机滤数据处理/临时商品车型关系数据匹配/";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("机油滤", "goodsFormat");
+        attrMap.put("id", "lyId");
+
+        String excel = path + "OK状态下没有匹配上的商品修改表-20161019.xlsx";
+
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 2);
+        List<Map<String, String>> lyCarGoodsList = readerXLSX.getDataList();
+        Print.info(lyCarGoodsList.size());
+        Print.info(lyCarGoodsList.get(0));
+
+        Map<String, Set<String>> goodsMap = new HashMap<>();
+        for(Map<String, String> goods : lyCarGoodsList){
+            String goodsFormat = goods.get("goodsFormat");
+            Set<String> lyIdSet = goodsMap.get(goodsFormat);
+            if(lyIdSet==null){
+                lyIdSet = new HashSet<>();
+                goodsMap.put(goodsFormat, lyIdSet);
+            }
+            lyIdSet.add(goods.get("lyId"));
+        }
+
+        attrMap = new HashMap<>();
+        attrMap.put("产品编码", "goodsSn");
+        attrMap.put("品牌", "goodsBrand");
+        attrMap.put("产品名称", "goodsName");
+        attrMap.put("规格型号", "goodsFormat");
+        readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 1);
+        List<Map<String, String>> goodsList = readerXLSX.getDataList();
+        Print.info(goodsList.size());
+        Print.info(goodsList.get(0));
+
+        //力洋-电商车型关系数据
+        List<Map<String, Object>> lyCarRelList = getLyCarRelList();
+        Print.info(lyCarRelList.size());
+        Print.info(lyCarRelList.get(0));
+
+        List<Map<String, String>> modifyGoodsCarList = new ArrayList<>();
+        for(Map.Entry<String, Set<String>> entry : goodsMap.entrySet()){
+            Map<String, String> goods = getGoodsByFormat(entry.getKey(), goodsList);
+            if(goods==null){
+                continue;
+            }
+            Collection<Map<String, String>> carList = getMatchGoodsCarList(entry.getValue(), lyCarRelList);
+            handleMatchGoodsCarList(goods, carList);
+            modifyGoodsCarList.addAll(carList);
+        }
+
+        Print.info(modifyGoodsCarList.size());
+        Print.info(modifyGoodsCarList.get(0));
+
+        //处理重复数据（同一个车款，同一个商品品牌下，有多个型号）
+        excel = path + "机滤-车款适配关系-20161019.xlsx";
+        attrMap.put("车品牌", "brand");
+        attrMap.put("厂家", "company");
+        attrMap.put("车系", "series");
+        attrMap.put("车型", "model");
+        attrMap.put("排量", "power");
+        attrMap.put("年款", "year");
+        attrMap.put("车款", "carName");
+        attrMap.put("id", "carId");
+
+        readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 1);
+        List<Map<String, String>> oldGoodsCarList = readerXLSX.getDataList();
+        Print.info(oldGoodsCarList.size());
+        Print.info(oldGoodsCarList.get(0));
+
+        //
+        oldGoodsCarList.addAll(modifyGoodsCarList);
+
+        Set<String> set = new HashSet<>();
+        Set<String> repeatKeySet = new HashSet<>();
+        for(Map<String, String> gc : oldGoodsCarList){
+            String key = gc.get("carId")+"-"+gc.get("goodsBrand");
+            if(!set.add(key)){
+                repeatKeySet.add(key);
+            }
+        }
+
+        List<Map<String, String>> repeatGoodsCarList = new ArrayList<>();
+        List<Map<String, String>> goodsCarList = new ArrayList<>();
+        for(Map<String, String> gc : oldGoodsCarList){
+            String key = gc.get("carId")+"-"+gc.get("goodsBrand");
+            if(repeatKeySet.contains(key)){
+                repeatGoodsCarList.add(gc);
+            }else{
+                goodsCarList.add(gc);
+            }
+        }
+
+        Print.info("重复数据："+repeatGoodsCarList.size());
+        Print.info("可用数据：" + goodsCarList.size());
+
+
+        String excelPath = path + "/处理后/";
+        IoUtil.mkdirsIfNotExist(excelPath);
+
+        PoiUtil poiUtil = new PoiUtil();
+
+        String[] heads = new String[]{"产品编码", "品牌", "产品名称", "规格型号", "车品牌", "厂家", "车系", "车型", "排量", "年款", "车款", "id"};
+        String[] fields = new String[]{"goodsSn", "goodsBrand", "goodsName", "goodsFormat", "brand", "company", "series", "model", "power", "year", "carName", "carId"};
+
+        Collections.sort(goodsCarList, new Comparator<Map<String, String>>() {
+            @Override
+            public int compare(Map<String, String> o1, Map<String, String> o2) {
+                String str1 = o1.get("goodsBrand")+o1.get("brand")+o1.get("company")+o1.get("model")+o1.get("year")+o1.get("carName");
+                String str2 = o2.get("goodsBrand")+o2.get("brand")+o2.get("company")+o2.get("model")+o2.get("year")+o2.get("carName");
+                return str1.compareTo(str2);
+            }
+        });
+        poiUtil.exportXlsxWithMap("机滤-车款适配关系", excelPath, heads, fields, goodsCarList);
+
+
+        Collections.sort(repeatGoodsCarList, new Comparator<Map<String, String>>() {
+            @Override
+            public int compare(Map<String, String> o1, Map<String, String> o2) {
+                String str1 = o1.get("goodsBrand")+o1.get("brand")+o1.get("company")+o1.get("model")+o1.get("year")+o1.get("carName");
+                String str2 = o2.get("goodsBrand")+o2.get("brand")+o2.get("company")+o2.get("model")+o2.get("year")+o2.get("carName");
+                return str1.compareTo(str2);
+            }
+        });
+        poiUtil.exportXlsxWithMap("机滤-车款适配关系(一对多)", excelPath, heads, fields, repeatGoodsCarList);
+
+
+    }
+    private Map<String, String> getGoodsByFormat(String goodsFormat, List<Map<String, String>> goodsList){
+        for(Map<String, String> goods : goodsList){
+            if(goodsFormat.equals(goods.get("goodsFormat"))){
+                return goods;
+            }
+        }
+        return null;
+    }
 
 }
