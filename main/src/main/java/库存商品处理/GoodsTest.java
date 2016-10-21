@@ -25,7 +25,7 @@ public class GoodsTest extends BaseTest {
 
     //奥胜商品型号-车型关系数据
     private Collection<Map<String, String>> getAoShengGoodsCarList() throws Exception{
-        String filePath = "/Users/huangzhangting/Desktop/库存商品数据处理/奥胜商品数据/";
+        String filePath = path + "奥胜商品数据/";
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("id", "carId");
         attrMap.put("商品编码", "goodsFormat");
@@ -305,7 +305,7 @@ public class GoodsTest extends BaseTest {
     }
 
     private List<Map<String, String>> getLyCarGoodsList(String fileName) throws Exception{
-        String filePath = "/Users/huangzhangting/Desktop/库存商品数据处理/monkey商品库/";
+        String filePath = path + "monkey商品库/";
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("gc.liyang_Id", "lyId");
         attrMap.put("g.goods_format", "goodsFormat");
