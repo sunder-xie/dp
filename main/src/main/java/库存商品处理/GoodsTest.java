@@ -106,10 +106,26 @@ public class GoodsTest extends BaseTest {
         return commonMapper.selectListBySql(sql);
     }
 
+    private boolean compareGoodsFormat(String goodsFormatStr, String goodsFormat){
+        goodsFormatStr = StrUtil.toUpCase(goodsFormatStr);
+        goodsFormat = StrUtil.toUpCase(goodsFormat);
+
+        if(goodsFormatStr.equals(goodsFormat)){
+            return true;
+        }
+        String[] gfs = goodsFormatStr.split("/");
+        for(String str : gfs){
+            if(str.equals(goodsFormat)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Set<String> getLyIdSet(String goodsFormat, List<Map<String, String>> lyCarGoodsList){
         Set<String> set = new HashSet<>();
         for(Map<String, String> cg : lyCarGoodsList){
-            if(StrUtil.toUpCase(goodsFormat).equals(StrUtil.toUpCase(cg.get("goodsFormat")))){
+            if(compareGoodsFormat(goodsFormat, cg.get("goodsFormat"))){
                 set.add(cg.get("lyId"));
             }
         }
@@ -149,6 +165,7 @@ public class GoodsTest extends BaseTest {
     //力洋id，车型关系数据
     List<Map<String, Object>> lyIdCarRelList;
 
+    //TODO 开始处理数据
     @Test
     public void test() throws Exception{
         path = "/Users/huangzhangting/Desktop/库存商品数据处理/";
