@@ -1,0 +1,10 @@
+# monkey商品库关系数据导出
+select @partId := 1618;
+select gc.liyang_Id,g.brand_id,g.brand_name,g.goods_name,g.goods_format
+from
+(select * from db_monkey_commodity_goods where part_id=@partId) g,
+db_monkey_commodity_goods_car gc
+where g.uuId=gc.goods_uuId
+
+
+select * from db_monkey_commodity_goods where part_name='空气滤清器'

@@ -72,6 +72,10 @@ public abstract class ReadExcelXLSX {
         sheet.close();
     }
 
+    public void processFirstSheet(String fileName) throws Exception{
+        processOneSheet(fileName, 1);
+    }
+
     /**
      * 遍历 excel 文件
      */

@@ -20,6 +20,17 @@ public class ObjectUtil {
         return m;
     }
 
+    public static Map<String, String> copyStrMap(Map<String, String> map){
+        if(map==null){
+            return null;
+        }
+        Map<String, String> result = new HashMap<>();
+        for(Map.Entry<String, String> entry : map.entrySet()){
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
+
     public static Map<String, Object> copyMap(Map<String, Object> map){
         if(map==null){
             return null;
