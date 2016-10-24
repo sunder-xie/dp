@@ -110,4 +110,70 @@ public class TempTest extends BaseTest {
         return keySet;
     }
 
+
+    // 2016-10-24
+    @Test
+    public void test_1024() throws Exception{
+        path = "/Users/huangzhangting/Desktop/库存商品数据处理/";
+
+        String excel = path + "OK状态下没有匹配上的商品-20161024.xlsx";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("产品编码", "goodsSn");
+        attrMap.put("产品品牌", "goodsBrand");
+        attrMap.put("产品名称", "goodsName");
+        attrMap.put("规格型号", "goodsFormat");
+
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 1);
+        List<Map<String, String>> kongqilv = readerXLSX.getDataList();
+        Print.printList(kongqilv);
+
+        readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 3);
+        List<Map<String, String>> kongtiaolv = readerXLSX.getDataList();
+        Print.printList(kongtiaolv);
+
+        //力洋id关系数据
+        attrMap = new HashMap<>();
+        attrMap.put("规格型号", "goodsFormat");
+        attrMap.put("id", "lyId");
+
+        readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 2);
+        List<Map<String, String>> kongqilvLyIds = readerXLSX.getDataList();
+        Print.printList(kongqilvLyIds);
+
+        readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processOneSheet(excel, 4);
+        List<Map<String, String>> kongtiaolvLyIds = readerXLSX.getDataList();
+        Print.printList(kongtiaolvLyIds);
+
+        common = new Common(commonMapper);
+
+        //处理空气滤清器
+        handleGoods(kongqilv, kongqilvLyIds, "空气滤清器补充", path + "处理后/空气滤清器/");
+        //处理空调滤清器
+        handleGoods(kongtiaolv, kongtiaolvLyIds, "空调滤清器补充", path + "处理后/空调滤清器/");
+    }
+
+    private void handleGoods(List<Map<String, String>> goodsList, List<Map<String, String>> lyIdGoodsList,
+                             String fileName, String filePath){
+        List<Map<String, String>> goodsCarList = new ArrayList<>();
+        for(Map<String, String> goods : goodsList){
+            String goodsFormat = goods.get("goodsFormat");
+            Set<String> lyIdSet = common.getLyIdSet(goodsFormat, lyIdGoodsList);
+            if(!lyIdSet.isEmpty()){
+                Collection<Map<String, String>> matchGoodsCarList = common.getMatchGoodsCarList(lyIdSet);
+                common.handleMatchGoodsCarList(goods, matchGoodsCarList);
+                goodsCarList.addAll(matchGoodsCarList);
+            }
+        }
+        Print.info("\n========== 需要处理的数据 ==========");
+        Print.printList(goodsCarList);
+        Print.info("");
+
+        common.exportGoodsCarExcel(fileName, filePath, goodsCarList);
+    }
+
 }
