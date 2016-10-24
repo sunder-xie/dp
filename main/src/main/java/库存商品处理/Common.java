@@ -1,6 +1,7 @@
 package 库存商品处理;
 
 import dp.common.util.ObjectUtil;
+import dp.common.util.Print;
 import dp.common.util.StrUtil;
 import dp.common.util.excelutil.PoiUtil;
 import dp.dao.mapper.CommonMapper;
@@ -80,6 +81,7 @@ public class Common {
         }
     }
 
+    //数据导出相关
     public void sortGoodsCarList(List<Map<String, String>> goodsCarList){
         Collections.sort(goodsCarList, new Comparator<Map<String, String>>() {
             @Override
@@ -107,6 +109,26 @@ public class Common {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //关系数据匹配
+    public void handleGoodsCar(List<Map<String, String>> goodsList, List<Map<String, String>> lyIdGoodsList,
+                             String fileName, String filePath){
+        List<Map<String, String>> goodsCarList = new ArrayList<>();
+        for(Map<String, String> goods : goodsList){
+            String goodsFormat = goods.get("goodsFormat");
+            Set<String> lyIdSet = getLyIdSet(goodsFormat, lyIdGoodsList);
+            if(!lyIdSet.isEmpty()){
+                Collection<Map<String, String>> matchGoodsCarList = getMatchGoodsCarList(lyIdSet);
+                handleMatchGoodsCarList(goods, matchGoodsCarList);
+                goodsCarList.addAll(matchGoodsCarList);
+            }
+        }
+        Print.info("\n========== 需要处理的数据 ==========");
+        Print.printList(goodsCarList);
+        Print.info("");
+
+        exportGoodsCarExcel(fileName, filePath, goodsCarList);
     }
 
 }

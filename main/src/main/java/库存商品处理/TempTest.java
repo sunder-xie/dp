@@ -152,28 +152,10 @@ public class TempTest extends BaseTest {
         common = new Common(commonMapper);
 
         //处理空气滤清器
-        handleGoods(kongqilv, kongqilvLyIds, "空气滤清器补充", path + "处理后/空气滤清器/");
+        common.handleGoodsCar(kongqilv, kongqilvLyIds, "空气滤清器补充", path + "处理后/空气滤清器/");
+
         //处理空调滤清器
-        handleGoods(kongtiaolv, kongtiaolvLyIds, "空调滤清器补充", path + "处理后/空调滤清器/");
-    }
-
-    private void handleGoods(List<Map<String, String>> goodsList, List<Map<String, String>> lyIdGoodsList,
-                             String fileName, String filePath){
-        List<Map<String, String>> goodsCarList = new ArrayList<>();
-        for(Map<String, String> goods : goodsList){
-            String goodsFormat = goods.get("goodsFormat");
-            Set<String> lyIdSet = common.getLyIdSet(goodsFormat, lyIdGoodsList);
-            if(!lyIdSet.isEmpty()){
-                Collection<Map<String, String>> matchGoodsCarList = common.getMatchGoodsCarList(lyIdSet);
-                common.handleMatchGoodsCarList(goods, matchGoodsCarList);
-                goodsCarList.addAll(matchGoodsCarList);
-            }
-        }
-        Print.info("\n========== 需要处理的数据 ==========");
-        Print.printList(goodsCarList);
-        Print.info("");
-
-        common.exportGoodsCarExcel(fileName, filePath, goodsCarList);
+        common.handleGoodsCar(kongtiaolv, kongtiaolvLyIds, "空调滤清器补充", path + "处理后/空调滤清器/");
     }
 
 }
