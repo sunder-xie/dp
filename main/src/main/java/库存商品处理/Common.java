@@ -1,8 +1,11 @@
 package 库存商品处理;
 
+import dp.common.util.IoUtil;
 import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
 import dp.common.util.StrUtil;
+import dp.common.util.excelutil.CommReaderXLS;
+import dp.common.util.excelutil.CommReaderXLSX;
 import dp.common.util.excelutil.PoiUtil;
 import dp.dao.mapper.CommonMapper;
 
@@ -18,6 +21,7 @@ public class Common {
     public Common(CommonMapper commonMapper) {
         this.commonMapper = commonMapper;
         lyCarRelList = getLyCarRelList();
+
     }
 
     //力洋id，车型关系数据
@@ -102,7 +106,7 @@ public class Common {
     public void exportGoodsCarExcel(String fileName, String filePath, List<Map<String, String>> goodsCarList){
         sortGoodsCarList(goodsCarList);
         String[] heads = getExcelHeads();
-        String[] fields =getDataFields();
+        String[] fields = getDataFields();
         PoiUtil poiUtil = new PoiUtil();
         try {
             poiUtil.exportXlsxWithMap(fileName, filePath, heads, fields, goodsCarList);
@@ -111,24 +115,128 @@ public class Common {
         }
     }
 
+    public void exportGoodsExcel(String fileName, String filePath, List<Map<String, String>> goodsList){
+        String[] heads = new String[]{"产品编码", "产品品牌", "产品名称", "规格型号", "完成情况", "来源", "备注"};
+        String[] fields = new String[]{"goodsSn", "goodsBrand", "goodsName", "goodsFormat", "status", "source", "remark"};
+        PoiUtil poiUtil = new PoiUtil();
+        try {
+            poiUtil.exportXlsxWithMap(fileName, filePath, heads, fields, goodsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     //关系数据匹配
     public void handleGoodsCar(List<Map<String, String>> goodsList, List<Map<String, String>> lyIdGoodsList,
                              String fileName, String filePath){
         List<Map<String, String>> goodsCarList = new ArrayList<>();
+        List<Map<String, String>> unMatchGoodsList = new ArrayList<>();
         for(Map<String, String> goods : goodsList){
             String goodsFormat = goods.get("goodsFormat");
             Set<String> lyIdSet = getLyIdSet(goodsFormat, lyIdGoodsList);
-            if(!lyIdSet.isEmpty()){
-                Collection<Map<String, String>> matchGoodsCarList = getMatchGoodsCarList(lyIdSet);
-                handleMatchGoodsCarList(goods, matchGoodsCarList);
-                goodsCarList.addAll(matchGoodsCarList);
+            if(lyIdSet.isEmpty()){
+                unMatchGoodsList.add(goods);
+                continue;
             }
+            Collection<Map<String, String>> matchGoodsCarList = getMatchGoodsCarList(lyIdSet);
+            if(matchGoodsCarList.isEmpty()){
+                unMatchGoodsList.add(goods);
+                continue;
+            }
+            handleMatchGoodsCarList(goods, matchGoodsCarList);
+            goodsCarList.addAll(matchGoodsCarList);
         }
+
+        IoUtil.mkdirsIfNotExist(filePath);
+
         Print.info("\n========== 需要处理的数据 ==========");
         Print.printList(goodsCarList);
         Print.info("");
 
         exportGoodsCarExcel(fileName, filePath, goodsCarList);
+
+
+        Print.info("\n========== 没有匹配上的商品 ==========");
+        Print.printList(goodsCarList);
+        Print.info("");
+
+        exportGoodsExcel(fileName+"-没匹配上的", filePath, unMatchGoodsList);
     }
 
+    /* 商品excel表头 */
+    public static Map<String, String> getGoodsAttrMap(){
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("产品编码", "goodsSn");
+        attrMap.put("品牌", "goodsBrand");
+        attrMap.put("产品名称", "goodsName");
+        attrMap.put("商品规格", "goodsFormat");
+        attrMap.put("完成情况", "status");
+        attrMap.put("来源", "source");
+        attrMap.put("备注", "remark");
+
+        return attrMap;
+    }
+    public static Map<String, String> getLyIdGoodsAttrMap(){
+        Map<String, String> map = new HashMap<>();
+        map.put("规格型号", "goodsFormat");
+        map.put("id", "lyId");
+
+        return map;
+    }
+
+    public static List<Map<String, String>> getDataList(String excelName, String excelType,
+                                                        int sheet, Map<String, String> attrMap) throws Exception{
+        String excel = excelName+"."+excelType;
+
+        if("xls".equals(excelType)){
+            CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
+            readerXLS.processOneSheet(excel, attrMap.size(), sheet);
+            List<Map<String, String>> mapList = readerXLS.getDataList();
+            Print.printList(mapList);
+            return mapList;
+        }else{
+            CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+            readerXLSX.processOneSheet(excel, sheet);
+            List<Map<String, String>> mapList = readerXLSX.getDataList();
+            Print.printList(mapList);
+            return mapList;
+        }
+    }
+    /** 商品数据 */
+    public static List<Map<String, String>> getGoodsList(String excelName, int sheet) throws Exception{
+        return getDataList(excelName, "xlsx", sheet, getGoodsAttrMap());
+    }
+    public static List<Map<String, String>> getOKGoodsList(String excelName, int sheet) throws Exception{
+        List<Map<String, String>> mapList = getGoodsList(excelName, sheet);
+        int size = mapList.size();
+        for(int i=0; i<size; i++){
+            Map<String, String> map = mapList.get(i);
+            if(!"OK".equals(map.get("status"))){
+                mapList.remove(i);
+                i--;
+                size--;
+            }
+        }
+        Print.info("OK data size："+mapList.size());
+        return mapList;
+    }
+
+    /** 力洋id商品关系数据 */
+    public static List<Map<String, String>> getLyIdGoodsList(String excelName, int sheet) throws Exception{
+        return getDataList(excelName, "xlsx", sheet, getLyIdGoodsAttrMap());
+    }
+
+    /** monkey商品库 */
+    public static List<Map<String, String>> getMonkeyLyIdGoodsList(String excel) throws Exception{
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("gc.liyang_Id", "lyId");
+        attrMap.put("g.goods_format", "goodsFormat");
+
+        CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
+        readerXLS.process(excel, attrMap.size());
+        List<Map<String, String>> mapList = readerXLS.getDataList();
+        Print.printList(mapList);
+        return mapList;
+    }
 }

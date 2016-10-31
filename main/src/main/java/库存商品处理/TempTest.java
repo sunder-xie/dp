@@ -158,4 +158,37 @@ public class TempTest extends BaseTest {
         common.handleGoodsCar(kongtiaolv, kongtiaolvLyIds, "空调滤清器补充", path + "处理后/空调滤清器/");
     }
 
+
+    //2016-10-31
+    @Test
+    public void test_1031() throws Exception{
+        path = "/Users/huangzhangting/Desktop/库存商品数据处理/";
+        String excel = path + "1031/1级别商品完成情况整理表20161021";
+        //火花塞
+        List<Map<String, String>> huoHuaList = Common.getOKGoodsList(excel, 1);
+        //刹车片
+        List<Map<String, String>> shaCheList = Common.getOKGoodsList(excel, 2);
+
+        excel = path + "1031/1级别商品与力洋ID对应关系20161027";
+        //力洋id火花塞
+        List<Map<String, String>> lyHuoHuaList = Common.getLyIdGoodsList(excel, 1);
+        //力洋id刹车片
+        List<Map<String, String>> lyShaCheList = Common.getLyIdGoodsList(excel, 2);
+
+        excel = path + "monkey商品库/力洋id博世刹车片数据.xls";
+        List<Map<String, String>> mkLyShaCheList = Common.getMonkeyLyIdGoodsList(excel);
+
+
+        common = new Common(commonMapper);
+        String filePath = path+"1031/处理后的/";
+
+        //处理火花塞
+        common.handleGoodsCar(huoHuaList, lyHuoHuaList, "火花塞数据", filePath);
+
+        //处理刹车片
+        lyShaCheList.addAll(mkLyShaCheList);
+        common.handleGoodsCar(shaCheList, lyShaCheList, "刹车片数据", filePath);
+
+    }
+
 }
