@@ -468,4 +468,19 @@ public class TempTest extends BaseTest {
         }
         return ys[1].trim();
     }
+
+    @Test
+    public void test_1104_ys() throws Exception{
+        path = "/Users/huangzhangting/Desktop/库存商品数据处理/1104/处理后的/";
+        String excel = path + "雨刷修订";
+
+        List<Map<String, String>> goodsList = Common.getGoodsList(excel, 1);
+
+        List<Map<String, String>> lyGoodsList = Common.getLyIdGoodsList(excel, 2);
+
+        common = new Common(commonMapper);
+
+        common.handleGoodsCar(goodsList, lyGoodsList, "雨刷补充", path);
+    }
+
 }
