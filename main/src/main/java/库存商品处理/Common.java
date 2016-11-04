@@ -86,7 +86,7 @@ public class Common {
     }
 
     //数据导出相关
-    public void sortGoodsCarList(List<Map<String, String>> goodsCarList){
+    public static void sortGoodsCarList(List<Map<String, String>> goodsCarList){
         Collections.sort(goodsCarList, new Comparator<Map<String, String>>() {
             @Override
             public int compare(Map<String, String> o1, Map<String, String> o2) {
@@ -96,14 +96,14 @@ public class Common {
             }
         });
     }
-    public String[] getExcelHeads(){
+    public static String[] getExcelHeads(){
         return new String[]{"产品编码", "产品品牌", "产品名称", "规格型号", "品牌", "厂家", "车系", "车型", "排量", "年款", "车款", "id"};
     }
-    public String[] getDataFields(){
+    public static String[] getDataFields(){
         return new String[]{"goodsSn", "goodsBrand", "goodsName", "goodsFormat", "brand", "company", "series", "model", "power", "year", "carName", "carId"};
     }
 
-    public void exportGoodsCarExcel(String fileName, String filePath, List<Map<String, String>> goodsCarList){
+    public static void exportGoodsCarExcel(String fileName, String filePath, List<Map<String, String>> goodsCarList){
         sortGoodsCarList(goodsCarList);
         String[] heads = getExcelHeads();
         String[] fields = getDataFields();
@@ -115,7 +115,7 @@ public class Common {
         }
     }
 
-    public void exportGoodsExcel(String fileName, String filePath, List<Map<String, String>> goodsList){
+    public static void exportGoodsExcel(String fileName, String filePath, List<Map<String, String>> goodsList){
         String[] heads = new String[]{"产品编码", "产品品牌", "产品名称", "规格型号", "完成情况", "来源", "备注"};
         String[] fields = new String[]{"goodsSn", "goodsBrand", "goodsName", "goodsFormat", "status", "source", "remark"};
         PoiUtil poiUtil = new PoiUtil();
@@ -170,7 +170,7 @@ public class Common {
         attrMap.put("产品编码", "goodsSn");
         attrMap.put("品牌", "goodsBrand");
         attrMap.put("产品名称", "goodsName");
-        attrMap.put("商品规格", "goodsFormat");
+        attrMap.put("规格型号", "goodsFormat");
         attrMap.put("完成情况", "status");
         attrMap.put("来源", "source");
         attrMap.put("备注", "remark");
@@ -180,7 +180,7 @@ public class Common {
     public static Map<String, String> getLyIdGoodsAttrMap(){
         Map<String, String> map = new HashMap<>();
         map.put("规格型号", "goodsFormat");
-        map.put("id", "lyId");
+        map.put("力洋ID", "lyId");
 
         return map;
     }
@@ -209,6 +209,23 @@ public class Common {
     }
     public static List<Map<String, String>> getOKGoodsList(String excelName, int sheet) throws Exception{
         List<Map<String, String>> mapList = getGoodsList(excelName, sheet);
+        int size = mapList.size();
+        for(int i=0; i<size; i++){
+            Map<String, String> map = mapList.get(i);
+            if(!"OK".equals(map.get("status"))){
+                mapList.remove(i);
+                i--;
+                size--;
+            }
+        }
+        Print.info("OK data size："+mapList.size());
+        return mapList;
+    }
+    public static List<Map<String, String>> getGoodsList(String excelName, int sheet, Map<String, String> attrMap) throws Exception{
+        return getDataList(excelName, "xlsx", sheet, attrMap);
+    }
+    public static List<Map<String, String>> getOKGoodsList(String excelName, int sheet, Map<String, String> attrMap) throws Exception{
+        List<Map<String, String>> mapList = getGoodsList(excelName, sheet, attrMap);
         int size = mapList.size();
         for(int i=0; i<size; i++){
             Map<String, String> map = mapList.get(i);
