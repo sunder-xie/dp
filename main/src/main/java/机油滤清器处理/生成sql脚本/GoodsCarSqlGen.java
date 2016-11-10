@@ -66,7 +66,7 @@ public class GoodsCarSqlGen extends BaseTest{
 
         return commonMapper.selectListBySql(sql);
     }
-    private Map<String, Object> getCarInfo(String carId, List<Map<String, Object>> carInfoList){
+    public Map<String, Object> getCarInfo(String carId){
         for(Map<String, Object> car : carInfoList){
             if(carId.equals(car.get("car_id").toString())){
                 return ObjectUtil.copyMap(car);
@@ -89,7 +89,7 @@ public class GoodsCarSqlGen extends BaseTest{
             for(Map<String, String> goods : goodsList){
                 String format = goods.get("goodsFormat");
                 if(goodsFormat.replace(" ", "").equals(format.replace(" ", ""))){
-                    Map<String, Object> gc = getCarInfo(carId, carInfoList);
+                    Map<String, Object> gc = getCarInfo(carId);
                     if(gc!=null){
                         gc.put("goods_id", goods.get("goodsId"));
                         gc.put("goods_format", format);
@@ -118,7 +118,7 @@ public class GoodsCarSqlGen extends BaseTest{
         for(Map<String, String> goods : goodsList){
             String format = goods.get("goodsFormat");
             if(goodsFormat.replace(" ", "").equals(format.replace(" ", ""))){
-                Map<String, Object> gc = getCarInfo(carId, carInfoList);
+                Map<String, Object> gc = getCarInfo(carId);
                 if(gc!=null){
                     gc.put("goods_id", goods.get("goodsId"));
                     gc.put("goods_format", format);
@@ -239,6 +239,42 @@ public class GoodsCarSqlGen extends BaseTest{
     }
     private void writeDeleteSql(StringBuilder sql){
         sql.insert(0, "delete from db_goods_car where goods_id in(");
+        sql.append(");\n");
+
+        IoUtil.writeFile(writer, sql.toString());
+    }
+
+    //处理更新数据
+    public void handleModifySql(String sqlFileName, List<String> idList){
+        String sqlPath = path + "sql/";
+        IoUtil.mkdirsIfNotExist(sqlPath);
+
+        String dateStr = DateUtils.dateToString(new Date(), DateUtils.yyyyMMdd);
+        writer = IoUtil.getWriter(sqlPath + sqlFileName + "_" + dateStr + ".sql");
+        IoUtil.writeFile(writer, "select @nowTime := now();\n");
+
+        int count = 50;
+        int size = idList.size();
+        int lastIndex = size - 1;
+        StringBuilder sql = new StringBuilder();
+        for(int i=0; i<size; i++){
+            sql.append(idList.get(i));
+            if((i+1)%count==0){
+                writeModifySql(sql);
+                sql.setLength(0);
+                continue;
+            }
+            if(lastIndex==i){
+                writeModifySql(sql);
+                break;
+            }
+            sql.append(",");
+        }
+
+        IoUtil.closeWriter(writer);
+    }
+    private void writeModifySql(StringBuilder sql){
+        sql.insert(0, "update db_goods_car set status=1,gmt_modified=@nowTime where id in(");
         sql.append(");\n");
 
         IoUtil.writeFile(writer, sql.toString());
