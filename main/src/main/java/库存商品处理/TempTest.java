@@ -519,5 +519,19 @@ public class TempTest extends BaseTest {
 
         common.handleGoodsCar(dengPaoList, lyIdDengPaoList, "灯泡", filePath);
     }
+    @Test
+    public void test_1114_修订数据() throws Exception{
+        path = "/Users/huangzhangting/Desktop/库存商品数据处理/1114/处理后的/";
+
+        String excel = path + "修改数据表";
+        List<Map<String, String>> shaCheList = Common.getOKGoodsList(excel, 1);
+
+        List<Map<String, String>> lyIdShaCheList = Common.getLyIdGoodsList(excel, 2);
+
+        common = new Common(commonMapper);
+
+        common.handleGoodsCar(shaCheList, lyIdShaCheList, "刹车片-修订", path);
+
+    }
 
 }

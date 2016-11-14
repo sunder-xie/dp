@@ -27,8 +27,8 @@ import java.util.List;
 @Slf4j
 public class HttpClientUtil {
 
-    private static final int CONNECT_TIME_OUT = 6000;
-    private static final int READ_TIME_OUT = 6000;
+    private static final int CONNECT_TIME_OUT = 60000;
+    private static final int READ_TIME_OUT = 60000;
 
     private static final String defaultCharset = "UTF-8";
 
