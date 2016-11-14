@@ -483,4 +483,41 @@ public class TempTest extends BaseTest {
         common.handleGoodsCar(goodsList, lyGoodsList, "雨刷补充", path);
     }
 
+
+    //2016-11-14
+    @Test
+    public void test_1114() throws Exception{
+        path = "/Users/huangzhangting/Desktop/库存商品数据处理/1114/";
+
+        String excel = path + "剩余库存商品整理完成情况表";
+        List<Map<String, String>> huoHuaList = Common.getOKGoodsList(excel, 1); //火花塞
+
+        List<Map<String, String>> shaCheList = Common.getOKGoodsList(excel, 2); //刹车片
+
+        List<Map<String, String>> dengPaoList = Common.getOKGoodsList(excel, 3); //灯泡
+
+        excel = path + "剩余商品与力洋ID关系";
+        List<Map<String, String>> lyIdHuoHuaList = Common.getLyIdGoodsList(excel, 1);
+
+        List<Map<String, String>> lyIdShaCheList = Common.getLyIdGoodsList(excel, 2);
+
+        List<Map<String, String>> lyIdDengPaoList = Common.getLyIdGoodsList(excel, 3);
+
+        //monkey商品库
+        List<Map<String, String>> monkeyHuoHuaList = Common.getMonkeyLyIdGoodsList(path + "力洋id火花塞数据.xls");
+        lyIdHuoHuaList.addAll(monkeyHuoHuaList);
+
+        List<Map<String, String>> monkeyShaCheList = Common.getMonkeyLyIdGoodsList(path + "力洋id刹车片数据.xls");
+        lyIdShaCheList.addAll(monkeyShaCheList);
+
+        String filePath = path + "处理后的/";
+        common = new Common(commonMapper);
+
+        common.handleGoodsCar(huoHuaList, lyIdHuoHuaList, "火花塞", filePath);
+
+        common.handleGoodsCar(shaCheList, lyIdShaCheList, "刹车片", filePath);
+
+        common.handleGoodsCar(dengPaoList, lyIdDengPaoList, "灯泡", filePath);
+    }
+
 }
