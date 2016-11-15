@@ -6,6 +6,7 @@ import dp.common.util.IoUtil;
 import dp.common.util.ObjectUtil;
 import dp.common.util.Print;
 import dp.dao.mapper.CommonMapper;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -146,6 +147,11 @@ public class GoodsCarSqlGen extends BaseTest{
         this.handleSql(sqlFileName, this.goodsCarList);
     }
     public void handleSql(String sqlFileName, List<Map<String, Object>> goodsCarList){
+        if(CollectionUtils.isEmpty(goodsCarList)){
+            Print.info("没有需要新增的数据");
+            return;
+        }
+
         Print.info(goodsCarList.size());
         Print.info(goodsCarList.get(0));
 
@@ -246,6 +252,10 @@ public class GoodsCarSqlGen extends BaseTest{
 
     //处理更新数据
     public void handleModifySql(String sqlFileName, List<String> idList){
+        if(CollectionUtils.isEmpty(idList)){
+            Print.info("没有需要改动的数据");
+            return;
+        }
         String sqlPath = path + "sql/";
         IoUtil.mkdirsIfNotExist(sqlPath);
 
