@@ -58,4 +58,32 @@ public class GoodsCarTest extends BaseTest {
         common.handleCarIdGoodsSnList(dataMap.values());
     }
 
+
+    // 2016-11-16
+    @Test
+    public void test_1116() throws Exception{
+        path = "/Users/huangzhangting/Desktop/库存商品数据处理/1116/";
+
+        String excel = path + "剩余库存商品整理完成情况表2(1)";
+        List<Map<String, String>> scPianList = Common.getOKGoodsList(excel, 1); //刹车片
+        List<Map<String, String>> scPanList = Common.getOKGoodsList(excel, 2); //刹车盘
+        List<Map<String, String>> scTiList = Common.getOKGoodsList(excel, 3); //刹车蹄
+        List<Map<String, String>> jiLvList = Common.getOKGoodsList(excel, 4); //机滤
+
+        excel = path + "剩余商品表2与力洋ID关系表(1)";
+        List<Map<String, String>> lyIdScPianList = Common.getLyIdGoodsList(excel, 1);
+        List<Map<String, String>> lyIdScPanList = Common.getLyIdGoodsList(excel, 2);
+        List<Map<String, String>> lyIdScTiList = Common.getLyIdGoodsList(excel, 3);
+        List<Map<String, String>> lyIdJiLvList = Common.getLyIdGoodsList(excel, 4);
+
+        Common common = new Common(commonMapper);
+        String filePath = path + "处理后的/";
+
+        common.handleGoodsCar(scPianList, lyIdScPianList, "刹车片", filePath);
+        common.handleGoodsCar(scPanList, lyIdScPanList, "刹车盘", filePath);
+        common.handleGoodsCar(scTiList, lyIdScTiList, "刹车蹄", filePath);
+        common.handleGoodsCar(jiLvList, lyIdJiLvList, "机滤", filePath);
+
+    }
+
 }
