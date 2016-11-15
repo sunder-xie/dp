@@ -146,9 +146,9 @@ public class JiSuWeiZhangTest {
         nameValuePairList.add(new BasicNameValuePair("appkey", APP_KEY));
         nameValuePairList.add(new BasicNameValuePair("carorg", "hangzhou")); //管局名称 不填默认为车牌所在地
         nameValuePairList.add(new BasicNameValuePair("lsprefix", "浙"));
-        nameValuePairList.add(new BasicNameValuePair("lsnum", "AW9F76"));
-        nameValuePairList.add(new BasicNameValuePair("engineno", "0"));
-        nameValuePairList.add(new BasicNameValuePair("frameno", "471887"));
+        nameValuePairList.add(new BasicNameValuePair("lsnum", "AU537D")); //车牌号
+        nameValuePairList.add(new BasicNameValuePair("engineno", "090407B")); //发动机号后N位
+        nameValuePairList.add(new BasicNameValuePair("frameno", "LGBM2DE47AS006276")); //车架号后N位
 //        nameValuePairList.add(new BasicNameValuePair("iscity", "1")); //是否返回城市 1返回 默认0不返回 不一定100%返回结果，准确度90% town、lat、lng仅供参考
 
         HttpClientResult clientResult = HttpClientUtil.get(url, nameValuePairList);
