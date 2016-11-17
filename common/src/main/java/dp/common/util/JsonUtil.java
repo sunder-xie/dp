@@ -92,7 +92,7 @@ public class JsonUtil {
         try {
             return OM.readTree(content);
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -105,5 +105,19 @@ public class JsonUtil {
     public static JavaType getCollectionType(Class<? extends Collection> collectionClass, Class<?> elementClass){
         return OM.getTypeFactory().constructCollectionType(collectionClass, elementClass);
     }
+
+    public static String jsonNodeToStr(JsonNode jsonNode){
+        return jsonNode==null?"":jsonNode.asText();
+    }
+    public static String jsonNodeToStr(JsonNode parentNode, String field){
+        return jsonNodeToStr(parentNode.findValue(field));
+    }
+    public static Integer jsonNodeToInt(JsonNode jsonNode){
+        return jsonNode==null?0:jsonNode.asInt();
+    }
+    public static Integer jsonNodeToInt(JsonNode parentNode, String field){
+        return jsonNodeToInt(parentNode.findValue(field));
+    }
+
 
 }

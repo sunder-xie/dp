@@ -1,5 +1,6 @@
 package 车辆违章;
 
+import base.BaseTest;
 import com.fasterxml.jackson.databind.JsonNode;
 import dp.common.util.JsonUtil;
 import dp.common.util.LocalConfig;
@@ -12,6 +13,7 @@ import lombok.Data;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -19,7 +21,7 @@ import java.util.*;
 /**
  * Created by huangzhangting on 16/11/11.
  */
-public class JiSuWeiZhangTest {
+public class JiSuWeiZhangTest extends BaseTest{
     private static final String APP_KEY = LocalConfig.JI_SU_APP_KEY;
 
     //获取支持城市参数接口
@@ -92,6 +94,8 @@ public class JiSuWeiZhangTest {
         city.setCityCode(jsonNode.findValue("carorg").asText());
         city.setEngineNo(jsonNode.findValue("engineno").asInt());
         city.setVinNo(jsonNode.findValue("frameno").asInt());
+        city.setLsPrefix(jsonNode.findValue("lsprefix").asText());
+        city.setLsNum(jsonNode.findValue("lsnum").asText());
 
         return city;
     }
@@ -104,6 +108,8 @@ public class JiSuWeiZhangTest {
     }
     @Data
     private class WzCity{
+        private String lsPrefix;
+        private String lsNum;
         private String cityName;
         private String cityCode;
         private Integer engineNo; //发动机号需要输入的长度，100为全部输入 0为不输入
@@ -121,12 +127,13 @@ public class JiSuWeiZhangTest {
                 map.put("cityCode", city.getCityCode());
                 map.put("engineNo", city.getEngineNo()+"");
                 map.put("vinNo", city.getVinNo()+"");
+                map.put("lsPrefix", city.getLsPrefix()+city.getLsNum());
                 list.add(map);
             }
         }
 
-        String[] heads = new String[]{"省份", "城市", "城市编码", "需要发动机号后N位", "需要车架号后N位"};
-        String[] fields = new String[]{"provinceName", "cityName", "cityCode", "engineNo", "vinNo"};
+        String[] heads = new String[]{"省份", "城市", "城市编码", "车牌前缀", "需要发动机号后N位", "需要车架号后N位"};
+        String[] fields = new String[]{"provinceName", "cityName", "cityCode", "lsPrefix", "engineNo", "vinNo"};
         String  filePath = "/Users/huangzhangting/Desktop/车辆违章查询接口/";
         PoiUtil poiUtil = new PoiUtil();
         try {
@@ -159,20 +166,25 @@ public class JiSuWeiZhangTest {
 
     }
 
+    public Map<String, String> getDataAttrMap(){
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("城市", "cityName");
+        attrMap.put("车牌号", "licencePlate");
+        attrMap.put("发动机号", "engineNo");
+        attrMap.put("车架号", "vinNo");
+        attrMap.put("接口返回", "result");
+
+        return attrMap;
+    }
+
     @Test
     public void test() throws Exception{
         String  filePath = "/Users/huangzhangting/Desktop/车辆违章查询接口/";
 
-        Map<String, String> dataAttrMap = new HashMap<>();
-        dataAttrMap.put("城市", "cityName");
-        dataAttrMap.put("车牌号", "licencePlate");
-        dataAttrMap.put("发动机号", "engineNo");
-        dataAttrMap.put("车架号", "vinNo");
-        dataAttrMap.put("备注", "remark");
-        dataAttrMap.put("接口返回", "result");
+        Map<String, String> dataAttrMap = getDataAttrMap();
 
         CommReaderXLSX readerXLSX = new CommReaderXLSX(dataAttrMap);
-        readerXLSX.processFirstSheet(filePath + "车辆违章查询测试需求-反馈-1.xlsx");
+        readerXLSX.processFirstSheet(filePath + "接口测试/极速违章接口测试结果-20161116.xlsx");
         List<Map<String, String>> testList = readerXLSX.getDataList();
         Print.printList(testList);
 
@@ -184,7 +196,7 @@ public class JiSuWeiZhangTest {
         attrMap.put("需要车架号后N位", "vinNo");
 
         readerXLSX = new CommReaderXLSX(attrMap);
-        readerXLSX.processFirstSheet(filePath + "极速车辆违章接口支持的城市站-20161114.xlsx");
+        readerXLSX.processFirstSheet(filePath + "极速车辆违章接口支持的城市站-20161116.xlsx");
         List<Map<String, String>> supportCityList = readerXLSX.getDataList();
         Print.printList(supportCityList);
 
@@ -197,12 +209,14 @@ public class JiSuWeiZhangTest {
         }
 
         for(Map<String, String> data : testList){
-            String remark = data.get("remark");
-            if(!StringUtils.isEmpty(remark)){
+            String result = data.get("result");
+            if(!StringUtils.isEmpty(result)){
                 continue;
             }
             List<NameValuePair> nameValuePairList = getNameValuePairList(data, supportCityList);
             if(nameValuePairList==null){
+                Print.info("暂时不支持该城市："+data);
+                data.put("result", "暂时不支持该城市");
                 continue;
             }
             Print.info(nameValuePairList);
@@ -217,7 +231,8 @@ public class JiSuWeiZhangTest {
             fields[i] = dataAttrMap.get(heads[i]);
         }
         PoiUtil poiUtil = new PoiUtil();
-        poiUtil.exportXlsxWithMap("极速违章接口测试结果", filePath, heads, fields, testList);
+        String excelPath = filePath + "接口测试/";
+        poiUtil.exportXlsxWithMap("极速违章接口测试结果", excelPath, heads, fields, testList);
 
     }
     private List<NameValuePair> getNameValuePairList(Map<String, String> data, List<Map<String, String>> supportCityList){
@@ -257,6 +272,124 @@ public class JiSuWeiZhangTest {
         }
         System.out.println(clientResult.getData());
         return clientResult.getData();
+    }
+
+
+    //违章接口返回结果解析
+    @Test
+    public void test_result() throws Exception{
+        path = "/Users/huangzhangting/Desktop/车辆违章查询接口/接口测试/";
+        String excel = path + "极速违章接口测试结果（需核对是否正确）.xlsx";
+        Map<String, String> dataAttrMap = getDataAttrMap();
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(dataAttrMap);
+        readerXLSX.processFirstSheet(excel);
+        List<Map<String, String>> dataList = readerXLSX.getDataList();
+        Print.printList(dataList);
+
+        for(Map<String, String> data : dataList){
+            String result = data.get("result");
+            JsonNode resultJson = JsonUtil.getJsonNode(result);
+            if(resultJson != null){
+                String resultStr = getResultStr(resultJson);
+                Print.info(resultStr);
+                data.put("result", resultStr);
+            }
+        }
+
+        String[] heads = new String[]{"城市", "车牌号", "发动机号", "车架号", "接口返回"};
+        int len = heads.length;
+        String[] fields = new String[len];
+        for(int i=0; i<len; i++){
+            fields[i] = dataAttrMap.get(heads[i]);
+        }
+        PoiUtil poiUtil = new PoiUtil();
+        poiUtil.exportXlsxWithMap("极速违章接口测试结果（需核对是否正确）", path, heads, fields, dataList);
+
+    }
+
+    public String getResultStr(JsonNode jsonNode){
+        if(jsonNode.findValue("status").asInt() != 0){
+            return jsonNode.findValue("msg").asText();
+        }
+
+        WzInfo wzInfo = getWzInfo(jsonNode.findValue("result"));
+        if(CollectionUtils.isEmpty(wzInfo.getWzDetailList())){
+            return "无违章";
+        }
+        return wzInfo.getWzDetailList().toString();
+    }
+
+    private WzInfo getWzInfo(JsonNode jsonNode){
+        WzInfo wzInfo = new WzInfo();
+        wzInfo.setCarOrg(JsonUtil.jsonNodeToStr(jsonNode, "carorg"));
+        wzInfo.setLsPrefix(JsonUtil.jsonNodeToStr(jsonNode, "lsprefix"));
+        wzInfo.setLsNum(JsonUtil.jsonNodeToStr(jsonNode, "lsnum"));
+        wzInfo.setUserCarId(JsonUtil.jsonNodeToInt(jsonNode, "usercarid"));
+        wzInfo.setWzDetailList(getWzDetailList(jsonNode.findValue("list")));
+        return wzInfo;
+    }
+    private List<WzDetail> getWzDetailList(JsonNode jsonNode){
+        List<WzDetail> wzDetailList = new ArrayList<>();
+        Iterator<JsonNode> jsonNodeIterator = jsonNode.elements();
+        while (jsonNodeIterator.hasNext()){
+            WzDetail wzDetail = getWzDetail(jsonNodeIterator.next());
+            wzDetailList.add(wzDetail);
+        }
+        return wzDetailList;
+    }
+    private WzDetail getWzDetail(JsonNode jsonNode){
+        WzDetail wzDetail = new WzDetail();
+        wzDetail.setTime(JsonUtil.jsonNodeToStr(jsonNode, "time"));
+        wzDetail.setAddress(JsonUtil.jsonNodeToStr(jsonNode, "address"));
+        wzDetail.setContent(JsonUtil.jsonNodeToStr(jsonNode, "content"));
+        wzDetail.setIllegalNo(JsonUtil.jsonNodeToStr(jsonNode, "legalnum"));
+        wzDetail.setPrice(JsonUtil.jsonNodeToStr(jsonNode, "price"));
+        wzDetail.setScore(JsonUtil.jsonNodeToStr(jsonNode, "score"));
+        wzDetail.setIllegalId(JsonUtil.jsonNodeToInt(jsonNode, "illegalid"));
+        wzDetail.setNumber(JsonUtil.jsonNodeToStr(jsonNode, "number"));
+        wzDetail.setAgency(JsonUtil.jsonNodeToStr(jsonNode, "agency"));
+        return wzDetail;
+    }
+
+    @Data
+    private class WzInfo{
+        private String carOrg; //管局名称
+        private String lsPrefix; //车牌前缀
+        private String lsNum; //车牌剩余部分
+        private Integer userCarId; //车牌ID
+        private List<WzDetail> wzDetailList;
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "管局名称=" + carOrg +
+                    ", 违章详情=" + wzDetailList +
+                    "}";
+        }
+    }
+    @Data
+    private class WzDetail{
+        private String time; //时间
+        private String address; //地点
+        private String content; //违章内容
+        private String illegalNo; //违章代码
+        private String price; //罚款金额
+        private String score; //扣分
+        private Integer illegalId; //违章ID
+        private String number; //违章编号
+        private String agency; //采集机关
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "时间=" + time +
+                    ", " + address +
+                    ", " + content +
+                    ", 违章代码=" + illegalNo +
+                    ", 罚款金额=" + price +
+                    ", 扣分=" + score +
+                    "}";
+        }
     }
 
 }
