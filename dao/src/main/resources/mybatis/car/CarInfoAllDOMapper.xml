@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dp.dao.mapper.car.CarInfoAllDOMapper" >
+  <resultMap id="BaseResultMap" type="dp.beans.car.CarInfoAllDO" >
+    <id column="car_model" property="carModel" jdbcType="INTEGER" />
+    <result column="leyel_id" property="leyelId" jdbcType="VARCHAR" />
+    <result column="factory_name" property="factoryName" jdbcType="VARCHAR" />
+    <result column="car_brand" property="carBrand" jdbcType="VARCHAR" />
+    <result column="car_series" property="carSeries" jdbcType="VARCHAR" />
+    <result column="market_name" property="marketName" jdbcType="VARCHAR" />
+    <result column="market_version" property="marketVersion" jdbcType="VARCHAR" />
+    <result column="model_year" property="modelYear" jdbcType="CHAR" />
+    <result column="env_standard" property="envStandard" jdbcType="VARCHAR" />
+    <result column="car_type" property="carType" jdbcType="VARCHAR" />
+    <result column="car_level" property="carLevel" jdbcType="VARCHAR" />
+    <result column="guide_price" property="guidePrice" jdbcType="VARCHAR" />
+    <result column="public_year" property="publicYear" jdbcType="CHAR" />
+    <result column="public_month" property="publicMonth" jdbcType="VARCHAR" />
+    <result column="create_year" property="createYear" jdbcType="CHAR" />
+    <result column="stop_year" property="stopYear" jdbcType="CHAR" />
+    <result column="production_status" property="productionStatus" jdbcType="VARCHAR" />
+    <result column="market_status" property="marketStatus" jdbcType="VARCHAR" />
+    <result column="production_country" property="productionCountry" jdbcType="VARCHAR" />
+    <result column="production_type" property="productionType" jdbcType="VARCHAR" />
+    <result column="engine_model" property="engineModel" jdbcType="VARCHAR" />
+    <result column="cylinder_capacity" property="cylinderCapacity" jdbcType="VARCHAR" />
+    <result column="displacement" property="displacement" jdbcType="VARCHAR" />
+    <result column="intake_style" property="intakeStyle" jdbcType="VARCHAR" />
+    <result column="fuel_type" property="fuelType" jdbcType="VARCHAR" />
+    <result column="fuel_flag" property="fuelFlag" jdbcType="VARCHAR" />
+    <result column="max_horsepower" property="maxHorsepower" jdbcType="VARCHAR" />
+    <result column="max_power" property="maxPower" jdbcType="VARCHAR" />
+    <result column="max_power_speed" property="maxPowerSpeed" jdbcType="VARCHAR" />
+    <result column="max_torque" property="maxTorque" jdbcType="VARCHAR" />
+    <result column="max_torque_speed" property="maxTorqueSpeed" jdbcType="VARCHAR" />
+    <result column="cylinder_style" property="cylinderStyle" jdbcType="VARCHAR" />
+    <result column="cylinder_num" property="cylinderNum" jdbcType="VARCHAR" />
+    <result column="valve_per_cylinder" property="valvePerCylinder" jdbcType="VARCHAR" />
+    <result column="compression_ratio" property="compressionRatio" jdbcType="VARCHAR" />
+    <result column="fuel_way" property="fuelWay" jdbcType="VARCHAR" />
+    <result column="fuel_consumption_average" property="fuelConsumptionAverage" jdbcType="VARCHAR" />
+    <result column="fuel_consumption_downtown" property="fuelConsumptionDowntown" jdbcType="VARCHAR" />
+    <result column="fuel_consumption_suburbs" property="fuelConsumptionSuburbs" jdbcType="VARCHAR" />
+    <result column="acceleration_time" property="accelerationTime" jdbcType="VARCHAR" />
+    <result column="top_speed" property="topSpeed" jdbcType="VARCHAR" />
+    <result column="engine_unique_tech" property="engineUniqueTech" jdbcType="VARCHAR" />
+    <result column="cool_style" property="coolStyle" jdbcType="VARCHAR" />
+    <result column="engine_desc" property="engineDesc" jdbcType="VARCHAR" />
+    <result column="gearbox_type" property="gearboxType" jdbcType="VARCHAR" />
+    <result column="transmission_type" property="transmissionType" jdbcType="VARCHAR" />
+    <result column="transmission_desc" property="transmissionDesc" jdbcType="VARCHAR" />
+    <result column="stall_num" property="stallNum" jdbcType="VARCHAR" />
+    <result column="front_suspension_num" property="frontSuspensionNum" jdbcType="VARCHAR" />
+    <result column="rear_suspension_type" property="rearSuspensionType" jdbcType="VARCHAR" />
+    <result column="steering_style" property="steeringStyle" jdbcType="VARCHAR" />
+    <result column="booster_type" property="boosterType" jdbcType="VARCHAR" />
+    <result column="min_clearance" property="minClearance" jdbcType="VARCHAR" />
+    <result column="min_turning_radius" property="minTurningRadius" jdbcType="VARCHAR" />
+    <result column="engine_position" property="enginePosition" jdbcType="VARCHAR" />
+    <result column="drive_way" property="driveWay" jdbcType="VARCHAR" />
+    <result column="drive_style" property="driveStyle" jdbcType="VARCHAR" />
+    <result column="body_style" property="bodyStyle" jdbcType="VARCHAR" />
+    <result column="length" property="length" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="wheelbase" property="wheelbase" jdbcType="VARCHAR" />
+    <result column="front_tread" property="frontTread" jdbcType="VARCHAR" />
+    <result column="rear_tread" property="rearTread" jdbcType="VARCHAR" />
+    <result column="curb_weight" property="curbWeight" jdbcType="VARCHAR" />
+    <result column="fully_loaded_weight" property="fullyLoadedWeight" jdbcType="VARCHAR" />
+    <result column="tank_capacity" property="tankCapacity" jdbcType="VARCHAR" />
+    <result column="trunk_capacity" property="trunkCapacity" jdbcType="VARCHAR" />
+    <result column="roof_type" property="roofType" jdbcType="VARCHAR" />
+    <result column="hood_type" property="hoodType" jdbcType="VARCHAR" />
+    <result column="door_num" property="doorNum" jdbcType="VARCHAR" />
+    <result column="seat_num" property="seatNum" jdbcType="VARCHAR" />
+    <result column="front_tire_style" property="frontTireStyle" jdbcType="VARCHAR" />
+    <result column="rear_tire_style" property="rearTireStyle" jdbcType="VARCHAR" />
+    <result column="front_wheel_style" property="frontWheelStyle" jdbcType="VARCHAR" />
+    <result column="rear_wheel_style" property="rearWheelStyle" jdbcType="VARCHAR" />
+    <result column="wheel_material" property="wheelMaterial" jdbcType="VARCHAR" />
+    <result column="spare_tire_style" property="spareTireStyle" jdbcType="VARCHAR" />
+    <result column="xenon_lamp" property="xenonLamp" jdbcType="VARCHAR" />
+    <result column="led_lamp" property="ledLamp" jdbcType="VARCHAR" />
+    <result column="daytime_running_light" property="daytimeRunningLight" jdbcType="VARCHAR" />
+    <result column="auto_lamp" property="autoLamp" jdbcType="VARCHAR" />
+    <result column="turn_lamp" property="turnLamp" jdbcType="VARCHAR" />
+    <result column="front_fog_lamp" property="frontFogLamp" jdbcType="VARCHAR" />
+    <result column="lamp_height_adjustable" property="lampHeightAdjustable" jdbcType="VARCHAR" />
+    <result column="has_cleaning_device" property="hasCleaningDevice" jdbcType="VARCHAR" />
+    <result column="vehicle_type" property="vehicleType" jdbcType="VARCHAR" />
+    <result column="catalytic_converter" property="catalyticConverter" jdbcType="VARCHAR" />
+    <result column="bore" property="bore" jdbcType="VARCHAR" />
+    <result column="stroke" property="stroke" jdbcType="VARCHAR" />
+    <result column="front_brake_type" property="frontBrakeType" jdbcType="VARCHAR" />
+    <result column="back_brake_type" property="backBrakeType" jdbcType="VARCHAR" />
+    <result column="departure_angle" property="departureAngle" jdbcType="VARCHAR" />
+    <result column="approach_angle" property="approachAngle" jdbcType="VARCHAR" />
+    <result column="electronic_skylights" property="electronicSkylights" jdbcType="VARCHAR" />
+    <result column="panoramic_sunroof" property="panoramicSunroof" jdbcType="VARCHAR" />
+    <result column="back_windshiel_wiper" property="backWindshielWiper" jdbcType="VARCHAR" />
+    <result column="air_conditioning" property="airConditioning" jdbcType="VARCHAR" />
+    <result column="auto_air_conditioning" property="autoAirConditioning" jdbcType="VARCHAR" />
+    <result column="power" property="power" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="BIT" />
+    <result column="brand_first_word" property="brandFirstWord" jdbcType="CHAR" />
+    <result column="spark_plugs" property="sparkPlugs" jdbcType="VARCHAR" />
+    <result column="engine_oil_num" property="engineOilNum" jdbcType="VARCHAR" />
+    <result column="oil_num" property="oilNum" jdbcType="VARCHAR" />
+    <result column="air_num" property="airNum" jdbcType="VARCHAR" />
+    <result column="aircondition_num" property="airconditionNum" jdbcType="VARCHAR" />
+    <result column="fuel_num" property="fuelNum" jdbcType="VARCHAR" />
+    <result column="update_month" property="updateMonth" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    car_model, leyel_id, factory_name, car_brand, car_series, market_name, market_version, 
+    model_year, env_standard, car_type, car_level, guide_price, public_year, public_month, 
+    create_year, stop_year, production_status, market_status, production_country, production_type, 
+    engine_model, cylinder_capacity, displacement, intake_style, fuel_type, fuel_flag, 
+    max_horsepower, max_power, max_power_speed, max_torque, max_torque_speed, cylinder_style, 
+    cylinder_num, valve_per_cylinder, compression_ratio, fuel_way, fuel_consumption_average, 
+    fuel_consumption_downtown, fuel_consumption_suburbs, acceleration_time, top_speed, 
+    engine_unique_tech, cool_style, engine_desc, gearbox_type, transmission_type, transmission_desc, 
+    stall_num, front_suspension_num, rear_suspension_type, steering_style, booster_type, 
+    min_clearance, min_turning_radius, engine_position, drive_way, drive_style, body_style, 
+    length, width, height, wheelbase, front_tread, rear_tread, curb_weight, fully_loaded_weight, 
+    tank_capacity, trunk_capacity, roof_type, hood_type, door_num, seat_num, front_tire_style, 
+    rear_tire_style, front_wheel_style, rear_wheel_style, wheel_material, spare_tire_style, 
+    xenon_lamp, led_lamp, daytime_running_light, auto_lamp, turn_lamp, front_fog_lamp, 
+    lamp_height_adjustable, has_cleaning_device, vehicle_type, catalytic_converter, bore, 
+    stroke, front_brake_type, back_brake_type, departure_angle, approach_angle, electronic_skylights, 
+    panoramic_sunroof, back_windshiel_wiper, air_conditioning, auto_air_conditioning, 
+    power, flag, brand_first_word, spark_plugs, engine_oil_num, oil_num, air_num, aircondition_num, 
+    fuel_num, update_month
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from db_car_info_all
+    where car_model = #{carModel,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from db_car_info_all
+    where car_model = #{carModel,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="dp.beans.car.CarInfoAllDO" >
+    insert into db_car_info_all (car_model, leyel_id, factory_name, 
+      car_brand, car_series, market_name, 
+      market_version, model_year, env_standard, 
+      car_type, car_level, guide_price, 
+      public_year, public_month, create_year, 
+      stop_year, production_status, market_status, 
+      production_country, production_type, engine_model, 
+      cylinder_capacity, displacement, intake_style, 
+      fuel_type, fuel_flag, max_horsepower, 
+      max_power, max_power_speed, max_torque, 
+      max_torque_speed, cylinder_style, cylinder_num, 
+      valve_per_cylinder, compression_ratio, fuel_way, 
+      fuel_consumption_average, fuel_consumption_downtown, 
+      fuel_consumption_suburbs, acceleration_time, 
+      top_speed, engine_unique_tech, cool_style, 
+      engine_desc, gearbox_type, transmission_type, 
+      transmission_desc, stall_num, front_suspension_num, 
+      rear_suspension_type, steering_style, booster_type, 
+      min_clearance, min_turning_radius, engine_position, 
+      drive_way, drive_style, body_style, 
+      length, width, height, 
+      wheelbase, front_tread, rear_tread, 
+      curb_weight, fully_loaded_weight, tank_capacity, 
+      trunk_capacity, roof_type, hood_type, 
+      door_num, seat_num, front_tire_style, 
+      rear_tire_style, front_wheel_style, rear_wheel_style, 
+      wheel_material, spare_tire_style, xenon_lamp, 
+      led_lamp, daytime_running_light, auto_lamp, 
+      turn_lamp, front_fog_lamp, lamp_height_adjustable, 
+      has_cleaning_device, vehicle_type, catalytic_converter, 
+      bore, stroke, front_brake_type, 
+      back_brake_type, departure_angle, approach_angle, 
+      electronic_skylights, panoramic_sunroof, 
+      back_windshiel_wiper, air_conditioning, auto_air_conditioning, 
+      power, flag, brand_first_word, 
+      spark_plugs, engine_oil_num, oil_num, 
+      air_num, aircondition_num, fuel_num, 
+      update_month)
+    values (#{carModel,jdbcType=INTEGER}, #{leyelId,jdbcType=VARCHAR}, #{factoryName,jdbcType=VARCHAR}, 
+      #{carBrand,jdbcType=VARCHAR}, #{carSeries,jdbcType=VARCHAR}, #{marketName,jdbcType=VARCHAR}, 
+      #{marketVersion,jdbcType=VARCHAR}, #{modelYear,jdbcType=CHAR}, #{envStandard,jdbcType=VARCHAR}, 
+      #{carType,jdbcType=VARCHAR}, #{carLevel,jdbcType=VARCHAR}, #{guidePrice,jdbcType=VARCHAR}, 
+      #{publicYear,jdbcType=CHAR}, #{publicMonth,jdbcType=VARCHAR}, #{createYear,jdbcType=CHAR}, 
+      #{stopYear,jdbcType=CHAR}, #{productionStatus,jdbcType=VARCHAR}, #{marketStatus,jdbcType=VARCHAR}, 
+      #{productionCountry,jdbcType=VARCHAR}, #{productionType,jdbcType=VARCHAR}, #{engineModel,jdbcType=VARCHAR}, 
+      #{cylinderCapacity,jdbcType=VARCHAR}, #{displacement,jdbcType=VARCHAR}, #{intakeStyle,jdbcType=VARCHAR}, 
+      #{fuelType,jdbcType=VARCHAR}, #{fuelFlag,jdbcType=VARCHAR}, #{maxHorsepower,jdbcType=VARCHAR}, 
+      #{maxPower,jdbcType=VARCHAR}, #{maxPowerSpeed,jdbcType=VARCHAR}, #{maxTorque,jdbcType=VARCHAR}, 
+      #{maxTorqueSpeed,jdbcType=VARCHAR}, #{cylinderStyle,jdbcType=VARCHAR}, #{cylinderNum,jdbcType=VARCHAR}, 
+      #{valvePerCylinder,jdbcType=VARCHAR}, #{compressionRatio,jdbcType=VARCHAR}, #{fuelWay,jdbcType=VARCHAR}, 
+      #{fuelConsumptionAverage,jdbcType=VARCHAR}, #{fuelConsumptionDowntown,jdbcType=VARCHAR}, 
+      #{fuelConsumptionSuburbs,jdbcType=VARCHAR}, #{accelerationTime,jdbcType=VARCHAR}, 
+      #{topSpeed,jdbcType=VARCHAR}, #{engineUniqueTech,jdbcType=VARCHAR}, #{coolStyle,jdbcType=VARCHAR}, 
+      #{engineDesc,jdbcType=VARCHAR}, #{gearboxType,jdbcType=VARCHAR}, #{transmissionType,jdbcType=VARCHAR}, 
+      #{transmissionDesc,jdbcType=VARCHAR}, #{stallNum,jdbcType=VARCHAR}, #{frontSuspensionNum,jdbcType=VARCHAR}, 
+      #{rearSuspensionType,jdbcType=VARCHAR}, #{steeringStyle,jdbcType=VARCHAR}, #{boosterType,jdbcType=VARCHAR}, 
+      #{minClearance,jdbcType=VARCHAR}, #{minTurningRadius,jdbcType=VARCHAR}, #{enginePosition,jdbcType=VARCHAR}, 
+      #{driveWay,jdbcType=VARCHAR}, #{driveStyle,jdbcType=VARCHAR}, #{bodyStyle,jdbcType=VARCHAR}, 
+      #{length,jdbcType=VARCHAR}, #{width,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, 
+      #{wheelbase,jdbcType=VARCHAR}, #{frontTread,jdbcType=VARCHAR}, #{rearTread,jdbcType=VARCHAR}, 
+      #{curbWeight,jdbcType=VARCHAR}, #{fullyLoadedWeight,jdbcType=VARCHAR}, #{tankCapacity,jdbcType=VARCHAR}, 
+      #{trunkCapacity,jdbcType=VARCHAR}, #{roofType,jdbcType=VARCHAR}, #{hoodType,jdbcType=VARCHAR}, 
+      #{doorNum,jdbcType=VARCHAR}, #{seatNum,jdbcType=VARCHAR}, #{frontTireStyle,jdbcType=VARCHAR}, 
+      #{rearTireStyle,jdbcType=VARCHAR}, #{frontWheelStyle,jdbcType=VARCHAR}, #{rearWheelStyle,jdbcType=VARCHAR}, 
+      #{wheelMaterial,jdbcType=VARCHAR}, #{spareTireStyle,jdbcType=VARCHAR}, #{xenonLamp,jdbcType=VARCHAR}, 
+      #{ledLamp,jdbcType=VARCHAR}, #{daytimeRunningLight,jdbcType=VARCHAR}, #{autoLamp,jdbcType=VARCHAR}, 
+      #{turnLamp,jdbcType=VARCHAR}, #{frontFogLamp,jdbcType=VARCHAR}, #{lampHeightAdjustable,jdbcType=VARCHAR}, 
+      #{hasCleaningDevice,jdbcType=VARCHAR}, #{vehicleType,jdbcType=VARCHAR}, #{catalyticConverter,jdbcType=VARCHAR}, 
+      #{bore,jdbcType=VARCHAR}, #{stroke,jdbcType=VARCHAR}, #{frontBrakeType,jdbcType=VARCHAR}, 
+      #{backBrakeType,jdbcType=VARCHAR}, #{departureAngle,jdbcType=VARCHAR}, #{approachAngle,jdbcType=VARCHAR}, 
+      #{electronicSkylights,jdbcType=VARCHAR}, #{panoramicSunroof,jdbcType=VARCHAR}, 
+      #{backWindshielWiper,jdbcType=VARCHAR}, #{airConditioning,jdbcType=VARCHAR}, #{autoAirConditioning,jdbcType=VARCHAR}, 
+      #{power,jdbcType=VARCHAR}, #{flag,jdbcType=BIT}, #{brandFirstWord,jdbcType=CHAR}, 
+      #{sparkPlugs,jdbcType=VARCHAR}, #{engineOilNum,jdbcType=VARCHAR}, #{oilNum,jdbcType=VARCHAR}, 
+      #{airNum,jdbcType=VARCHAR}, #{airconditionNum,jdbcType=VARCHAR}, #{fuelNum,jdbcType=VARCHAR}, 
+      #{updateMonth,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="dp.beans.car.CarInfoAllDO" >
+    insert into db_car_info_all
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carModel != null" >
+        car_model,
+      </if>
+      <if test="leyelId != null" >
+        leyel_id,
+      </if>
+      <if test="factoryName != null" >
+        factory_name,
+      </if>
+      <if test="carBrand != null" >
+        car_brand,
+      </if>
+      <if test="carSeries != null" >
+        car_series,
+      </if>
+      <if test="marketName != null" >
+        market_name,
+      </if>
+      <if test="marketVersion != null" >
+        market_version,
+      </if>
+      <if test="modelYear != null" >
+        model_year,
+      </if>
+      <if test="envStandard != null" >
+        env_standard,
+      </if>
+      <if test="carType != null" >
+        car_type,
+      </if>
+      <if test="carLevel != null" >
+        car_level,
+      </if>
+      <if test="guidePrice != null" >
+        guide_price,
+      </if>
+      <if test="publicYear != null" >
+        public_year,
+      </if>
+      <if test="publicMonth != null" >
+        public_month,
+      </if>
+      <if test="createYear != null" >
+        create_year,
+      </if>
+      <if test="stopYear != null" >
+        stop_year,
+      </if>
+      <if test="productionStatus != null" >
+        production_status,
+      </if>
+      <if test="marketStatus != null" >
+        market_status,
+      </if>
+      <if test="productionCountry != null" >
+        production_country,
+      </if>
+      <if test="productionType != null" >
+        production_type,
+      </if>
+      <if test="engineModel != null" >
+        engine_model,
+      </if>
+      <if test="cylinderCapacity != null" >
+        cylinder_capacity,
+      </if>
+      <if test="displacement != null" >
+        displacement,
+      </if>
+      <if test="intakeStyle != null" >
+        intake_style,
+      </if>
+      <if test="fuelType != null" >
+        fuel_type,
+      </if>
+      <if test="fuelFlag != null" >
+        fuel_flag,
+      </if>
+      <if test="maxHorsepower != null" >
+        max_horsepower,
+      </if>
+      <if test="maxPower != null" >
+        max_power,
+      </if>
+      <if test="maxPowerSpeed != null" >
+        max_power_speed,
+      </if>
+      <if test="maxTorque != null" >
+        max_torque,
+      </if>
+      <if test="maxTorqueSpeed != null" >
+        max_torque_speed,
+      </if>
+      <if test="cylinderStyle != null" >
+        cylinder_style,
+      </if>
+      <if test="cylinderNum != null" >
+        cylinder_num,
+      </if>
+      <if test="valvePerCylinder != null" >
+        valve_per_cylinder,
+      </if>
+      <if test="compressionRatio != null" >
+        compression_ratio,
+      </if>
+      <if test="fuelWay != null" >
+        fuel_way,
+      </if>
+      <if test="fuelConsumptionAverage != null" >
+        fuel_consumption_average,
+      </if>
+      <if test="fuelConsumptionDowntown != null" >
+        fuel_consumption_downtown,
+      </if>
+      <if test="fuelConsumptionSuburbs != null" >
+        fuel_consumption_suburbs,
+      </if>
+      <if test="accelerationTime != null" >
+        acceleration_time,
+      </if>
+      <if test="topSpeed != null" >
+        top_speed,
+      </if>
+      <if test="engineUniqueTech != null" >
+        engine_unique_tech,
+      </if>
+      <if test="coolStyle != null" >
+        cool_style,
+      </if>
+      <if test="engineDesc != null" >
+        engine_desc,
+      </if>
+      <if test="gearboxType != null" >
+        gearbox_type,
+      </if>
+      <if test="transmissionType != null" >
+        transmission_type,
+      </if>
+      <if test="transmissionDesc != null" >
+        transmission_desc,
+      </if>
+      <if test="stallNum != null" >
+        stall_num,
+      </if>
+      <if test="frontSuspensionNum != null" >
+        front_suspension_num,
+      </if>
+      <if test="rearSuspensionType != null" >
+        rear_suspension_type,
+      </if>
+      <if test="steeringStyle != null" >
+        steering_style,
+      </if>
+      <if test="boosterType != null" >
+        booster_type,
+      </if>
+      <if test="minClearance != null" >
+        min_clearance,
+      </if>
+      <if test="minTurningRadius != null" >
+        min_turning_radius,
+      </if>
+      <if test="enginePosition != null" >
+        engine_position,
+      </if>
+      <if test="driveWay != null" >
+        drive_way,
+      </if>
+      <if test="driveStyle != null" >
+        drive_style,
+      </if>
+      <if test="bodyStyle != null" >
+        body_style,
+      </if>
+      <if test="length != null" >
+        length,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="wheelbase != null" >
+        wheelbase,
+      </if>
+      <if test="frontTread != null" >
+        front_tread,
+      </if>
+      <if test="rearTread != null" >
+        rear_tread,
+      </if>
+      <if test="curbWeight != null" >
+        curb_weight,
+      </if>
+      <if test="fullyLoadedWeight != null" >
+        fully_loaded_weight,
+      </if>
+      <if test="tankCapacity != null" >
+        tank_capacity,
+      </if>
+      <if test="trunkCapacity != null" >
+        trunk_capacity,
+      </if>
+      <if test="roofType != null" >
+        roof_type,
+      </if>
+      <if test="hoodType != null" >
+        hood_type,
+      </if>
+      <if test="doorNum != null" >
+        door_num,
+      </if>
+      <if test="seatNum != null" >
+        seat_num,
+      </if>
+      <if test="frontTireStyle != null" >
+        front_tire_style,
+      </if>
+      <if test="rearTireStyle != null" >
+        rear_tire_style,
+      </if>
+      <if test="frontWheelStyle != null" >
+        front_wheel_style,
+      </if>
+      <if test="rearWheelStyle != null" >
+        rear_wheel_style,
+      </if>
+      <if test="wheelMaterial != null" >
+        wheel_material,
+      </if>
+      <if test="spareTireStyle != null" >
+        spare_tire_style,
+      </if>
+      <if test="xenonLamp != null" >
+        xenon_lamp,
+      </if>
+      <if test="ledLamp != null" >
+        led_lamp,
+      </if>
+      <if test="daytimeRunningLight != null" >
+        daytime_running_light,
+      </if>
+      <if test="autoLamp != null" >
+        auto_lamp,
+      </if>
+      <if test="turnLamp != null" >
+        turn_lamp,
+      </if>
+      <if test="frontFogLamp != null" >
+        front_fog_lamp,
+      </if>
+      <if test="lampHeightAdjustable != null" >
+        lamp_height_adjustable,
+      </if>
+      <if test="hasCleaningDevice != null" >
+        has_cleaning_device,
+      </if>
+      <if test="vehicleType != null" >
+        vehicle_type,
+      </if>
+      <if test="catalyticConverter != null" >
+        catalytic_converter,
+      </if>
+      <if test="bore != null" >
+        bore,
+      </if>
+      <if test="stroke != null" >
+        stroke,
+      </if>
+      <if test="frontBrakeType != null" >
+        front_brake_type,
+      </if>
+      <if test="backBrakeType != null" >
+        back_brake_type,
+      </if>
+      <if test="departureAngle != null" >
+        departure_angle,
+      </if>
+      <if test="approachAngle != null" >
+        approach_angle,
+      </if>
+      <if test="electronicSkylights != null" >
+        electronic_skylights,
+      </if>
+      <if test="panoramicSunroof != null" >
+        panoramic_sunroof,
+      </if>
+      <if test="backWindshielWiper != null" >
+        back_windshiel_wiper,
+      </if>
+      <if test="airConditioning != null" >
+        air_conditioning,
+      </if>
+      <if test="autoAirConditioning != null" >
+        auto_air_conditioning,
+      </if>
+      <if test="power != null" >
+        power,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="brandFirstWord != null" >
+        brand_first_word,
+      </if>
+      <if test="sparkPlugs != null" >
+        spark_plugs,
+      </if>
+      <if test="engineOilNum != null" >
+        engine_oil_num,
+      </if>
+      <if test="oilNum != null" >
+        oil_num,
+      </if>
+      <if test="airNum != null" >
+        air_num,
+      </if>
+      <if test="airconditionNum != null" >
+        aircondition_num,
+      </if>
+      <if test="fuelNum != null" >
+        fuel_num,
+      </if>
+      <if test="updateMonth != null" >
+        update_month,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carModel != null" >
+        #{carModel,jdbcType=INTEGER},
+      </if>
+      <if test="leyelId != null" >
+        #{leyelId,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryName != null" >
+        #{factoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="carBrand != null" >
+        #{carBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="carSeries != null" >
+        #{carSeries,jdbcType=VARCHAR},
+      </if>
+      <if test="marketName != null" >
+        #{marketName,jdbcType=VARCHAR},
+      </if>
+      <if test="marketVersion != null" >
+        #{marketVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="modelYear != null" >
+        #{modelYear,jdbcType=CHAR},
+      </if>
+      <if test="envStandard != null" >
+        #{envStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null" >
+        #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="carLevel != null" >
+        #{carLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="guidePrice != null" >
+        #{guidePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="publicYear != null" >
+        #{publicYear,jdbcType=CHAR},
+      </if>
+      <if test="publicMonth != null" >
+        #{publicMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="createYear != null" >
+        #{createYear,jdbcType=CHAR},
+      </if>
+      <if test="stopYear != null" >
+        #{stopYear,jdbcType=CHAR},
+      </if>
+      <if test="productionStatus != null" >
+        #{productionStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="marketStatus != null" >
+        #{marketStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="productionCountry != null" >
+        #{productionCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="productionType != null" >
+        #{productionType,jdbcType=VARCHAR},
+      </if>
+      <if test="engineModel != null" >
+        #{engineModel,jdbcType=VARCHAR},
+      </if>
+      <if test="cylinderCapacity != null" >
+        #{cylinderCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="displacement != null" >
+        #{displacement,jdbcType=VARCHAR},
+      </if>
+      <if test="intakeStyle != null" >
+        #{intakeStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelType != null" >
+        #{fuelType,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelFlag != null" >
+        #{fuelFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="maxHorsepower != null" >
+        #{maxHorsepower,jdbcType=VARCHAR},
+      </if>
+      <if test="maxPower != null" >
+        #{maxPower,jdbcType=VARCHAR},
+      </if>
+      <if test="maxPowerSpeed != null" >
+        #{maxPowerSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="maxTorque != null" >
+        #{maxTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="maxTorqueSpeed != null" >
+        #{maxTorqueSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="cylinderStyle != null" >
+        #{cylinderStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="cylinderNum != null" >
+        #{cylinderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="valvePerCylinder != null" >
+        #{valvePerCylinder,jdbcType=VARCHAR},
+      </if>
+      <if test="compressionRatio != null" >
+        #{compressionRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelWay != null" >
+        #{fuelWay,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelConsumptionAverage != null" >
+        #{fuelConsumptionAverage,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelConsumptionDowntown != null" >
+        #{fuelConsumptionDowntown,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelConsumptionSuburbs != null" >
+        #{fuelConsumptionSuburbs,jdbcType=VARCHAR},
+      </if>
+      <if test="accelerationTime != null" >
+        #{accelerationTime,jdbcType=VARCHAR},
+      </if>
+      <if test="topSpeed != null" >
+        #{topSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="engineUniqueTech != null" >
+        #{engineUniqueTech,jdbcType=VARCHAR},
+      </if>
+      <if test="coolStyle != null" >
+        #{coolStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="engineDesc != null" >
+        #{engineDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="gearboxType != null" >
+        #{gearboxType,jdbcType=VARCHAR},
+      </if>
+      <if test="transmissionType != null" >
+        #{transmissionType,jdbcType=VARCHAR},
+      </if>
+      <if test="transmissionDesc != null" >
+        #{transmissionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="stallNum != null" >
+        #{stallNum,jdbcType=VARCHAR},
+      </if>
+      <if test="frontSuspensionNum != null" >
+        #{frontSuspensionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="rearSuspensionType != null" >
+        #{rearSuspensionType,jdbcType=VARCHAR},
+      </if>
+      <if test="steeringStyle != null" >
+        #{steeringStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="boosterType != null" >
+        #{boosterType,jdbcType=VARCHAR},
+      </if>
+      <if test="minClearance != null" >
+        #{minClearance,jdbcType=VARCHAR},
+      </if>
+      <if test="minTurningRadius != null" >
+        #{minTurningRadius,jdbcType=VARCHAR},
+      </if>
+      <if test="enginePosition != null" >
+        #{enginePosition,jdbcType=VARCHAR},
+      </if>
+      <if test="driveWay != null" >
+        #{driveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="driveStyle != null" >
+        #{driveStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyStyle != null" >
+        #{bodyStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null" >
+        #{length,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="wheelbase != null" >
+        #{wheelbase,jdbcType=VARCHAR},
+      </if>
+      <if test="frontTread != null" >
+        #{frontTread,jdbcType=VARCHAR},
+      </if>
+      <if test="rearTread != null" >
+        #{rearTread,jdbcType=VARCHAR},
+      </if>
+      <if test="curbWeight != null" >
+        #{curbWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="fullyLoadedWeight != null" >
+        #{fullyLoadedWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="tankCapacity != null" >
+        #{tankCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="trunkCapacity != null" >
+        #{trunkCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="roofType != null" >
+        #{roofType,jdbcType=VARCHAR},
+      </if>
+      <if test="hoodType != null" >
+        #{hoodType,jdbcType=VARCHAR},
+      </if>
+      <if test="doorNum != null" >
+        #{doorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="seatNum != null" >
+        #{seatNum,jdbcType=VARCHAR},
+      </if>
+      <if test="frontTireStyle != null" >
+        #{frontTireStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="rearTireStyle != null" >
+        #{rearTireStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="frontWheelStyle != null" >
+        #{frontWheelStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="rearWheelStyle != null" >
+        #{rearWheelStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="wheelMaterial != null" >
+        #{wheelMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="spareTireStyle != null" >
+        #{spareTireStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="xenonLamp != null" >
+        #{xenonLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="ledLamp != null" >
+        #{ledLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="daytimeRunningLight != null" >
+        #{daytimeRunningLight,jdbcType=VARCHAR},
+      </if>
+      <if test="autoLamp != null" >
+        #{autoLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="turnLamp != null" >
+        #{turnLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="frontFogLamp != null" >
+        #{frontFogLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="lampHeightAdjustable != null" >
+        #{lampHeightAdjustable,jdbcType=VARCHAR},
+      </if>
+      <if test="hasCleaningDevice != null" >
+        #{hasCleaningDevice,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleType != null" >
+        #{vehicleType,jdbcType=VARCHAR},
+      </if>
+      <if test="catalyticConverter != null" >
+        #{catalyticConverter,jdbcType=VARCHAR},
+      </if>
+      <if test="bore != null" >
+        #{bore,jdbcType=VARCHAR},
+      </if>
+      <if test="stroke != null" >
+        #{stroke,jdbcType=VARCHAR},
+      </if>
+      <if test="frontBrakeType != null" >
+        #{frontBrakeType,jdbcType=VARCHAR},
+      </if>
+      <if test="backBrakeType != null" >
+        #{backBrakeType,jdbcType=VARCHAR},
+      </if>
+      <if test="departureAngle != null" >
+        #{departureAngle,jdbcType=VARCHAR},
+      </if>
+      <if test="approachAngle != null" >
+        #{approachAngle,jdbcType=VARCHAR},
+      </if>
+      <if test="electronicSkylights != null" >
+        #{electronicSkylights,jdbcType=VARCHAR},
+      </if>
+      <if test="panoramicSunroof != null" >
+        #{panoramicSunroof,jdbcType=VARCHAR},
+      </if>
+      <if test="backWindshielWiper != null" >
+        #{backWindshielWiper,jdbcType=VARCHAR},
+      </if>
+      <if test="airConditioning != null" >
+        #{airConditioning,jdbcType=VARCHAR},
+      </if>
+      <if test="autoAirConditioning != null" >
+        #{autoAirConditioning,jdbcType=VARCHAR},
+      </if>
+      <if test="power != null" >
+        #{power,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=BIT},
+      </if>
+      <if test="brandFirstWord != null" >
+        #{brandFirstWord,jdbcType=CHAR},
+      </if>
+      <if test="sparkPlugs != null" >
+        #{sparkPlugs,jdbcType=VARCHAR},
+      </if>
+      <if test="engineOilNum != null" >
+        #{engineOilNum,jdbcType=VARCHAR},
+      </if>
+      <if test="oilNum != null" >
+        #{oilNum,jdbcType=VARCHAR},
+      </if>
+      <if test="airNum != null" >
+        #{airNum,jdbcType=VARCHAR},
+      </if>
+      <if test="airconditionNum != null" >
+        #{airconditionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelNum != null" >
+        #{fuelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="updateMonth != null" >
+        #{updateMonth,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="dp.beans.car.CarInfoAllDO" >
+    update db_car_info_all
+    <set >
+      <if test="leyelId != null" >
+        leyel_id = #{leyelId,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryName != null" >
+        factory_name = #{factoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="carBrand != null" >
+        car_brand = #{carBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="carSeries != null" >
+        car_series = #{carSeries,jdbcType=VARCHAR},
+      </if>
+      <if test="marketName != null" >
+        market_name = #{marketName,jdbcType=VARCHAR},
+      </if>
+      <if test="marketVersion != null" >
+        market_version = #{marketVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="modelYear != null" >
+        model_year = #{modelYear,jdbcType=CHAR},
+      </if>
+      <if test="envStandard != null" >
+        env_standard = #{envStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null" >
+        car_type = #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="carLevel != null" >
+        car_level = #{carLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="guidePrice != null" >
+        guide_price = #{guidePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="publicYear != null" >
+        public_year = #{publicYear,jdbcType=CHAR},
+      </if>
+      <if test="publicMonth != null" >
+        public_month = #{publicMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="createYear != null" >
+        create_year = #{createYear,jdbcType=CHAR},
+      </if>
+      <if test="stopYear != null" >
+        stop_year = #{stopYear,jdbcType=CHAR},
+      </if>
+      <if test="productionStatus != null" >
+        production_status = #{productionStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="marketStatus != null" >
+        market_status = #{marketStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="productionCountry != null" >
+        production_country = #{productionCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="productionType != null" >
+        production_type = #{productionType,jdbcType=VARCHAR},
+      </if>
+      <if test="engineModel != null" >
+        engine_model = #{engineModel,jdbcType=VARCHAR},
+      </if>
+      <if test="cylinderCapacity != null" >
+        cylinder_capacity = #{cylinderCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="displacement != null" >
+        displacement = #{displacement,jdbcType=VARCHAR},
+      </if>
+      <if test="intakeStyle != null" >
+        intake_style = #{intakeStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelType != null" >
+        fuel_type = #{fuelType,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelFlag != null" >
+        fuel_flag = #{fuelFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="maxHorsepower != null" >
+        max_horsepower = #{maxHorsepower,jdbcType=VARCHAR},
+      </if>
+      <if test="maxPower != null" >
+        max_power = #{maxPower,jdbcType=VARCHAR},
+      </if>
+      <if test="maxPowerSpeed != null" >
+        max_power_speed = #{maxPowerSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="maxTorque != null" >
+        max_torque = #{maxTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="maxTorqueSpeed != null" >
+        max_torque_speed = #{maxTorqueSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="cylinderStyle != null" >
+        cylinder_style = #{cylinderStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="cylinderNum != null" >
+        cylinder_num = #{cylinderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="valvePerCylinder != null" >
+        valve_per_cylinder = #{valvePerCylinder,jdbcType=VARCHAR},
+      </if>
+      <if test="compressionRatio != null" >
+        compression_ratio = #{compressionRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelWay != null" >
+        fuel_way = #{fuelWay,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelConsumptionAverage != null" >
+        fuel_consumption_average = #{fuelConsumptionAverage,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelConsumptionDowntown != null" >
+        fuel_consumption_downtown = #{fuelConsumptionDowntown,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelConsumptionSuburbs != null" >
+        fuel_consumption_suburbs = #{fuelConsumptionSuburbs,jdbcType=VARCHAR},
+      </if>
+      <if test="accelerationTime != null" >
+        acceleration_time = #{accelerationTime,jdbcType=VARCHAR},
+      </if>
+      <if test="topSpeed != null" >
+        top_speed = #{topSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="engineUniqueTech != null" >
+        engine_unique_tech = #{engineUniqueTech,jdbcType=VARCHAR},
+      </if>
+      <if test="coolStyle != null" >
+        cool_style = #{coolStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="engineDesc != null" >
+        engine_desc = #{engineDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="gearboxType != null" >
+        gearbox_type = #{gearboxType,jdbcType=VARCHAR},
+      </if>
+      <if test="transmissionType != null" >
+        transmission_type = #{transmissionType,jdbcType=VARCHAR},
+      </if>
+      <if test="transmissionDesc != null" >
+        transmission_desc = #{transmissionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="stallNum != null" >
+        stall_num = #{stallNum,jdbcType=VARCHAR},
+      </if>
+      <if test="frontSuspensionNum != null" >
+        front_suspension_num = #{frontSuspensionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="rearSuspensionType != null" >
+        rear_suspension_type = #{rearSuspensionType,jdbcType=VARCHAR},
+      </if>
+      <if test="steeringStyle != null" >
+        steering_style = #{steeringStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="boosterType != null" >
+        booster_type = #{boosterType,jdbcType=VARCHAR},
+      </if>
+      <if test="minClearance != null" >
+        min_clearance = #{minClearance,jdbcType=VARCHAR},
+      </if>
+      <if test="minTurningRadius != null" >
+        min_turning_radius = #{minTurningRadius,jdbcType=VARCHAR},
+      </if>
+      <if test="enginePosition != null" >
+        engine_position = #{enginePosition,jdbcType=VARCHAR},
+      </if>
+      <if test="driveWay != null" >
+        drive_way = #{driveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="driveStyle != null" >
+        drive_style = #{driveStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyStyle != null" >
+        body_style = #{bodyStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null" >
+        length = #{length,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="wheelbase != null" >
+        wheelbase = #{wheelbase,jdbcType=VARCHAR},
+      </if>
+      <if test="frontTread != null" >
+        front_tread = #{frontTread,jdbcType=VARCHAR},
+      </if>
+      <if test="rearTread != null" >
+        rear_tread = #{rearTread,jdbcType=VARCHAR},
+      </if>
+      <if test="curbWeight != null" >
+        curb_weight = #{curbWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="fullyLoadedWeight != null" >
+        fully_loaded_weight = #{fullyLoadedWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="tankCapacity != null" >
+        tank_capacity = #{tankCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="trunkCapacity != null" >
+        trunk_capacity = #{trunkCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="roofType != null" >
+        roof_type = #{roofType,jdbcType=VARCHAR},
+      </if>
+      <if test="hoodType != null" >
+        hood_type = #{hoodType,jdbcType=VARCHAR},
+      </if>
+      <if test="doorNum != null" >
+        door_num = #{doorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="seatNum != null" >
+        seat_num = #{seatNum,jdbcType=VARCHAR},
+      </if>
+      <if test="frontTireStyle != null" >
+        front_tire_style = #{frontTireStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="rearTireStyle != null" >
+        rear_tire_style = #{rearTireStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="frontWheelStyle != null" >
+        front_wheel_style = #{frontWheelStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="rearWheelStyle != null" >
+        rear_wheel_style = #{rearWheelStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="wheelMaterial != null" >
+        wheel_material = #{wheelMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="spareTireStyle != null" >
+        spare_tire_style = #{spareTireStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="xenonLamp != null" >
+        xenon_lamp = #{xenonLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="ledLamp != null" >
+        led_lamp = #{ledLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="daytimeRunningLight != null" >
+        daytime_running_light = #{daytimeRunningLight,jdbcType=VARCHAR},
+      </if>
+      <if test="autoLamp != null" >
+        auto_lamp = #{autoLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="turnLamp != null" >
+        turn_lamp = #{turnLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="frontFogLamp != null" >
+        front_fog_lamp = #{frontFogLamp,jdbcType=VARCHAR},
+      </if>
+      <if test="lampHeightAdjustable != null" >
+        lamp_height_adjustable = #{lampHeightAdjustable,jdbcType=VARCHAR},
+      </if>
+      <if test="hasCleaningDevice != null" >
+        has_cleaning_device = #{hasCleaningDevice,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleType != null" >
+        vehicle_type = #{vehicleType,jdbcType=VARCHAR},
+      </if>
+      <if test="catalyticConverter != null" >
+        catalytic_converter = #{catalyticConverter,jdbcType=VARCHAR},
+      </if>
+      <if test="bore != null" >
+        bore = #{bore,jdbcType=VARCHAR},
+      </if>
+      <if test="stroke != null" >
+        stroke = #{stroke,jdbcType=VARCHAR},
+      </if>
+      <if test="frontBrakeType != null" >
+        front_brake_type = #{frontBrakeType,jdbcType=VARCHAR},
+      </if>
+      <if test="backBrakeType != null" >
+        back_brake_type = #{backBrakeType,jdbcType=VARCHAR},
+      </if>
+      <if test="departureAngle != null" >
+        departure_angle = #{departureAngle,jdbcType=VARCHAR},
+      </if>
+      <if test="approachAngle != null" >
+        approach_angle = #{approachAngle,jdbcType=VARCHAR},
+      </if>
+      <if test="electronicSkylights != null" >
+        electronic_skylights = #{electronicSkylights,jdbcType=VARCHAR},
+      </if>
+      <if test="panoramicSunroof != null" >
+        panoramic_sunroof = #{panoramicSunroof,jdbcType=VARCHAR},
+      </if>
+      <if test="backWindshielWiper != null" >
+        back_windshiel_wiper = #{backWindshielWiper,jdbcType=VARCHAR},
+      </if>
+      <if test="airConditioning != null" >
+        air_conditioning = #{airConditioning,jdbcType=VARCHAR},
+      </if>
+      <if test="autoAirConditioning != null" >
+        auto_air_conditioning = #{autoAirConditioning,jdbcType=VARCHAR},
+      </if>
+      <if test="power != null" >
+        power = #{power,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=BIT},
+      </if>
+      <if test="brandFirstWord != null" >
+        brand_first_word = #{brandFirstWord,jdbcType=CHAR},
+      </if>
+      <if test="sparkPlugs != null" >
+        spark_plugs = #{sparkPlugs,jdbcType=VARCHAR},
+      </if>
+      <if test="engineOilNum != null" >
+        engine_oil_num = #{engineOilNum,jdbcType=VARCHAR},
+      </if>
+      <if test="oilNum != null" >
+        oil_num = #{oilNum,jdbcType=VARCHAR},
+      </if>
+      <if test="airNum != null" >
+        air_num = #{airNum,jdbcType=VARCHAR},
+      </if>
+      <if test="airconditionNum != null" >
+        aircondition_num = #{airconditionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelNum != null" >
+        fuel_num = #{fuelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="updateMonth != null" >
+        update_month = #{updateMonth,jdbcType=INTEGER},
+      </if>
+    </set>
+    where car_model = #{carModel,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="dp.beans.car.CarInfoAllDO" >
+    update db_car_info_all
+    set leyel_id = #{leyelId,jdbcType=VARCHAR},
+      factory_name = #{factoryName,jdbcType=VARCHAR},
+      car_brand = #{carBrand,jdbcType=VARCHAR},
+      car_series = #{carSeries,jdbcType=VARCHAR},
+      market_name = #{marketName,jdbcType=VARCHAR},
+      market_version = #{marketVersion,jdbcType=VARCHAR},
+      model_year = #{modelYear,jdbcType=CHAR},
+      env_standard = #{envStandard,jdbcType=VARCHAR},
+      car_type = #{carType,jdbcType=VARCHAR},
+      car_level = #{carLevel,jdbcType=VARCHAR},
+      guide_price = #{guidePrice,jdbcType=VARCHAR},
+      public_year = #{publicYear,jdbcType=CHAR},
+      public_month = #{publicMonth,jdbcType=VARCHAR},
+      create_year = #{createYear,jdbcType=CHAR},
+      stop_year = #{stopYear,jdbcType=CHAR},
+      production_status = #{productionStatus,jdbcType=VARCHAR},
+      market_status = #{marketStatus,jdbcType=VARCHAR},
+      production_country = #{productionCountry,jdbcType=VARCHAR},
+      production_type = #{productionType,jdbcType=VARCHAR},
+      engine_model = #{engineModel,jdbcType=VARCHAR},
+      cylinder_capacity = #{cylinderCapacity,jdbcType=VARCHAR},
+      displacement = #{displacement,jdbcType=VARCHAR},
+      intake_style = #{intakeStyle,jdbcType=VARCHAR},
+      fuel_type = #{fuelType,jdbcType=VARCHAR},
+      fuel_flag = #{fuelFlag,jdbcType=VARCHAR},
+      max_horsepower = #{maxHorsepower,jdbcType=VARCHAR},
+      max_power = #{maxPower,jdbcType=VARCHAR},
+      max_power_speed = #{maxPowerSpeed,jdbcType=VARCHAR},
+      max_torque = #{maxTorque,jdbcType=VARCHAR},
+      max_torque_speed = #{maxTorqueSpeed,jdbcType=VARCHAR},
+      cylinder_style = #{cylinderStyle,jdbcType=VARCHAR},
+      cylinder_num = #{cylinderNum,jdbcType=VARCHAR},
+      valve_per_cylinder = #{valvePerCylinder,jdbcType=VARCHAR},
+      compression_ratio = #{compressionRatio,jdbcType=VARCHAR},
+      fuel_way = #{fuelWay,jdbcType=VARCHAR},
+      fuel_consumption_average = #{fuelConsumptionAverage,jdbcType=VARCHAR},
+      fuel_consumption_downtown = #{fuelConsumptionDowntown,jdbcType=VARCHAR},
+      fuel_consumption_suburbs = #{fuelConsumptionSuburbs,jdbcType=VARCHAR},
+      acceleration_time = #{accelerationTime,jdbcType=VARCHAR},
+      top_speed = #{topSpeed,jdbcType=VARCHAR},
+      engine_unique_tech = #{engineUniqueTech,jdbcType=VARCHAR},
+      cool_style = #{coolStyle,jdbcType=VARCHAR},
+      engine_desc = #{engineDesc,jdbcType=VARCHAR},
+      gearbox_type = #{gearboxType,jdbcType=VARCHAR},
+      transmission_type = #{transmissionType,jdbcType=VARCHAR},
+      transmission_desc = #{transmissionDesc,jdbcType=VARCHAR},
+      stall_num = #{stallNum,jdbcType=VARCHAR},
+      front_suspension_num = #{frontSuspensionNum,jdbcType=VARCHAR},
+      rear_suspension_type = #{rearSuspensionType,jdbcType=VARCHAR},
+      steering_style = #{steeringStyle,jdbcType=VARCHAR},
+      booster_type = #{boosterType,jdbcType=VARCHAR},
+      min_clearance = #{minClearance,jdbcType=VARCHAR},
+      min_turning_radius = #{minTurningRadius,jdbcType=VARCHAR},
+      engine_position = #{enginePosition,jdbcType=VARCHAR},
+      drive_way = #{driveWay,jdbcType=VARCHAR},
+      drive_style = #{driveStyle,jdbcType=VARCHAR},
+      body_style = #{bodyStyle,jdbcType=VARCHAR},
+      length = #{length,jdbcType=VARCHAR},
+      width = #{width,jdbcType=VARCHAR},
+      height = #{height,jdbcType=VARCHAR},
+      wheelbase = #{wheelbase,jdbcType=VARCHAR},
+      front_tread = #{frontTread,jdbcType=VARCHAR},
+      rear_tread = #{rearTread,jdbcType=VARCHAR},
+      curb_weight = #{curbWeight,jdbcType=VARCHAR},
+      fully_loaded_weight = #{fullyLoadedWeight,jdbcType=VARCHAR},
+      tank_capacity = #{tankCapacity,jdbcType=VARCHAR},
+      trunk_capacity = #{trunkCapacity,jdbcType=VARCHAR},
+      roof_type = #{roofType,jdbcType=VARCHAR},
+      hood_type = #{hoodType,jdbcType=VARCHAR},
+      door_num = #{doorNum,jdbcType=VARCHAR},
+      seat_num = #{seatNum,jdbcType=VARCHAR},
+      front_tire_style = #{frontTireStyle,jdbcType=VARCHAR},
+      rear_tire_style = #{rearTireStyle,jdbcType=VARCHAR},
+      front_wheel_style = #{frontWheelStyle,jdbcType=VARCHAR},
+      rear_wheel_style = #{rearWheelStyle,jdbcType=VARCHAR},
+      wheel_material = #{wheelMaterial,jdbcType=VARCHAR},
+      spare_tire_style = #{spareTireStyle,jdbcType=VARCHAR},
+      xenon_lamp = #{xenonLamp,jdbcType=VARCHAR},
+      led_lamp = #{ledLamp,jdbcType=VARCHAR},
+      daytime_running_light = #{daytimeRunningLight,jdbcType=VARCHAR},
+      auto_lamp = #{autoLamp,jdbcType=VARCHAR},
+      turn_lamp = #{turnLamp,jdbcType=VARCHAR},
+      front_fog_lamp = #{frontFogLamp,jdbcType=VARCHAR},
+      lamp_height_adjustable = #{lampHeightAdjustable,jdbcType=VARCHAR},
+      has_cleaning_device = #{hasCleaningDevice,jdbcType=VARCHAR},
+      vehicle_type = #{vehicleType,jdbcType=VARCHAR},
+      catalytic_converter = #{catalyticConverter,jdbcType=VARCHAR},
+      bore = #{bore,jdbcType=VARCHAR},
+      stroke = #{stroke,jdbcType=VARCHAR},
+      front_brake_type = #{frontBrakeType,jdbcType=VARCHAR},
+      back_brake_type = #{backBrakeType,jdbcType=VARCHAR},
+      departure_angle = #{departureAngle,jdbcType=VARCHAR},
+      approach_angle = #{approachAngle,jdbcType=VARCHAR},
+      electronic_skylights = #{electronicSkylights,jdbcType=VARCHAR},
+      panoramic_sunroof = #{panoramicSunroof,jdbcType=VARCHAR},
+      back_windshiel_wiper = #{backWindshielWiper,jdbcType=VARCHAR},
+      air_conditioning = #{airConditioning,jdbcType=VARCHAR},
+      auto_air_conditioning = #{autoAirConditioning,jdbcType=VARCHAR},
+      power = #{power,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=BIT},
+      brand_first_word = #{brandFirstWord,jdbcType=CHAR},
+      spark_plugs = #{sparkPlugs,jdbcType=VARCHAR},
+      engine_oil_num = #{engineOilNum,jdbcType=VARCHAR},
+      oil_num = #{oilNum,jdbcType=VARCHAR},
+      air_num = #{airNum,jdbcType=VARCHAR},
+      aircondition_num = #{airconditionNum,jdbcType=VARCHAR},
+      fuel_num = #{fuelNum,jdbcType=VARCHAR},
+      update_month = #{updateMonth,jdbcType=INTEGER}
+    where car_model = #{carModel,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectAllCarList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from db_car_info_all
+  </select>
+
+</mapper>

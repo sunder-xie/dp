@@ -21,21 +21,21 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="dp.beans.category" targetProject="../beans/src/main/java">
+        <javaModelGenerator targetPackage="dp.beans.car" targetProject="../beans/src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mybatis.category"  targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="mybatis.car"  targetProject="src/main/resources">
             <property name="enableSubPackages" value="false" />
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="dp.dao.mybatis.category"  targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="dp.dao.mapper.car"  targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
 
-        <table tableName="db_category_part" domainObjectName="CategoryPartDO"
+        <table tableName="db_car_info_all" domainObjectName="CarInfoAllDO"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
         </table>
