@@ -6,15 +6,12 @@ import dp.common.util.IoUtil;
 import dp.common.util.Print;
 import org.junit.Test;
 
-import java.io.Writer;
 import java.util.*;
 
 /**
  * Created by huangzhangting on 16/6/1.
  */
 public class HandleMaintenance extends BaseTest {
-    private String path;
-    private Writer writer;
     private List<Map<String, String>> maintainRelationList;
     private StringBuilder insertSqlSb;
 

@@ -6,15 +6,12 @@ import dp.common.util.excelutil.CommReaderXLS;
 import dp.common.util.excelutil.CommReaderXLSX;
 import org.junit.Test;
 
-import java.io.Writer;
 import java.util.*;
 
 /**
  * Created by huangzhangting on 16/5/31.
  */
 public class HandleCar extends BaseTest {
-    private String path;
-    private Writer writer;
     private Map<String, String> brandMap;
     private Set<String> spBrandSet;
 
@@ -40,14 +37,14 @@ public class HandleCar extends BaseTest {
 
     @Test
     public void carTest() throws Exception{
-        List<Map<String, Object>> carList = getCarList();
+        List<Map<String, Object>> carList = getAllCarList();
         Print.info(carList.size());
         if(carList.isEmpty()){
             return;
         }
 
-        path = "/Users/huangzhangting/Documents/数据处理/爬取数据/搜狐汽车/";
-        String excel = path + "车型数据.xls";
+        path = "/Users/huangzhangting/Desktop/数据抓取/搜狐/";
+        String excel = path + "搜狐车型数据.xls";
 
         Map<String,String> attrMap = new HashMap<>();
         attrMap.put("t1.car_brand", "brand");
@@ -57,10 +54,10 @@ public class HandleCar extends BaseTest {
         attrMap.put("t2.id", "id");
         attrMap.put("t2.sale_name", "name");
 
-        CommReaderXLS readerXLS = new CommReaderXLS(attrMap, Constant.TYPE_LIST, 0);
+        CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
         readerXLS.process(excel, 6);
         List<Map<String, String>> shCarList = readerXLS.getDataList();
-        Print.info(shCarList.size());
+        Print.printList(shCarList);
         if(shCarList.isEmpty()){
             return;
         }
@@ -81,6 +78,7 @@ public class HandleCar extends BaseTest {
         String dateStr = DateUtils.dateToString(new Date(), DateUtils.yyyyMMdd);
         String sqlFile = path + "addCarRelation-"+dateStr+".sql";
         writer = IoUtil.getWriter(sqlFile);
+        IoUtil.writeFile(writer, "truncate table sohu_car_relation;\n");
     }
 
     public Map<String, String> initBrandMap(){
@@ -111,13 +109,14 @@ public class HandleCar extends BaseTest {
             compareCarSp(shCar, carList);
             return;
         }
-        String shCompany = shCar.get("company");
-        String shModel = StrUtil.toUpCase(shCar.get("model"));
+        String name = shCar.get("name");
 
         Set<String> matchCarIds = new HashSet<>();
         for(Map<String, Object> car : carList){
-            if(shBrand.equals(car.get("brand").toString()) && compareModel(shModel, car)){
-                if(shCar.get("year").equals(car.get("year"))){
+            if(shBrand.equals(car.get("brand").toString()) && compareModel(shCar, car)){
+                if(shCar.get("year").equals(car.get("year").toString())
+                        && comparePower(car, name)){
+
                     matchCarIds.add(car.get("id").toString());
                 }
             }
@@ -130,8 +129,26 @@ public class HandleCar extends BaseTest {
         }
     }
 
-    public boolean compareModel(String shModel, Map<String, Object> car){
+    private boolean comparePower(Map<String, Object> car, String saleName){
+        String power = car.get("power").toString().replace("T", "").replace("L", "");
+        if(saleName.contains(power)){
+            return !(saleName.contains("柴油") ^ car.get("name").toString().contains("柴油"));
+        }
+        return false;
+    }
+
+    public boolean compareModel(Map<String, String> shCar, Map<String, Object> car){
+        String importInfo = car.get("import_info").toString();
+        String shCompany = shCar.get("company");
+        if("进口".equals(importInfo) ^ shCompany.contains("进口")){
+            return false;
+        }
+
+        String shModel = StrUtil.toUpCase(shCar.get("model"));
         String model = StrUtil.toUpCase(car.get("model").toString());
+        if(shModel.equals(model)){
+            return true;
+        }
 
         if(shModel.contains(model) || model.contains(shModel)){
             return true;
@@ -146,6 +163,12 @@ public class HandleCar extends BaseTest {
 
 
     public boolean compareModelSp(Map<String, String> shCar, Map<String, Object> car){
+        String importInfo = car.get("import_info").toString();
+        String shCompany = shCar.get("company");
+        if("进口".equals(importInfo) ^ shCompany.contains("进口")){
+            return false;
+        }
+
         String shSeries = StrUtil.toUpCase(shCar.get("model"));
         String shModel = StrUtil.repBrackets(StrUtil.repCN(shCar.get("name")));
         shModel = StrUtil.toUpCase(shModel);
@@ -164,11 +187,14 @@ public class HandleCar extends BaseTest {
     public void compareCarSp(Map<String, String> shCar, List<Map<String, Object>> carList){
         String shBrand = shCar.get("brand");
         String shCompany = shCar.get("company");
+        String name = shCar.get("name");
 
         Set<String> matchCarIds = new HashSet<>();
         for(Map<String, Object> car : carList){
             if(shBrand.equals(car.get("brand").toString()) && compareModelSp(shCar, car)){
-                if(shCar.get("year").equals(car.get("year"))){
+                if(shCar.get("year").equals(car.get("year")) &&
+                        comparePower(car, name)){
+
                     matchCarIds.add(car.get("id").toString());
                 }
             }
@@ -192,7 +218,7 @@ public class HandleCar extends BaseTest {
     public void writeSql(String shId, Set<String> idSet){
         StringBuilder sb = new StringBuilder();
         for(String id : idSet){
-            sb.append("insert into sohu_car_relation(sh_car_id,tq_car_id) value (");
+            sb.append("insert ignore into sohu_car_relation(sh_car_id,tq_car_id) value (");
             sb.append(shId).append(",");
             sb.append(id).append(");\n");
             IoUtil.writeFile(writer, sb.toString());

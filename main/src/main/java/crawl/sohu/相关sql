@@ -1,0 +1,41 @@
+create table sohu_car_relation(
+id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+sh_car_id int not null default 0 comment '搜狐车型id',
+tq_car_id int not null default 0 comment '淘汽车型id',
+PRIMARY key(id),
+UNIQUE key uk_sh_tq_car(sh_car_id,tq_car_id)
+)ENGINE=INNODB comment '搜狐车型-淘汽车型关系表';
+
+
+# 车型保养数据导出
+select c.*,m.mileage,m.oil_filter,m.engine_oil,m.gasoline_filter,m.air_filter,
+m.air_conditioning_filter,m.brake_oil,m.transmission_oil,m.turn_oil,
+m.belt,m.spark_plug
+from
+(select c2.id,c1.car_brand,c1.company,c1.car_model,c2.car_year,c2.sale_name
+from
+(select * from sohu_car where pid!=0) c2, sohu_car c1
+where c2.pid=c1.id) c, sohu_car_maintenance m
+where c.id=m.car_id
+
+
+# 车型数据导出
+select t1.car_brand,t1.company,t1.car_model,t2.car_year,t2.sale_name,t2.id
+from
+(select * from sohu_car where pid=0) t1, sohu_car t2
+where t1.id=t2.pid
+
+
+# 车型匹配数据导出
+select c6.id as 'tq_car',c6.brand as '淘汽品牌',c6.company as '淘汽厂家',c6.series as '淘汽车系',
+c6.model as '淘汽车型',c6.power as '淘汽排量',c6.year as '淘汽年款',c6.name as '淘汽车款',c6.import_info as '进口合资国产',
+sc.car_brand as '搜狐品牌',sc.company as '搜狐厂家',sc.car_model as '搜狐车型',
+sc.car_year as '搜狐年款',sc.sale_name as '搜狐车款',sc.id as 'sh_car'
+from
+(select * from db_car_category where level=6) c6,
+sohu_car_relation r,
+(select t1.car_brand,t1.company,t1.car_model,t2.car_year,t2.sale_name,t2.id
+from
+(select * from sohu_car where pid=0) t1, sohu_car t2
+where t1.id=t2.pid) sc
+where c6.id=r.tq_car_id and sc.id=r.sh_car_id
