@@ -14,6 +14,7 @@ import java.util.*;
  * Created by huangzhangting on 16/10/8.
  */
 public class GoodsCarSqlGen extends BaseTest{
+    public static String GOODS_CAR_TABLE = "db_goods_car";
     private List<Map<String, Object>> goodsCarList;
     private Set<String> unMatchGoodsFormats;
     private Set<String> matchGoodsIds;
@@ -202,7 +203,8 @@ public class GoodsCarSqlGen extends BaseTest{
     }
     private void writeGcSql(StringBuilder sb){
         StringBuilder sqlSb = new StringBuilder();
-        sqlSb.append("insert ignore into db_goods_car");
+        sqlSb.append("insert ignore into ");
+        sqlSb.append(GOODS_CAR_TABLE);
         sqlSb.append("(goods_id,car_id,car_name,car_brand_id,car_brand,car_series_id,car_series,car_model_id,car_model,car_power_id,car_power,car_year_id,car_year,status,gmt_create)");
         sqlSb.append(" values ").append(sb).append(";\n");
 

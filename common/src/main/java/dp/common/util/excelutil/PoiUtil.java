@@ -35,7 +35,7 @@ public class PoiUtil {
 
     public static float DefaultRowHeight = 20f;
 
-    public static int DefaultColumnWith = 4000;
+    public static int DefaultColumnWith = 3500;
 
 
     //excel标题样式
