@@ -39,6 +39,7 @@ from
 (select * from sohu_car where pid=0) t1, sohu_car t2
 where t1.id=t2.pid) sc
 where c6.id=r.tq_car_id and sc.id=r.sh_car_id
+order by c6.brand,c6.model,c6.year,c6.name
 
 
 ### 导出待补充的车型保养方案数据

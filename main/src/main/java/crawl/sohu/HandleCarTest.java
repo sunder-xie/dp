@@ -3,6 +3,7 @@ package crawl.sohu;
 import base.BaseTest;
 import dp.common.util.*;
 import dp.common.util.excelutil.CommReaderXLS;
+import dp.common.util.excelutil.CommReaderXLSX;
 import org.junit.Test;
 
 import java.util.*;
@@ -79,7 +80,12 @@ public class HandleCarTest extends BaseTest {
         }
         Print.info("匹配上的车型："+matchCarList.size());
 
+
         IoUtil.closeWriter(writer);
+
+
+        //todo 临时处理，和人工处理的数据作比较
+        //compare_his_data();
     }
 
     public void init(){
@@ -121,6 +127,7 @@ public class HandleCarTest extends BaseTest {
         String year = car.get("year").toString();
         String name = car.get("name").toString();
         String shCarId = null;
+        Set<String> shCarIdSet = new HashSet<>();
         for(Map<String, String> shCar : shCarList){
             String shBrand = handleBrand(StrUtil.toUpCase(shCar.get("brand")));
             String shName = shCar.get("name");
@@ -128,24 +135,31 @@ public class HandleCarTest extends BaseTest {
                     && year.equals(shCar.get("year")) && compareTransmissionType(name, shName)){
                 if(spBrandSet.contains(shBrand)){
                     if(compareModelSp(shCar, car)){
-                        shCarId = shCar.get("id");
-                        break;
+//                        shCarId = shCar.get("id");
+//                        break;
+
+                        shCarIdSet.add(shCar.get("id"));
                     }
                 }else{
                     if(compareModel(shCar, car, compareTime)){
-                        shCarId = shCar.get("id");
-                        break;
+//                        shCarId = shCar.get("id");
+//                        break;
+
+                        shCarIdSet.add(shCar.get("id"));
                     }
                 }
             }
         }
 
         //如果没有匹配上
-        if(shCarId==null){
+        if(shCarIdSet.isEmpty()){
             unMatchCarList.add(car);
         }else{
-            car.put("shCarId", shCarId);
-            matchCarList.add(car);
+            for(String id : shCarIdSet){
+                Map<String, Object> map = ObjectUtil.copyMap(car);
+                map.put("shCarId", id);
+                matchCarList.add(map);
+            }
         }
     }
 
@@ -243,6 +257,73 @@ public class HandleCarTest extends BaseTest {
             IoUtil.writeFile(writer, sb.toString());
             sb.setLength(0);
         }
+    }
+
+
+
+    public void compare_his_data() throws Exception{
+        String excel = path + "搜狐-淘汽车型匹配验证-20161128.xlsx";
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("tq_car", "tq_car");
+        attrMap.put("sh_car", "sh_car");
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processFirstSheet(excel);
+        List<Map<String, String>> dataList = readerXLSX.getDataList();
+        Print.printList(dataList);
+
+        writer = IoUtil.getWriter(path + "add_car_rel_1.sql");
+        List<Map<String, String>> unMatchList = new ArrayList<>();
+        for(Map<String, String> data : dataList){
+            if(!check_exist(data)){
+                unMatchList.add(data);
+
+                writeRelSql(data.get("tq_car"), data.get("sh_car"));
+            }
+        }
+        Print.info("人工匹配多余的数据："+unMatchList.size());
+
+
+        writer = IoUtil.getWriter(path + "add_car_rel_2.sql");
+        List<Map<String, Object>> unMatchCarList = new ArrayList<>();
+        for(Map<String, Object> car : matchCarList){
+            if(!check_car(car, dataList)){
+                unMatchCarList.add(car);
+
+                writeRelSql(car.get("id").toString(), car.get("shCarId").toString());
+            }
+        }
+        Print.info("程序匹配多余的数据："+unMatchCarList.size());
+
+
+    }
+    private boolean check_exist(Map<String, String> data){
+        for(Map<String, Object> map : matchCarList){
+            String tqId = map.get("id").toString();
+            String shId = map.get("shCarId").toString();
+            if(tqId.equals(data.get("tq_car")) && shId.equals(data.get("sh_car"))){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean check_car(Map<String, Object> car, List<Map<String, String>> list){
+        String tqId = car.get("id").toString();
+        String shId = car.get("shCarId").toString();
+        for(Map<String, String> data : list){
+            if(tqId.equals(data.get("tq_car")) && shId.equals(data.get("sh_car"))){
+                return true;
+            }
+        }
+        return false;
+    }
+    private void writeRelSql(String tqCarId, String shCarId){
+        StringBuilder sql = new StringBuilder();
+        sql.append("insert ignore into sohu_car_relation(tq_car_id, sh_car_id) value(");
+        sql.append(tqCarId);
+        sql.append(",");
+        sql.append(shCarId);
+        sql.append(");\n");
+        IoUtil.writeFile(writer, sql.toString());
     }
 
 }

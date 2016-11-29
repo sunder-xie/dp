@@ -60,6 +60,11 @@ public class TempTest extends BaseTest {
         IoUtil.writeFile(writer, sql.toString());
     }
 
+
+    /**
+     * 对应多个保养方案的车型数据导出
+     * @throws Exception
+     */
     @Test
     public void multi_maintenance_test() throws Exception{
         path = "/Users/huangzhangting/Desktop/数据抓取/搜狐/";
