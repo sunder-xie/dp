@@ -1,0 +1,5 @@
+# 有保养的车型
+select car_brand as '品牌',company as '厂家',car_model as '车型',
+concat('http://www.autohome.com.cn',maintenance_url) as '保养周期'
+from auto_home_car where maintenance_url!=''
+order by car_brand,company,car_model

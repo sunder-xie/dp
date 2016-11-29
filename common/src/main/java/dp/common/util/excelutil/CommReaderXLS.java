@@ -17,6 +17,7 @@ public class CommReaderXLS extends ReadExcelXLS {
 
     protected Map<Integer, String> attrIdxMap;
     protected Map<String, String> attrMap;
+    protected int attrSize;
 
     protected List<Map<String, String>> dataList;
     protected Map<String, Map<String, String>> dataMap;
@@ -49,14 +50,23 @@ public class CommReaderXLS extends ReadExcelXLS {
     }
 
     protected void initAttrIdxMap(List<String> rowList){
-        for(int i=0; i<rowList.size(); i++){
+        attrSize = rowList.size();
+        for(int i=0; i<attrSize; i++){
             attrIdxMap.put(i, StrUtil.strip(rowList.get(i)));
         }
     }
 
     protected Map<String, String> getData(List<String> rowList){
+        int size = rowList.size();
+        if(size < attrSize){
+            for(int j=size; j<attrSize; j++){
+                rowList.add("");
+            }
+            size = attrSize;
+        }
+
         Map<String, String> data = new HashMap<>();
-        for(int i=0; i<rowList.size(); i++){
+        for(int i=0; i<size; i++){
             String attr = attrMap.get(attrIdxMap.get(i));
             if(attr==null) {
                 continue;

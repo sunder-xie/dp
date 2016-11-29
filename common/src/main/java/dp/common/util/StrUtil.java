@@ -9,14 +9,23 @@ import java.util.regex.Pattern;
  */
 public class StrUtil {
     public static String toUpCase(String str){
+        if(str==null){
+            return "";
+        }
         return str.replace(" ", "").toUpperCase();
     }
 
     public static String strip(String str){
+        if(str==null){
+            return "";
+        }
         return str.replace("\r\n", "").replace("\n", "").trim();
     }
 
     public static String rep(String str){
+        if(str==null){
+            return "";
+        }
         return toUpCase(str.replace("-", "").replace("·", "").replace("/", "")).replace("・", "");
     }
 
@@ -32,6 +41,9 @@ public class StrUtil {
 
     //去掉括号
     public static String repBrackets(String str){
+        if(str==null){
+            return "";
+        }
         return str.replace("(","").replace(")","").replace("（", "").replace("）", "");
     }
 

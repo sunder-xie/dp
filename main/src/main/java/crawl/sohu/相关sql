@@ -73,3 +73,39 @@ db_car_category t4, sohu_car t5
 where t1.tq_car_id=t2.tq_car_id and t2.sh_car_id=t3.car_id
 and t1.tq_car_id=t4.id and t2.sh_car_id=t5.id
 order by t4.brand,t4.model,t4.`year`,t4.`name`,t5.id,t3.mileage
+
+
+### 导出待补充的车型保养方案数据(方案随便选一个)
+
+set @when_sql="when 1 then '保养' else '' end";
+set @msg='保养';
+select t4.id,t4.brand as '品牌',t4.company as '厂家',t4.series as '车系',
+t4.model as '车型',t4.power as '排量',t4.`year` as '年款',t4.`name` as '车款',
+t4.import_info as '进口合资国产',
+t5.id as '搜狐id',t5.sale_name as '搜狐车型',
+t3.mileage as '里程数',
+case t3.engine_oil when 1 then @msg else '' end as '机油',
+case t3.spark_plug when 1 then @msg else '' end as '火花塞',
+case t3.oil_filter when 1 then @msg else '' end as '机油滤清器',
+case t3.air_filter when 1 then @msg else '' end as '空气滤清器',
+case t3.air_conditioning_filter when 1 then @msg else '' end as '空调滤清器',
+case t3.gasoline_filter when 1 then @msg else '' end as '汽油滤清器',
+case t3.brake_oil when 1 then @msg else '' end as '刹车油',
+case t3.transmission_oil when 1 then @msg else '' end as '变速箱油',
+case t3.turn_oil when 1 then @msg else '' end as '转向助力油',
+case t3.belt when 1 then @msg else '' end as '正时皮带'
+from
+(select r.tq_car_id
+from
+(select distinct tq_car_id from sohu_car_relation) r
+left join
+(select distinct model_id from db_model_maintain_relation) c
+on r.tq_car_id=c.model_id
+where c.model_id is null) t1,
+(select tq_car_id,max(sh_car_id) as sh_car_id
+from sohu_car_relation group by tq_car_id) t2,
+sohu_car_maintenance t3,
+db_car_category t4, sohu_car t5
+where t1.tq_car_id=t2.tq_car_id and t2.sh_car_id=t3.car_id
+and t1.tq_car_id=t4.id and t2.sh_car_id=t5.id
+order by t4.brand,t4.model,t4.`year`,t4.`name`,t5.id,t3.mileage
