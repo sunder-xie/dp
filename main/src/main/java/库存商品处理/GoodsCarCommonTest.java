@@ -18,7 +18,7 @@ public class GoodsCarCommonTest extends BaseTest {
      */
     @Test
     public void testGC() throws Exception{
-        path = "/Users/huangzhangting/Desktop/库存商品数据处理/检查完成后的结果/";
+        path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/";
 
         List<Map<String, Object>> addDataList = getAddDataList();
         Print.info(addDataList.size());

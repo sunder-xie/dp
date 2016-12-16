@@ -1,7 +1,9 @@
 package 库存商品处理;
 
 import base.BaseTest;
+import dp.common.util.IoUtil;
 import dp.common.util.Print;
+import dp.common.util.excelutil.CommReaderXLSX;
 import org.junit.Test;
 
 import java.io.File;
@@ -104,5 +106,43 @@ public class GoodsCarTest extends BaseTest {
 
         common.handleCarIdGoodsSnList(dataMap.values());
     }
+
+
+    @Test
+    public void test_1216_数据补充() throws Exception{
+        path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/";
+
+        String excel = path + "云修机滤补充车型20131213.xlsx";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("规格型号2", "goodsFormat");
+        attrMap.put("力洋ID", "lyId");
+
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processFirstSheet(excel);
+        List<Map<String, String>> dataList = readerXLSX.getDataList();
+        Print.printList(dataList);
+
+        Set<String> lyIdSet = new HashSet<>();
+        for(Map<String, String> data : dataList){
+            lyIdSet.add(data.get("lyId"));
+        }
+        Print.info(lyIdSet.size());
+
+
+        writer = IoUtil.getWriter(path + "ly_id_goods.sql");
+        IoUtil.writeFile(writer, "truncate table ly_id_goods;\n");
+
+        StringBuilder sql = new StringBuilder();
+        for(String lyId : lyIdSet){
+            sql.setLength(0);
+            sql.append("insert into ly_id_goods(goods_id, ly_id) value(393195, '");
+            sql.append(lyId).append("');\n");
+
+            IoUtil.writeFile(writer, sql.toString());
+        }
+
+    }
+
 
 }

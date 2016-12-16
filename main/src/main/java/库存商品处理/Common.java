@@ -20,12 +20,16 @@ public class Common {
 
     public Common(CommonMapper commonMapper) {
         this.commonMapper = commonMapper;
-        lyCarRelList = getLyCarRelList();
+        lyCarRelList = selectLyCarRelList();
 
     }
 
+    public List<Map<String, Object>> getLyCarRelList() {
+        return lyCarRelList;
+    }
+
     //力洋id，车型关系数据
-    public List<Map<String, Object>> getLyCarRelList(){
+    public List<Map<String, Object>> selectLyCarRelList(){
         String sql = "select new_l_id,brand,company,series,model,power,`year`,car_models,car_models_id from db_car_all";
         return commonMapper.selectListBySql(sql);
     }
