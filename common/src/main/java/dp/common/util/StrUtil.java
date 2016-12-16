@@ -1,5 +1,7 @@
 package dp.common.util;
 
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,4 +70,17 @@ public class StrUtil {
         return oe.toUpperCase().replaceAll("[^0-9A-Z]", "");
     }
 
+
+    public static byte[] strToBytes(String str){
+        if(StringUtils.isEmpty(str)){
+            return new byte[0];
+        }
+        String[] strings = str.split(",");
+        int len = strings.length;
+        byte[] bytes = new byte[len];
+        for(int i=0; i<len; i++){
+            bytes[i] = Byte.parseByte(strings[i]);
+        }
+        return bytes;
+    }
 }
