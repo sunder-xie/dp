@@ -2,6 +2,7 @@ package 库存商品处理;
 
 import base.BaseTest;
 import dp.common.util.Print;
+import dp.common.util.excelutil.CommReaderXLS;
 import org.junit.Test;
 import 机油滤清器处理.生成sql脚本.GoodsCarSqlGen;
 
@@ -78,6 +79,37 @@ public class GoodsCarCommonTest extends BaseTest {
                 "where t1.goods_id=t2.goods_id and t1.car_id=t2.car_id";
 
         return commonMapper.selectOneFieldBySql(sql);
+    }
+
+
+    @Test
+    public void test() throws Exception{
+        path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/";
+        String excel = path + "云修号YO-6889数据补充-1220.xls";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("car_id", "car_id");
+        attrMap.put("goods_id", "goods_id");
+
+        CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
+        readerXLS.process(excel, attrMap.size());
+        List<Map<String, String>> dataList = readerXLS.getDataList();
+        Print.printList(dataList);
+
+        List<Map<String, Object>> goodsCarList = new ArrayList<>();
+        GoodsCarSqlGen sqlGen = new GoodsCarSqlGen(path, commonMapper);
+        for(Map<String, String> add : dataList){
+            Map<String, Object> carInfo = sqlGen.getCarInfo(add.get("car_id"));
+            if(carInfo==null){
+                Print.info("错误的车款id："+add);
+            }else{
+                carInfo.put("goods_id", add.get("goods_id"));
+                goodsCarList.add(carInfo);
+            }
+        }
+
+        sqlGen.handleSql("add_goods_car", goodsCarList);
+
     }
 
 }

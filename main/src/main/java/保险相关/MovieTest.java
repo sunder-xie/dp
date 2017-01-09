@@ -1,10 +1,7 @@
 package 保险相关;
 
 import base.BaseTest;
-import dp.common.util.IoUtil;
-import dp.common.util.LocalConfig;
-import dp.common.util.Print;
-import dp.common.util.StrUtil;
+import dp.common.util.*;
 import dp.common.util.excelutil.CommReaderXLSX;
 import org.apache.shiro.crypto.AesCipherService;
 import org.junit.Test;
@@ -20,9 +17,9 @@ public class MovieTest extends BaseTest {
 
     @Test
     public void test() throws Exception{
-        path = "/Users/huangzhangting/Desktop/保险项目/后台系统/电影票项目/";
+        path = "/Users/huangzhangting/Desktop/保险项目/后台系统/电影票项目/电影票兑换码/";
 
-        String excel = path + "钢锯岭兑换码-短信发放-900张.xlsx";
+        String excel = path + "14张电影票-1226.xlsx";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("兑换码", "code");
@@ -31,10 +28,15 @@ public class MovieTest extends BaseTest {
         List<Map<String, String>> dataList = readerXLSX.getDataList();
         Print.printList(dataList);
 
+        List<Map<String, String>> mapList = new ArrayList<>();
         int len = 12;
         Set<String> set = new HashSet<>();
         for(Map<String, String> data : dataList){
             String code = data.get("code");
+            if("".equals(code)){
+                continue;
+            }
+
             if(code.length() != len){
                 Print.info("长度有疑问："+code);
             }
@@ -43,17 +45,22 @@ public class MovieTest extends BaseTest {
             }
 
             data.put("encryptCode", encryptStr(code));
+            mapList.add(data);
         }
 
-        writer = IoUtil.getWriter(path + "mana_insert_data_20161208.sql");
+        String dateStr = DateUtils.dateToString(new Date(), DateUtils.yyyyMMdd);
+        String sqlName = path + "mana_insert_data_" + dateStr + ".sql";
+
+        writer = IoUtil.getWriter(sqlName);
         IoUtil.writeFile(writer, "select @nowTime := now();\n");
 
         int count = 100;
-        int size = dataList.size();
+        int size = mapList.size();
+        Print.info("最终数量："+size);
         int lastIdx = size - 1;
         StringBuilder sql = new StringBuilder();
         for(int i=0; i<size; i++){
-            appendVal(sql, dataList.get(i));
+            appendVal(sql, mapList.get(i));
             if((i+1)%count==0){
                 writeSql(sql);
                 sql.setLength(0);
