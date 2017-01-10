@@ -121,14 +121,49 @@ public class ManaCrmDataTest extends BaseTest {
         packageLicencePlateForList(licencePlateMap, allLicencePlateList, dataList_3, 1);
 
         Print.info("手机-车牌数量："+licencePlateMap.size());
-        List<Map<String, String>> vehicleList = packageVehicle(customerMap, licencePlateMap);
-        Print.printList(vehicleList);
+        Map<String, Map<String, String>> vehicleMap = packageVehicle(customerMap, licencePlateMap);
 
 
         /* 处理sql */
         path = "/Users/huangzhangting/Desktop/保险项目/历史数据/";
         handleCustomerSql(customerMap.values());
-        handleVehicleSql(vehicleList);
+        handleVehicleSql(vehicleMap.values());
+
+
+        /* 生成log数据 */
+        for(Map<String, Object> data : dataList_1){
+            data.put("virtualFormId", data.get("form_id"));
+            data.put("form_id", 0);
+            data.put("is_virtual", 1);
+            data.put("customer_vehicle_id", getVehicleId(vehicleMap, data));
+        }
+        for(Map<String, Object> data : dataList_2){
+            data.put("is_virtual", 0);
+            data.put("customer_vehicle_id", getVehicleId(vehicleMap, data));
+        }
+        for(Map<String, Object> data : dataList_3){
+            data.put("virtualFormId", 0);
+            data.put("is_virtual", 0);
+            data.put("customer_vehicle_id", getVehicleId(vehicleMap, data));
+        }
+        List<Map<String, Object>> logList = new ArrayList<>();
+        logList.addAll(dataList_1);
+        logList.addAll(dataList_2);
+        logList.addAll(dataList_3);
+
+        /* 处理日志 */
+        handleSyncLogSql(logList);
+
+    }
+
+    private String getVehicleId(Map<String, Map<String, String>> vehicleMap, Map<String, Object> data){
+        String key = data.get("vehicle_owner_phone").toString().trim()+"_"+data.get("vehicle_sn").toString().trim();
+        Map<String, String> vehicle = vehicleMap.get(key);
+        if(vehicle==null){
+            Print.info("存在有问题的log："+data);
+            return null;
+        }
+        return vehicle.get("id");
     }
 
     private Set<String> getFormIdSet_2(List<Map<String, Object>> dataList_2){
@@ -161,13 +196,13 @@ public class ManaCrmDataTest extends BaseTest {
     private void packageMobileMapForList(Map<String, Map<String, Object>> mobileMap, List<String> mobileList,
                                          List<Map<String, Object>> dataList){
         for(String mobile : mobileList){
-            packageMobileMap(mobileMap, mobile, dataList);
+            packageMobileMap(mobileMap, mobile.trim(), dataList);
         }
     }
     private void packageMobileMap(Map<String, Map<String, Object>> mobileMap, String mobile,
                                   List<Map<String, Object>> dataList){
         for(Map<String, Object> data : dataList){
-            String vehicle_owner_phone = data.get("vehicle_owner_phone").toString();
+            String vehicle_owner_phone = data.get("vehicle_owner_phone").toString().trim();
             if(mobile.equals(vehicle_owner_phone)){
                 Map<String, Object> map = mobileMap.get(mobile);
                 if(map==null){
@@ -197,11 +232,11 @@ public class ManaCrmDataTest extends BaseTest {
         for(Map<String, Object> data : dataList){
             data.put("hasInsured", hasInsured); //是否投保
 
-            String vehicle_owner_phone = data.get("vehicle_owner_phone").toString();
-            String vehicle_sn = data.get("vehicle_sn").toString();
+            String vehicle_owner_phone = data.get("vehicle_owner_phone").toString().trim();
+            String vehicle_sn = data.get("vehicle_sn").toString().trim();
 
-            if(vehicle_owner_phone.equals(licencePlate.get("vehicle_owner_phone").toString())
-                    && vehicle_sn.equals(licencePlate.get("vehicle_sn").toString())){
+            if(vehicle_owner_phone.equals(licencePlate.get("vehicle_owner_phone").toString().trim())
+                    && vehicle_sn.equals(licencePlate.get("vehicle_sn").toString().trim())){
 
                 String key = vehicle_owner_phone + "_" + vehicle_sn;
                 Map<String, Object> map = licencePlateMap.get(key);
@@ -227,7 +262,7 @@ public class ManaCrmDataTest extends BaseTest {
             Map<String, Object> data = entry.getValue();
             Map<String, String> map = new HashMap<>();
             map.put("id", id+"");
-            map.put("customer_mobile", data.get("vehicle_owner_phone").toString());
+            map.put("customer_mobile", data.get("vehicle_owner_phone").toString().trim());
             map.put("customer_name", data.get("vehicle_owner_name").toString());
             map.put("certificate_type", data.get("vehicle_owner_cert_type").toString());
             map.put("certificate_no", data.get("vehicle_owner_cert_code").toString());
@@ -239,10 +274,10 @@ public class ManaCrmDataTest extends BaseTest {
     }
 
     /* 组装车辆 */
-    private List<Map<String, String>> packageVehicle(Map<String, Map<String, String>> customerMap,
+    private Map<String, Map<String, String>> packageVehicle(Map<String, Map<String, String>> customerMap,
                                                      Map<String, Map<String, Object>> licencePlateMap){
 
-        List<Map<String, String>> vehicleList = new ArrayList<>();
+        Map<String, Map<String, String>> vehicleMap = new HashMap<>();
         int id = 1;
         for(Map.Entry<String, Map<String, Object>> entry : licencePlateMap.entrySet()){
             String mobile = entry.getKey().substring(0, entry.getKey().indexOf("_"));
@@ -253,7 +288,7 @@ public class ManaCrmDataTest extends BaseTest {
                 map.put("id", id+"");
                 map.put("customer_id", customer.get("id"));
 
-                map.put("licence_plate", data.get("vehicle_sn").toString());
+                map.put("licence_plate", data.get("vehicle_sn").toString().trim());
                 map.put("has_licence_plate", data.get("has_license").toString());
                 map.put("insure_province", data.get("insured_province").toString());
                 map.put("insure_province_code", data.get("insured_province_code").toString());
@@ -264,7 +299,7 @@ public class ManaCrmDataTest extends BaseTest {
                 map.put("vin_no", data.get("car_frame_sn").toString());
                 map.put("vehicle_reg_date", data.get("car_egister_date").toString());
                 map.put("cooperation_mode", data.get("cooperation_mode").toString());
-                map.put("agent_type", data.get("agent_type")==null?"0":data.get("agent_type").toString());
+                map.put("agent_type", data.get("agent_type")==null?"1":data.get("agent_type").toString());
                 map.put("agent_id", data.get("agent_id").toString());
                 map.put("agent_name", data.get("agent_name").toString());
 
@@ -281,12 +316,14 @@ public class ManaCrmDataTest extends BaseTest {
                     map.put("hasInsured", hasInsured.toString());
                 }
 
-                vehicleList.add(map);
+                vehicleMap.put(entry.getKey(), map);
                 id++;
+            }else{
+                Print.info("没有客户信息："+entry.getValue());
             }
         }
 
-        return vehicleList;
+        return vehicleMap;
     }
 
 
@@ -307,7 +344,7 @@ public class ManaCrmDataTest extends BaseTest {
         }
     }
 
-    private void handleVehicleSql(List<Map<String, String>> vehicleList){
+    private void handleVehicleSql(Collection<Map<String, String>> vehicleList){
         writer = IoUtil.getWriter(path + "add_vehicle.sql");
         for(Map<String, String> map : vehicleList){
             StringBuilder sql = new StringBuilder();
@@ -351,6 +388,77 @@ public class ManaCrmDataTest extends BaseTest {
 
             IoUtil.writeFile(writer, sql.toString());
         }
+    }
+
+
+    /* 处理同步日志 */
+    private void handleSyncLogSql(List<Map<String, Object>> dataList){
+        writer = IoUtil.getWriter(path + "add_sync_log.sql");
+
+        int count = 100;
+        int size = dataList.size();
+        int lastIndex = size - 1;
+        StringBuilder sql = new StringBuilder();
+        for(int i=0; i<size; i++){
+            appendVal(sql, dataList.get(i));
+            if((i+1)%count==0){
+                writeLogSql(sql);
+                sql.setLength(0);
+                continue;
+            }
+            if(i==lastIndex){
+                writeLogSql(sql);
+                break;
+            }
+            sql.append(",");
+        }
+
+    }
+    private void appendVal(StringBuilder sql, Map<String, Object> data){
+        sql.append("('system','");
+        sql.append(data.get("gmt_create")).append("','");
+        sql.append(data.get("customer_vehicle_id")).append("','");
+        sql.append(data.get("form_id")).append("','");
+        sql.append(data.get("id")).append("','");
+        sql.append(data.get("insurance_company_id")).append("','");
+        sql.append(data.get("cooperation_mode")).append("','");
+        sql.append(data.get("vehicle_owner_cert_type")).append("','");
+        sql.append(data.get("vehicle_owner_cert_code")).append("','");
+        sql.append(data.get("vehicle_owner_name")).append("','");
+        sql.append(data.get("vehicle_owner_phone").toString().trim()).append("','");
+        sql.append(data.get("agent_type")==null?1:data.get("agent_type")).append("','");
+        sql.append(data.get("agent_id")).append("','");
+        sql.append(data.get("agent_name")).append("','");
+        sql.append(data.get("package_start_time")).append("','");
+        sql.append(data.get("package_end_time")).append("','");
+        sql.append(data.get("insured_province")).append("','");
+        sql.append(data.get("insured_city")).append("','");
+        sql.append(data.get("insured_province_code")).append("','");
+        sql.append(data.get("insured_city_code")).append("','");
+        sql.append(data.get("vehicle_sn").toString().trim()).append("','");
+        sql.append(data.get("has_license")).append("','");
+        sql.append(data.get("car_config_type")).append("','");
+        sql.append(data.get("car_engine_sn")).append("','");
+        sql.append(data.get("car_frame_sn")).append("','");
+        sql.append(data.get("car_egister_date")).append("','");
+        sql.append(data.get("is_virtual")).append("',");
+        sql.append(data.get("virtualFormId"));
+
+        sql.append(")");
+    }
+    private void writeLogSql(StringBuilder sql){
+        StringBuilder sb = new StringBuilder();
+        sb.append("insert into mana_insurance_form_sync_log(creator,gmt_create,customer_vehicle_id,");
+        sb.append("insurance_form_id,insurance_basic_id,insure_company_id,cooperation_mode,");
+        sb.append("vehicle_owner_cert_type,vehicle_owner_cert_code,vehicle_owner_name,vehicle_owner_phone,");
+        sb.append("agent_type,agent_id,agent_name,insure_start_time,insure_end_time,");
+        sb.append("insured_province,insured_city,insured_province_code,insured_city_code,");
+        sb.append("licence_plate,has_licence_plate,config_type,engine_no,vin_no,vehicle_reg_date,");
+        sb.append("is_virtual,virtual_insurance_form_id");
+        sb.append(") values");
+        sb.append(sql);
+        sb.append(";\n");
+        IoUtil.writeFile(writer, sb.toString());
     }
 
 }
