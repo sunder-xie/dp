@@ -1,6 +1,8 @@
 package 库存商品处理;
 
 import base.BaseTest;
+import dp.common.util.DateUtils;
+import dp.common.util.IoUtil;
 import dp.common.util.Print;
 import dp.common.util.excelutil.CommReaderXLS;
 import org.junit.Test;
@@ -27,6 +29,8 @@ public class GoodsCarCommonTest extends BaseTest {
         List<String> modifyDataList = getModifyDataList();
         Print.info(modifyDataList.size());
 
+        //需要上线的商品id集合
+        Set<String> goodsIdSet = new HashSet<>();
 
         List<Map<String, Object>> goodsCarList = new ArrayList<>();
         GoodsCarSqlGen sqlGen = new GoodsCarSqlGen(path, commonMapper);
@@ -37,11 +41,27 @@ public class GoodsCarCommonTest extends BaseTest {
             }else{
                 carInfo.put("goods_id", add.get("goods_id"));
                 goodsCarList.add(carInfo);
+
+                goodsIdSet.add(add.get("goods_id").toString());
             }
+        }
+
+        if(!modifyDataList.isEmpty()){
+            goodsIdSet.addAll(getModifyGoodsIdList());
         }
 
         sqlGen.handleSql("dataserver_add_goods_car", goodsCarList);
         sqlGen.handleModifySql("dataserver_modify_goods_car", modifyDataList);
+
+
+        if (goodsIdSet.isEmpty()) {
+            Print.info("\n没有需要补充的商品车型关系数据\n");
+        }else {
+            String dateStr = DateUtils.dateToString(new Date(), DateUtils.yyyyMMdd);
+            writer = IoUtil.getWriter(path + "补充适配车型的商品id-"+dateStr+".txt");
+            IoUtil.writeFile(writer, goodsIdSet.toString().replace("[","( ").replace("]", " )"));
+            IoUtil.closeWriter(writer);
+        }
     }
 
     public List<Map<String, Object>> getAddDataList(){
@@ -73,6 +93,15 @@ public class GoodsCarCommonTest extends BaseTest {
     }
     public List<String> getModifyDataList(){
         String sql = "select t2.id " +
+                "from " +
+                "db_goods_car_mini t1, " +
+                "(select id,goods_id,car_id from db_goods_car where `status`!=1) t2 " +
+                "where t1.goods_id=t2.goods_id and t1.car_id=t2.car_id";
+
+        return commonMapper.selectOneFieldBySql(sql);
+    }
+    public List<String> getModifyGoodsIdList(){
+        String sql = "select distinct t2.goods_id " +
                 "from " +
                 "db_goods_car_mini t1, " +
                 "(select id,goods_id,car_id from db_goods_car where `status`!=1) t2 " +
