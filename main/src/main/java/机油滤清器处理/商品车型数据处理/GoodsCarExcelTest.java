@@ -33,16 +33,16 @@ public class GoodsCarExcelTest extends BaseTest {
     //TODO 商品-力洋车型关系处理
     @Test
     public void goodsLyCarTest() throws Exception{
-        path = "/Users/huangzhangting/Desktop/机滤数据处理/";
+        path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/未处理/国文/";
 
-        String excel = path + "机滤正确数据总表整理版20160926（奥盛版）.xlsx";
+        String excel = path + "奥盛机滤没有匹配上的数据修改版-20170302.xlsx";
 
         BRAND_CODE = BrandEnum.AO_SHENG.getCode();
 
-        int sheet = 1;
+        int sheet = 1; //第几个sheet
 
         boolean exportUnMatchDataFlag = true; //导出没有匹配上的数据
-
+        boolean modifyFlag = true; //需要过滤错误的数据
 
         CommReaderXLSX readerXLSX = new CommReaderXLSX(GoodsCarConfig.getGcExcelAttrMap());
         readerXLSX.processOneSheet(excel, sheet);
@@ -50,6 +50,20 @@ public class GoodsCarExcelTest extends BaseTest {
         List<Map<String, String>> dataList = readerXLSX.getDataList();
         Print.info(dataList.size());
         Print.info(dataList.get(0));
+
+        if(modifyFlag){
+            int size = dataList.size();
+            for(int i=0; i<size; i++){
+                Map<String, String> data = dataList.get(i);
+                if(!"OK".equals(data.get("modifyStatus"))){
+                    dataList.remove(i);
+                    i--;
+                    size--;
+                }
+            }
+            Print.info("去掉了错误的数据，剩下数据：");
+            Print.printList(dataList);
+        }
 
 
         List<Map<String, Object>> carInfoList = commonMapper.selectListBySql(GoodsCarConfig.getLyCarInfoSql());
@@ -147,7 +161,16 @@ public class GoodsCarExcelTest extends BaseTest {
             Print.info("数据错误：" + data);
             unMatchList.add(data);
         }else{
-            handleSql(data.get("goodsFormat"), lyIdSet);
+            handleSql(data.get("goodsFormat"), lyIdSet, BRAND_CODE);
+
+            //云修号处理
+            String yunFormat = data.get("yunFormat");
+            if(StringUtils.isEmpty(yunFormat) || yunFormat.contains("#N/A")){
+
+            }else{
+                Print.info("有云修号："+yunFormat);
+                handleSql(yunFormat, lyIdSet, BrandEnum.YUN_XIU.getCode());
+            }
         }
     }
 
@@ -318,7 +341,7 @@ public class GoodsCarExcelTest extends BaseTest {
     }
 
 
-    private void handleSql(String goodsFormat, Set<String> lyIdSet){
+    private void handleSql(String goodsFormat, Set<String> lyIdSet, int brandCode){
         Print.info(goodsFormat+" : "+lyIdSet.size());
 
         StringBuilder sb = new StringBuilder();
@@ -326,7 +349,7 @@ public class GoodsCarExcelTest extends BaseTest {
             sb.append(",");
             sb.append("('").append(goodsFormat);
             sb.append("', '").append(lyId).append("', ");
-            sb.append(BRAND_CODE).append(")");
+            sb.append(brandCode).append(")");
         }
         sb.deleteCharAt(0);
 

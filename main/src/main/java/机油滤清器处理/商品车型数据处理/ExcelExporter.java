@@ -19,7 +19,19 @@ public class ExcelExporter {
         String[] fields = null;
         String fileName = null;
 
-        if(type== BrandEnum.YUN_XIU.getCode()){ //云修机滤
+        if(type==BrandEnum.AO_SHENG.getCode()){ //奥盛机滤
+            fileName = "奥盛机滤没有匹配上的数据";
+
+            heads = new String[]{"序号", "车系（原）", "车型（原）", "年款（年/月）", "发动机", "功率(KW)",
+                    "商品编码", "云修号", "尺寸",
+                    "品牌", "厂家", "车系", "车型", "年款", "排量", "进气形式", "最大功率"};
+
+            fields = new String[]{"index", "car_series", "car_model", "car_year", "car_engine", "car_power",
+                    "goodsFormat", "yunFormat", "goods_size",
+                    "brand", "company", "series", "model", "year", "power", "inletType", "maxPower"};
+
+        }
+        else if(type==BrandEnum.YUN_XIU.getCode()){ //云修机滤
             fileName = "云修机滤没有匹配上的数据";
 
             heads = new String[]{"序号", "车系（原）", "车型（原）", "年款（年/月）", "发动机", "功率(KW)", "机油滤清器", "尺寸",

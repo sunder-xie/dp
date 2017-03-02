@@ -40,8 +40,8 @@ public class GoodsCarCommonTest extends BaseTest {
             }
         }
 
-        sqlGen.handleSql("add_goods_car", goodsCarList);
-        sqlGen.handleModifySql("modify_goods_car", modifyDataList);
+        sqlGen.handleSql("dataserver_add_goods_car", goodsCarList);
+        sqlGen.handleModifySql("dataserver_modify_goods_car", modifyDataList);
     }
 
     public List<Map<String, Object>> getAddDataList(){
@@ -111,5 +111,40 @@ public class GoodsCarCommonTest extends BaseTest {
         sqlGen.handleSql("add_goods_car", goodsCarList);
 
     }
+
+    @Test
+    public void test_0216() throws Exception{
+        path = "/Users/huangzhangting/Desktop/";
+
+        List<Map<String, String>> dataList = new ArrayList<>();
+        dataList.add(new HashMap<String, String>(){{
+            put("car_id", "60667");
+            put("goods_id", "393198");
+        }});
+        dataList.add(new HashMap<String, String>(){{
+            put("car_id", "60668");
+            put("goods_id", "393198");
+        }});
+
+        Print.printList(dataList);
+
+
+        List<Map<String, Object>> goodsCarList = new ArrayList<>();
+        GoodsCarSqlGen sqlGen = new GoodsCarSqlGen(path, commonMapper);
+        for(Map<String, String> add : dataList){
+            Map<String, Object> carInfo = sqlGen.getCarInfo(add.get("car_id"));
+            if(carInfo==null){
+                Print.info("错误的车款id："+add);
+            }else{
+                carInfo.put("goods_id", add.get("goods_id"));
+                goodsCarList.add(carInfo);
+            }
+        }
+
+        sqlGen.handleSql("add_goods_car", goodsCarList);
+
+    }
+
+
 
 }

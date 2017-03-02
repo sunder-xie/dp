@@ -76,6 +76,19 @@ public class GoodsCarSqlGen extends BaseTest{
         }
         return null;
     }
+    //获取汽油车
+    public Map<String, Object> getGasCarInfo(String carId){
+        for(Map<String, Object> car : carInfoList){
+            if(carId.equals(car.get("car_id").toString())){
+                String name = car.get("car_name").toString();
+                if(name.contains("电动") || name.contains("柴油")){
+                    return null;
+                }
+                return ObjectUtil.copyMap(car);
+            }
+        }
+        return null;
+    }
 
 
     //处理关系数据

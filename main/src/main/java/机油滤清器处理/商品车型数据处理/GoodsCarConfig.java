@@ -58,6 +58,9 @@ public class GoodsCarConfig {
         attrMap.put("生产年份", "createYear");
         attrMap.put("变速器类型", "transmissionType");
 
+        attrMap.put("云修号", "yunFormat");
+        attrMap.put("修改标识", "modifyStatus");
+
         //没有参与比较的属性
         attrMap.put("车系（原）", "car_series");
         attrMap.put("车型（原）", "car_model");

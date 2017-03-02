@@ -36,3 +36,23 @@ where gc.id is null
 
 # 数据校验
 select * from db_goods_car where id>3234265
+
+
+
+# 导出商品型号-车款id
+select gc.goods_format,c.id as car_id,c.name as car_name
+from
+(select t1.goods_format,t2.car_models_id
+from
+(select * from temp_goods_lyid_rel
+-- where brand_code=1
+) t1,
+db_car_all t2
+where t1.ly_id=t2.new_l_id
+group by t1.goods_format,t2.car_models_id) gc,
+db_car_category c
+where gc.car_models_id=c.id
+and c.name not like '%电动%'
+and c.name not like '%柴油%'
+
+

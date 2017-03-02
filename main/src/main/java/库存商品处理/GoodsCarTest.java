@@ -3,8 +3,10 @@ package 库存商品处理;
 import base.BaseTest;
 import dp.common.util.IoUtil;
 import dp.common.util.Print;
+import dp.common.util.excelutil.CommReaderXLS;
 import dp.common.util.excelutil.CommReaderXLSX;
 import org.junit.Test;
+import 机油滤清器处理.生成sql脚本.GoodsCarSqlGen;
 
 import java.io.File;
 import java.util.*;
@@ -143,6 +145,73 @@ public class GoodsCarTest extends BaseTest {
         }
 
     }
+
+
+
+
+
+    //读取商品数据
+    private List<Map<String, String>> getDsGoodsList(String excelName) throws Exception{
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("goods_id", "goods_id");
+        attrMap.put("goods_name", "goods_name");
+        attrMap.put("goods_format", "goods_format");
+
+        String excel = "/Users/huangzhangting/Desktop/商品车型关系数据补充/电商商品/"+excelName;
+
+        CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
+        readerXLS.processFirstSheet(excel, attrMap.size());
+        List<Map<String, String>> dataList = readerXLS.getDataList();
+        Print.printList(dataList);
+        return dataList;
+    }
+    private String getGoodsId(List<Map<String, String>> goodsList, String goodsFormat){
+        for(Map<String, String> goods : goodsList){
+            if(goodsFormat.equals(goods.get("goods_format"))){
+                return goods.get("goods_id");
+            }
+        }
+        return null;
+    }
+
+
+    @Test
+    public void test_0302() throws Exception{
+        path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/未处理/国文/";
+
+        List<Map<String, String>> goodsList = getDsGoodsList("奥胜机滤.xls");
+        goodsList.addAll(getDsGoodsList("云修机滤.xls"));
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("gc.goods_format", "goods_format");
+        attrMap.put("c.car_id", "car_id");
+
+        CommReaderXLS readerXLS = new CommReaderXLS(attrMap);
+        readerXLS.processFirstSheet(path + "商品型号-车款id.xls", attrMap.size());
+        List<Map<String, String>> dataList = readerXLS.getDataList();
+        Print.printList(dataList);
+
+        String table = "db_goods_car_mini";
+        writer = IoUtil.getWriter(path + table + ".sql");
+        IoUtil.writeFile(writer, "truncate table "+table+";\n");
+
+        for(Map<String, String> data : dataList){
+            String goodsId = getGoodsId(goodsList, data.get("goods_format"));
+            if(goodsId==null){
+                Print.info("不存在的商品编码："+data);
+            }else{
+                //data.put("goods_id", goodsId);
+                StringBuilder sql = new StringBuilder();
+                sql.append("insert ignore into ").append(table).append("(goods_id, car_id) value (");
+                sql.append(goodsId).append(", ").append(data.get("car_id"));
+                sql.append(");\n");
+                IoUtil.writeFile(writer, sql.toString());
+            }
+        }
+
+        IoUtil.closeWriter(writer);
+    }
+
 
 
 }
