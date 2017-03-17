@@ -156,6 +156,7 @@ public class GoodsCarTest extends BaseTest {
         attrMap.put("goods_id", "goods_id");
         attrMap.put("goods_name", "goods_name");
         attrMap.put("goods_format", "goods_format");
+        attrMap.put("brand_partcode", "brand_code");
 
         String excel = "/Users/huangzhangting/Desktop/商品车型关系数据补充/电商商品/"+excelName;
 
@@ -168,6 +169,14 @@ public class GoodsCarTest extends BaseTest {
     private String getGoodsId(List<Map<String, String>> goodsList, String goodsFormat){
         for(Map<String, String> goods : goodsList){
             if(goodsFormat.equals(goods.get("goods_format"))){
+                return goods.get("goods_id");
+            }
+        }
+        return null;
+    }
+    private String getGoodsId2(List<Map<String, String>> goodsList, String brandCode){
+        for(Map<String, String> goods : goodsList){
+            if(brandCode.equals(goods.get("brand_code"))){
                 return goods.get("goods_id");
             }
         }
@@ -213,5 +222,25 @@ public class GoodsCarTest extends BaseTest {
     }
 
 
+
+    @Test
+    public void test_0307() throws Exception{
+        path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/未处理/美龄/";
+
+        Map<String, String> attrMap = new HashMap<>();
+        attrMap.put("商品型号", "goodsFormat");
+        attrMap.put("力洋ID", "lyId");
+
+        String excel = path + "博世电瓶与车型关系汇总.xlsx";
+        CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
+        readerXLSX.processFirstSheet(excel);
+        List<Map<String, String>> dataList = readerXLSX.getDataList();
+        Print.printList(dataList);
+
+        List<Map<String, String>> goodsList = getDsGoodsList("博世电瓶.xls");
+
+
+
+    }
 
 }
