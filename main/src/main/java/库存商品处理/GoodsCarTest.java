@@ -3,6 +3,7 @@ package 库存商品处理;
 import base.BaseTest;
 import dp.common.util.IoUtil;
 import dp.common.util.Print;
+import dp.common.util.StrUtil;
 import dp.common.util.excelutil.CommReaderXLS;
 import dp.common.util.excelutil.CommReaderXLSX;
 import org.junit.Test;
@@ -224,23 +225,105 @@ public class GoodsCarTest extends BaseTest {
 
 
     @Test
-    public void test_0307() throws Exception{
+    public void test_0320() throws Exception{
+        String brandName = "博世电瓶";
+        String dataExcel = "博世电瓶与车型关系汇总.xlsx";
+        String goodsExcel = brandName+".xls";
+
         path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/未处理/美龄/";
 
         Map<String, String> attrMap = new HashMap<>();
         attrMap.put("商品型号", "goodsFormat");
         attrMap.put("力洋ID", "lyId");
 
-        String excel = path + "博世电瓶与车型关系汇总.xlsx";
+        String excel = path + dataExcel;
         CommReaderXLSX readerXLSX = new CommReaderXLSX(attrMap);
         readerXLSX.processFirstSheet(excel);
         List<Map<String, String>> dataList = readerXLSX.getDataList();
         Print.printList(dataList);
 
-        List<Map<String, String>> goodsList = getDsGoodsList("博世电瓶.xls");
+        List<Map<String, String>> goodsList = getDsGoodsList(goodsExcel);
 
+        List<Map<String, String>> matchList = new ArrayList<>();
+        Set<String> matchFormatSet = new HashSet<>();
+        Set<String> unMatchFormatSet = new HashSet<>();
+        for(Map<String, String> data : dataList){
+            String goodsFormat = data.get("goodsFormat");
+            if("".equals(goodsFormat)){
+                Print.info("没有商品型号的数据："+data);
+                continue;
+            }
+            String goodsId = getGoodsId3(goodsList, goodsFormat);
+            if(goodsId!=null){
+                data.put("goodsId", goodsId);
+                matchList.add(data);
+                matchFormatSet.add(goodsFormat);
+            }else{
+                unMatchFormatSet.add(handleGoodsFormat(goodsFormat));
+            }
+        }
 
+        writer = IoUtil.getWriter(path+brandName+"_商品匹配结果.txt");
+        IoUtil.writeFile(writer, "匹配上的型号:\n"+matchFormatSet.toString());
+        IoUtil.writeFile(writer, "\n\n没有匹配上的型号:\n"+unMatchFormatSet.toString());
+        IoUtil.closeWriter(writer);
 
+        writer = IoUtil.getWriter(path + brandName+"_ly_id_goods.sql");
+        batchInsertIntoLyIdGoods(matchList);
+        IoUtil.closeWriter(writer);
+    }
+    private String handleGoodsFormat(String goodsFormat){
+        return StrUtil.toUpCase(goodsFormat).replace("-", "");
+    }
+    private String getGoodsId3(List<Map<String, String>> goodsList, String goodsFormat){
+        goodsFormat = handleGoodsFormat(goodsFormat);
+        for(Map<String, String> goods : goodsList){
+            String goods_format = handleGoodsFormat(goods.get("goods_format"));
+            if(goodsFormat.equals(goods_format)){
+                return goods.get("goods_id");
+            }
+            String brand_code = handleGoodsFormat(goods.get("brand_code"));
+            if(goodsFormat.equals(brand_code)){
+                return goods.get("goods_id");
+            }
+        }
+        return null;
+    }
+    private void batchInsertIntoLyIdGoods(List<Map<String, String>> dataList){
+        if(dataList.isEmpty()){
+            Print.info("没有数据");
+            return;
+        }
+        int count = 500;
+        int size = dataList.size();
+        int lastIndex = size - 1;
+        StringBuilder sql = new StringBuilder();
+        for(int i=0; i<size; i++){
+            appendValue(sql, dataList.get(i));
+            if((i+1)%count==0){
+                writeSql(sql);
+                sql.setLength(0);
+                continue;
+            }
+            if(i==lastIndex){
+                writeSql(sql);
+                sql.setLength(0);
+                break;
+            }
+            sql.append(",");
+        }
+    }
+    private void appendValue(StringBuilder sql, Map<String, String> data){
+        sql.append("(");
+        sql.append(data.get("goodsId"));
+        sql.append(",'");
+        sql.append(data.get("lyId"));
+        sql.append("')");
+    }
+    private void writeSql(StringBuilder sql){
+        sql.insert(0, "insert into ly_id_goods(goods_id,ly_id) values ");
+        sql.append(";\n");
+        IoUtil.writeFile(writer, sql.toString());
     }
 
 }

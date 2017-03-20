@@ -21,7 +21,7 @@ left join db_goods_car gc
 on t1.goods_id=gc.goods_id and t1.car_id=gc.car_id
 where gc.id is null;
 
-
+# 插入临时表 db_goods_car_mini
 insert into db_goods_car_mini(goods_id, car_id)
 select t1.goods_id,t1.car_id
 from
@@ -31,7 +31,7 @@ where lg.ly_id=ca.new_l_id
 group by lg.goods_id,ca.car_models_id) t1
 left join db_goods_car gc
 on t1.goods_id=gc.goods_id and t1.car_id=gc.car_id
-where gc.id is null
+where gc.id is null and t1.goods_id!=0
 
 
 # 数据校验
