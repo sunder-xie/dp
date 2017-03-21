@@ -226,8 +226,8 @@ public class GoodsCarTest extends BaseTest {
 
     @Test
     public void test_0320() throws Exception{
-        String brandName = "博世电瓶";
-        String dataExcel = "博世电瓶与车型关系汇总.xlsx";
+        String brandName = "瓦尔塔电瓶";
+        String dataExcel = "瓦尔塔电瓶与车型关系汇总.xlsx";
         String goodsExcel = brandName+".xls";
 
         path = "/Users/huangzhangting/Desktop/商品车型关系数据补充/未处理/美龄/";
@@ -248,7 +248,7 @@ public class GoodsCarTest extends BaseTest {
         Set<String> matchFormatSet = new HashSet<>();
         Set<String> unMatchFormatSet = new HashSet<>();
         for(Map<String, String> data : dataList){
-            String goodsFormat = data.get("goodsFormat");
+            String goodsFormat = getRepGoodsFormat(data.get("goodsFormat"));
             if("".equals(goodsFormat)){
                 Print.info("没有商品型号的数据："+data);
                 continue;
@@ -324,6 +324,49 @@ public class GoodsCarTest extends BaseTest {
         sql.insert(0, "insert into ly_id_goods(goods_id,ly_id) values ");
         sql.append(";\n");
         IoUtil.writeFile(writer, sql.toString());
+    }
+    private String getRepGoodsFormat(String goodsFormat){
+        Map<String, String> map = getGoodsFormatRepMap();
+        String str = map.get(goodsFormat);
+        if(str==null){
+            return goodsFormat;
+        }
+        return str;
+    }
+    private Map<String, String> getGoodsFormatRepMap(){
+        Map<String, String> map = new HashMap<>();
+        map.put("D2665RT2", "D26-60(65)-R-T2");
+        map.put("80D26L", "2S 80D26 L");
+
+        map.put("L2350MF", "L2350");
+
+        map.put("46B24L", "46B24L-MF");
+        map.put("46B24L/R", "46B24L-MF");
+        map.put("46B24LX", "46B24LX-MF");
+        map.put("46B24R", "46B24R-MF");
+        map.put("46B24L/R", "46B24R-MF");
+        map.put("55530", "555 30MF");
+        map.put("55D23L", "55D23L-MF");
+        map.put("55D23L\\R", "55D23L-MF");
+        map.put("55D23R", "55D23R-MF");
+        map.put("55D23L\\R", "55D23R-MF");
+        map.put("55D26R/L", "55D26L-MF");
+        map.put("55D26L", "55D26L-MF");
+        map.put("55D26LX", "55D26LX-MF");
+        map.put("55D26R/L", "55D26R-MF");
+        map.put("55D26R", "55D26R-MF");
+        map.put("56613", "566 13MF");
+        map.put("6QW36反", "6-QW-36L");
+        map.put("6QW36", "6-QW-36R");
+        map.put("L2400", "L2 400MF");
+        map.put("80D26R\\L", "80D26R-MF");
+        map.put("80D26R/L", "80D26R-MF");
+        map.put("80D26R", "80D26R-MF");
+        map.put("95D31R\\L", "95D31L-MF");
+        map.put("95D31L", "95D31L-MF");
+        map.put("95D31R\\L", "95D31R-MF");
+        map.put("95D31R", "95D31R-MF");
+        return map;
     }
 
 }
