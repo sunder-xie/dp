@@ -14,6 +14,7 @@
         <module>common</module>
         <module>biz</module>
         <module>beans</module>
+        <module>mybatis-generator</module>
     </modules>
 
     <properties>
@@ -191,6 +192,12 @@
                 <groupId>net.sourceforge.jeval</groupId>
                 <artifactId>jeval</artifactId>
                 <version>0.9.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-core</artifactId>
+                <version>1.3.5</version>
             </dependency>
 
         </dependencies>

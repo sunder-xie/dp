@@ -6,7 +6,11 @@
     <classPathEntry location="/Users/huangzhangting/hzt-tools/mysql-connector-java-5.1.30.jar" />
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
-        <commentGenerator>
+
+        <!--<plugin type="org.mybatis.generator.plugins.ToStringPlugin" />-->
+        <plugin type="tqmall.mybatis.generator.PluginTest" />
+
+        <commentGenerator >
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
@@ -34,10 +38,9 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-
-        <table tableName="db_car_info_all" domainObjectName="CarInfoAllDO"
+        <table tableName="db_car_vin" domainObjectName="CarVinDO"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false">
+               enableSelectByExample="false" selectByExampleQueryId="false" >
         </table>
 
     </context>
