@@ -3,21 +3,26 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <!--mvn mybatis-generator:generate -->
 <generatorConfiguration>
-    <classPathEntry location="/Users/huangzhangting/hzt-tools/mysql-connector-java-5.1.30.jar" />
+
+    <properties resource="generator.properties"/>
+
+    <classPathEntry location="${class_path}"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
 
         <!--<plugin type="org.mybatis.generator.plugins.ToStringPlugin" />-->
-        <plugin type="tqmall.mybatis.generator.PluginTest" />
+        <plugin type="tqmall.mybatis.generator.PluginTest">
+            <property name="useLombok" value="true"/>
+        </plugin>
 
         <commentGenerator >
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/test_dataserver"
-                        userId="root"
-                        password="root">
+                        connectionURL="${jdbc_url}"
+                        userId="${jdbc_user_name}"
+                        password="${jdbc_password}">
         </jdbcConnection>
 
 

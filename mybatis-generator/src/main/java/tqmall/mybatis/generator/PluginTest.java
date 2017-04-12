@@ -12,16 +12,17 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static org.mybatis.generator.internal.util.StringUtility.isTrue;
 
 /**
  * Created by huangzhangting on 17/4/11.
  */
 public class PluginTest extends PluginAdapter {
     private FullyQualifiedJavaType lombokData;
+    private boolean useLombok;
+
     private final String batchInsert = "batchInsert";
     private final String batchInsertList = "list";
 
@@ -37,21 +38,34 @@ public class PluginTest extends PluginAdapter {
     }
 
     @Override
+    public void setProperties(Properties properties) {
+        super.setProperties(properties);
+        useLombok = isTrue(properties.getProperty("useLombok"));
+        System.out.println("use lombok: "+useLombok);
+    }
+
+    @Override
     public boolean modelGetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-        return false;
+        if(useLombok)
+            return false;
+        return super.modelGetterMethodGenerated(method, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 
     @Override
     public boolean modelSetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-        return false;
+        if(useLombok)
+            return false;
+        return super.modelGetterMethodGenerated(method, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        Set<FullyQualifiedJavaType> importedTypes = new HashSet<FullyQualifiedJavaType>();
-        importedTypes.add(lombokData);
-        topLevelClass.addImportedTypes(importedTypes);
-        topLevelClass.addAnnotation("@Data");
+        if(useLombok) {
+            Set<FullyQualifiedJavaType> importedTypes = new HashSet<FullyQualifiedJavaType>();
+            importedTypes.add(lombokData);
+            topLevelClass.addImportedTypes(importedTypes);
+            topLevelClass.addAnnotation("@Data");
+        }
         return true;
     }
 
@@ -95,7 +109,7 @@ public class PluginTest extends PluginAdapter {
         Method method = new Method(batchInsert);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
 
-        FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
+        FullyQualifiedJavaType listType = new FullyQualifiedJavaType("List");
         listType.addTypeArgument(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
         Parameter parameter = new Parameter(listType, batchInsertList);
         method.addParameter(parameter);
@@ -103,7 +117,7 @@ public class PluginTest extends PluginAdapter {
         method.addJavaDocLine("/** 批量插入 **/");
 
         interfaze.addMethod(method);
-        interfaze.addImportedType(listType);
+        interfaze.addImportedType(FullyQualifiedJavaType.getNewListInstance()); //导入
     }
 
     @Override
