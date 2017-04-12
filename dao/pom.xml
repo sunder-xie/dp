@@ -54,6 +54,11 @@
                 <version>1.3.2</version>
                 <dependencies>
                     <dependency>
+                        <groupId>org.mybatis.generator</groupId>
+                        <artifactId>mybatis-generator-core</artifactId>
+                        <version>1.3.5</version>
+                    </dependency>
+                    <dependency>
                         <groupId>hzt.dp</groupId>
                         <artifactId>mybatis-generator</artifactId>
                         <version>1.0-SNAPSHOT</version>
