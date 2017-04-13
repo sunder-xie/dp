@@ -121,6 +121,16 @@ public class PluginTest extends PluginAdapter {
     }
 
     @Override
+    public boolean sqlMapInsertElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    @Override
+    public boolean sqlMapUpdateByPrimaryKeyWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
         generateBatchInsertSql(document, introspectedTable);
         return true;
@@ -185,6 +195,11 @@ public class PluginTest extends PluginAdapter {
 
         insert.addElement(foreach);
 
+        StringBuilder note = new StringBuilder();
+        OutputUtilities.newLine(note);
+        OutputUtilities.xmlIndent(note, 1);
+        note.append("<!-- 批量插入 -->");
+        rootElement.addElement(new TextElement(note.toString()));
         rootElement.addElement(insert);
     }
 
