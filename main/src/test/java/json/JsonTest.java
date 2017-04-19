@@ -1,9 +1,11 @@
 package json;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import dp.common.util.JsonUtil;
 import dp.common.util.JsonUtils;
 import json.data.Dog;
 import json.data.House;
@@ -113,6 +115,14 @@ public class JsonTest {
         List<Dog> dogs = JsonUtils.strToList(str, Dog.class);
         System.out.println(dogs);
         System.out.println(dogs.size());
+    }
+
+
+    @Test
+    public void test_json(){
+        String str = "{\"sign\":\"TH0f2xCq/V6/24aLpTs6wYNB/uSGznNA3nTEaahKhRGtpDfoi/mCjPYYr3GNGPRv7lZtN5pgoXPDwI9LVRdbESoZCMlKQ6QF1RGINgOURL1YP8k9L0bY+JeTc/PpRM6x0PjgAtoDEigOp4cXPTGEAgczSBB7VTMs47IJXYe2TrY=\",\"status\":\"OK\",\"signedValue\":\"{\\\"totalNum\\\":4,\\\"inExpDetail\\\":[{\\\"bizOrderNo\\\":\\\"hms20170414003\\\",\\\"curFreezenAmount\\\":0,\\\"tradeNo\\\":\\\"1704141654471299276499\\\",\\\"oriAmount\\\":1000,\\\"curAmount\\\":2000,\\\"chgAmount\\\":1000,\\\"changeTime\\\":\\\"2017-04-14 16:54:47\\\",\\\"accountSetName\\\":\\\"商户测试应用1现金账户集\\\"},{\\\"bizOrderNo\\\":\\\"hms20170411001\\\",\\\"curFreezenAmount\\\":0,\\\"tradeNo\\\":\\\"1704121121313013274997\\\",\\\"oriAmount\\\":0,\\\"curAmount\\\":1000,\\\"chgAmount\\\":1000,\\\"changeTime\\\":\\\"2017-04-12 11:21:31\\\",\\\"accountSetName\\\":\\\"商户测试应用1现金账户集\\\"},{\\\"bizOrderNo\\\":\\\"test_refund000\\\",\\\"curFreezenAmount\\\":0,\\\"tradeNo\\\":\\\"1704111753117183274870\\\",\\\"oriAmount\\\":1,\\\"curAmount\\\":0,\\\"chgAmount\\\":-1,\\\"changeTime\\\":\\\"2017-04-11 17:53:11\\\",\\\"accountSetName\\\":\\\"商户测试应用1现金账户集\\\"},{\\\"bizOrderNo\\\":\\\"consumeApply_order_3\\\",\\\"curFreezenAmount\\\":0,\\\"tradeNo\\\":\\\"1704111644393570274812\\\",\\\"oriAmount\\\":0,\\\"curAmount\\\":1,\\\"chgAmount\\\":1,\\\"changeTime\\\":\\\"2017-04-11 16:44:39\\\",\\\"accountSetName\\\":\\\"商户测试应用1现金账户集\\\"}],\\\"bizUserId\\\":\\\"88888\\\"}\"}";
+        JsonNode jsonNode = JsonUtil.getJsonNode(str);
+        System.out.println(jsonNode);
     }
 
 }
