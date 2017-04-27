@@ -18,5 +18,6 @@ public class StringTest {
         System.out.println(str);
         arr[1] = ' ';
         System.out.println(str);
+
     }
 }
