@@ -60,6 +60,22 @@ public class CommTest {
 
     @Test
     public void test_11(){
-        System.out.println(InterfaceTest.getName());
+        test_switch(2);
+
+        System.out.println(Runtime.getRuntime().availableProcessors());
     }
+
+    public void test_switch(int i){
+        int result = 0;
+        switch (i){
+            case 1:
+                result += 1;
+            case 3:
+                result += 3;
+            case 2:
+                result += 2;
+        }
+        System.out.println(result);
+    }
+
 }
