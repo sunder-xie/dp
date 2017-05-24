@@ -133,5 +133,7 @@ public class GenIdea14 {
     {
         Random r = new Random();
         System.out.println(MakeKey("zhangting", 3650, r.nextInt(100000)));
+
+        System.out.println("²âÊÔÒ»ÏÂ");
     }
 }
