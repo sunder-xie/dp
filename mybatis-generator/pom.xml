@@ -57,19 +57,19 @@
     </build>
 
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>tqmall-snapshots</id>
-            <name>tqmall snapshots</name>
-            <url>http://build.tqmall.com/nexus/content/repositories/snapshots
-            </url>
-        </snapshotRepository>
-        <repository>
-            <id>tqmall-releases</id>
-            <name>tqmall releases</name>
-            <url>http://build.tqmall.com/nexus/content/repositories/releases
-            </url>
-        </repository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<snapshotRepository>-->
+            <!--<id>tqmall-snapshots</id>-->
+            <!--<name>tqmall snapshots</name>-->
+            <!--<url>http://build.tqmall.com/nexus/content/repositories/snapshots-->
+            <!--</url>-->
+        <!--</snapshotRepository>-->
+        <!--<repository>-->
+            <!--<id>tqmall-releases</id>-->
+            <!--<name>tqmall releases</name>-->
+            <!--<url>http://build.tqmall.com/nexus/content/repositories/releases-->
+            <!--</url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
 
 </project>
