@@ -9,10 +9,11 @@
     <classPathEntry location="${class_path}"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
+        <property name="javaFileEncoding" value="UTF-8"/>
 
         <!--<plugin type="org.mybatis.generator.plugins.ToStringPlugin" />-->
-        <plugin type="tqmall.mybatis.generator.PluginTest">
-            <property name="useLombok" value="true"/>
+        <plugin type="com.mybatis.generator.plugins.MyPlugin">
+            <property name="useLombok" value="false"/>
         </plugin>
 
         <commentGenerator >
@@ -30,20 +31,20 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="dp.beans.car" targetProject="../beans/src/main/java">
+        <javaModelGenerator targetPackage="dp.beans.user" targetProject="../beans/src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mybatis.car"  targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="mybatis.user"  targetProject="src/main/resources">
             <property name="enableSubPackages" value="false" />
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="dp.dao.mapper.car"  targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="dp.dao.mapper.user"  targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="db_car_vin" domainObjectName="CarVinDO"
+        <table tableName="user_extend" domainObjectName="UserExtendDO"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" >
         </table>

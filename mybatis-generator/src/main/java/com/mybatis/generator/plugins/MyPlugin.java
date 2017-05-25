@@ -1,4 +1,4 @@
-package tqmall.mybatis.generator;
+package com.mybatis.generator.plugins;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -17,9 +17,9 @@ import java.util.*;
 import static org.mybatis.generator.internal.util.StringUtility.isTrue;
 
 /**
- * Created by huangzhangting on 17/4/11.
+ * Created by huangzhangting on 2017/5/24.
  */
-public class PluginTest extends PluginAdapter {
+public class MyPlugin extends PluginAdapter {
     private FullyQualifiedJavaType lombokData;
     private boolean useLombok;
 
@@ -27,7 +27,7 @@ public class PluginTest extends PluginAdapter {
     private final String batchInsertList = "list";
 
 
-    public PluginTest() {
+    public MyPlugin() {
         super();
         lombokData = new FullyQualifiedJavaType("lombok.Data");
     }
@@ -114,7 +114,7 @@ public class PluginTest extends PluginAdapter {
         Parameter parameter = new Parameter(listType, batchInsertList);
         method.addParameter(parameter);
 
-        method.addJavaDocLine("/** 批量插入 **/");
+        method.addJavaDocLine("/** batch insert **/");
 
         interfaze.addMethod(method);
         interfaze.addImportedType(FullyQualifiedJavaType.getNewListInstance()); //导入
@@ -198,7 +198,7 @@ public class PluginTest extends PluginAdapter {
         StringBuilder note = new StringBuilder();
         OutputUtilities.newLine(note);
         OutputUtilities.xmlIndent(note, 1);
-        note.append("<!-- 批量插入 -->");
+        note.append("<!-- batch insert -->");
         rootElement.addElement(new TextElement(note.toString()));
         rootElement.addElement(insert);
     }
